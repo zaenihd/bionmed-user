@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "409575069878",
+    "project_id": "bionmed-754cc",
+    "storage_bucket": "bionmed-754cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409575069878:android:8b021eb2814b3589bb2e17",
+        "android_client_info": {
+          "package_name": "com.bionmed_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "409575069878-t9asoir3lnt8p8u5qli6tm2k7716313t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcPGrdYPs9xIQLKmhE48axs-LSvZO2YP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "409575069878-t9asoir3lnt8p8u5qli6tm2k7716313t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
