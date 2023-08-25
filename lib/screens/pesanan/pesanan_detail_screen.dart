@@ -2302,11 +2302,14 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                   ['nurse_work_scope']['icon'],
                               height: 20,
                             ),
-                            Txt(
-                                text: Get.find<ControllerPesanan>()
-                                    .sopNurse[index]['nurse_work_scope']['name']
-                                // "Get.find<LayananHomeController>().packageNurseSops[index]['nurse_work_scope']['name']"
-                                )
+                            Cntr(
+                              width: Get.width / 1.7,
+                              child: Txt(
+                                  text: Get.find<ControllerPesanan>()
+                                      .sopNurse[index]['nurse_work_scope']['name']
+                                  // "Get.find<LayananHomeController>().packageNurseSops[index]['nurse_work_scope']['name']"
+                                  ),
+                            )
                           ],
                         ),
                       ),
