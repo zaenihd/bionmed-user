@@ -46,6 +46,7 @@ class _OtpScreenState extends State<OtpScreen> {
               imageUrl: "assets/images/img-otp.png",
               title: "Verifikasi Kode",
               subtitle:
+                  // ignore: unnecessary_string_escapes
                   "Kode Verifikasi dikirim melalui Whatsapp \Anda (+62) 89** _ **** _ **"),
           Container(
             margin: const EdgeInsets.only(top: 36),

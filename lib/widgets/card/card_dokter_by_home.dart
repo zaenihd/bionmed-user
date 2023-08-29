@@ -1,7 +1,5 @@
 import 'package:bionmed_app/screens/login/controller_login.dart';
-import 'package:bionmed_app/screens/payment/controller_payment.dart';
 import 'package:bionmed_app/screens/profile_doctor/detail-_dokter_from_home.dart';
-import 'package:bionmed_app/screens/profile_doctor/detail_profile_doctor_umum.dart';
 import 'package:bionmed_app/widgets/other/loading_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

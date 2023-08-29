@@ -187,7 +187,7 @@ class PilihJadwalView extends GetView<PilihJadwalController> {
                                           //     onPress: () {
                                           //       Get.back();
                                           //     });
-                                          controller.jadwalTerlewat3Jam();
+                                          controller.jadwalTerlewat3Jam("Pilih Jadwal Lain");
 
                                         } else {
                                           Get.bottomSheet(

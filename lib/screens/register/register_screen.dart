@@ -2,7 +2,6 @@
 
 import 'package:bionmed_app/constant/colors.dart';
 import 'package:bionmed_app/constant/styles.dart';
-import 'package:bionmed_app/screens/profile/controller_profile.dart';
 import 'package:bionmed_app/screens/register/register_controller.dart';
 import 'package:bionmed_app/widgets/appbar/appbar_back.dart';
 import 'package:bionmed_app/widgets/header/header_auth.dart';
@@ -12,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 
 import '../../widgets/input/input_primary.dart';

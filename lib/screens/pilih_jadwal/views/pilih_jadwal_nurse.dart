@@ -135,6 +135,11 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                     color: Colors.white,
                                   ),
                                   onTap: () async {
+                                    log(Get.find<
+                                                        InputLayananController>()
+                                                    .jamTerpilihForSend
+                                                    .value
+                                                    .substring(0, 2));
                                     controller.endTime.value =
                                         controller.dataJadwal[index]['endTime'];
                                     controller.idService.value =
@@ -158,7 +163,6 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                                           .value ==
                                             6) {
                                       if (controller.readyBooking.isTrue) {
-
                                         int hours = int.parse(controller
                                                 .startDateCustomer.value
                                                 .substring(11, 13)) +
@@ -170,9 +174,17 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                             .startDateCustomer.value
                                             .substring(0, 10);
                                         controller.startDateCustomerHomeVisit
-                                            .value = "$date $hours:$minute";
+                                            .value = "$date ${Get.find<
+                                                        InputLayananController>()
+                                                    .jamTerpilihForSend
+                                                    .value}";
                                             log('ini adalah star${controller.startDateCustomerHomeVisit
                                             .value}' );
+                                            log("ini adalaah 1 $date $hours:$minute");
+                                            log("ini adalaah 1 ${ Get.find<
+                                                        InputLayananController>()
+                                                    .jamSekarangPlus4JamFix
+                                                    .value}");
                                       }
                                       if (int.parse(jadwalC.startDate.value
                                               .substring(8, 10)) ==
@@ -183,15 +195,18 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                                 .dateTimeNow
                                                 .value =
                                             DateFormat('kk:mm').format(now);
-                                        if (int.parse(Get.find<
-                                                        ControllerPayment>()
-                                                    .dateTimeNow
+                                        if (int.parse(
+                                          Get.find<
+                                                        InputLayananController>()
+                                                    .jamTerpilihForSend
                                                     .value
-                                                    .substring(0, 2)) +
-                                                3 >=
-                                            int.parse(controller.endTime.value
-                                                .substring(0, 2))) {
-                                          controller.jadwalTerlewat3Jam();
+                                                    .substring(0, 2))
+                                                 <
+                                            Get.find<
+                                                        InputLayananController>()
+                                                    .jamSekarangPlus4JamFix
+                                                    .value + 4) {
+                                          controller.jadwalTerlewat3Jam("Pilih Jadwal Lain");
                                         } else {
                                           Get.bottomSheet(
                                               shape: RoundedRectangleBorder(
@@ -236,7 +251,7 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                                       Text(
                                                         controller.readyBooking
                                                                 .isTrue
-                                                            ? 'Silakan Membayar Untuk\nMendapatkan Jadwal'
+                                                            ? 'Silakan Membayar Untuk\nMendapatkan Jaadwal'
                                                             : "Jadwal Sudah Penuh ",
                                                         textAlign:
                                                             TextAlign.center,
@@ -671,9 +686,9 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                             ),
                                           ));
                                     }
-                                    log('ini adalah ' +  Get.find<ControllerPesanan>()
+                                    log('ini adalah ${Get.find<ControllerPesanan>()
                                                 .serviceId
-                                                .value.toString());
+                                                .value}');
                                   },
                                 ),
                               ),

@@ -1,17 +1,16 @@
+
+// ignore_for_file: file_names
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bionmed_app/constant/styles.dart';
 import 'package:bionmed_app/screens/login/controller_login.dart';
-import 'package:bionmed_app/screens/payment/controller_payment.dart';
 import 'package:bionmed_app/screens/profile_doctor/profil_dokter_controller.dart';
-import 'package:bionmed_app/screens/select_service/select_service_screen.dart';
-import 'package:bionmed_app/widgets/button/button_gradient.dart';
 import 'package:bionmed_app/widgets/other/loading_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constant/colors.dart';
-import '../services/controller_service_on_call.dart';
 
 class DetailProfileDoctorUmumFromHome extends StatefulWidget {
   const DetailProfileDoctorUmumFromHome({Key? key}) : super(key: key);
@@ -248,7 +247,7 @@ class _DetailProfileDoctorUmumFromHomeState extends State<DetailProfileDoctorUmu
                                                               children: [
                                                                 myC.dataJadwalDokter[i]['schedules'].length >
                                                                         2
-                                                                    ? Icon(Icons
+                                                                    ? const Icon(Icons
                                                                         .swap_vert)
                                                                     : const SizedBox(
                                                                         height:

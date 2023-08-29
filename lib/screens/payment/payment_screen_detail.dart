@@ -357,7 +357,7 @@ class _PaymentScreenDetaiState extends State<PaymentScreenDetai> {
             children: [
               InkWell(
                 onTap: () {
-                  log('zen ' + Get.find<ControllerPayment>().dataOrder.toString());
+                  log('zen ${Get.find<ControllerPayment>().dataOrder}');
                 },
                 child: Text(
                   "Diskon",

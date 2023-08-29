@@ -1,9 +1,6 @@
 import 'package:bionmed_app/constant/colors.dart';
-import 'package:bionmed_app/constant/styles.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
-import 'package:bionmed_app/screens/login/controller_login.dart';
 import 'package:bionmed_app/screens/profile_doctor/profil_dokter_controller.dart';
-import 'package:bionmed_app/screens/select_service/select_service_screen.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
 import 'package:bionmed_app/widgets/container/container.dart';
 import 'package:bionmed_app/widgets/other/loading_indicator.dart';
@@ -113,7 +110,7 @@ class _DetailHospitalState extends State<DetailHospital> {
               ),
             ),
             child: ListView(
-              padding: EdgeInsets.all(24),
+              padding: const EdgeInsets.all(24),
               children: [
                 Txt(
                   text: 'Rumah Sakit Dedari',
@@ -128,7 +125,7 @@ class _DetailHospitalState extends State<DetailHospital> {
                   children: [
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.location_on,
                           color: Colors.green,
                         ),
@@ -174,10 +171,10 @@ class _DetailHospitalState extends State<DetailHospital> {
                 ),
                 Cntr(
                   height: 325,
-                  color: Color(0xffECECEC),
+                  color: const Color(0xffECECEC),
                   child: CupertinoScrollbar(
                     child: ListView(
-                      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 16),
                       children: [
                         Row(
                           children: [

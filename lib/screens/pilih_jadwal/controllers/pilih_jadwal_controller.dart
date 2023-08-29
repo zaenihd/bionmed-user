@@ -22,7 +22,7 @@ class PilihJadwalController extends GetxController {
     super.onInit();
   }
 
-  jadwalTerlewat3Jam() {
+  jadwalTerlewat3Jam(String title) {
     return Get.bottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -61,7 +61,7 @@ class PilihJadwalController extends GetxController {
                           height: 14.0,
                         ),
                         const Text(
-                          'Maaf, jika ingin konsultasi\nmohon pilih jadwal 3 jam sebelum pemesanan',
+                          'Maaf, jika ingin konsultasi\nmohon pilih jadwal 4 jam sebelum pemesanan',
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -73,7 +73,7 @@ class PilihJadwalController extends GetxController {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ButtonGradient(
-                            label: "Pilih Jadwal Lain",
+                            label: title,
                             onPressed: () {
                               Get.back();
                             },
@@ -189,7 +189,7 @@ class PilihJadwalController extends GetxController {
       endHoursCustomer.value = dataRegisterSlot['endHoursCustomer'] ?? "";
 
       print('DATA REGISTER SLOT $dataRegisterSlot');
-      print('date dikirim  == ${date}');
+      print('date dikirim  == $date');
       print('dateNow dikirim  == ${dateTimeNow.value}');
       print('servicePriceId  == ${servicePriceId.value}');
 

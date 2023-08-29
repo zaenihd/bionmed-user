@@ -14,7 +14,6 @@ import 'package:bionmed_app/screens/payment/controller_payment.dart';
 import 'package:bionmed_app/screens/splash/splash_controller.dart';
 import 'package:bionmed_app/widgets/card/card_dokter_by_home.dart';
 
-import 'package:bionmed_app/widgets/card/card_rec_doctor.dart';
 import 'package:bionmed_app/widgets/header/header_curved.dart';
 import 'package:bionmed_app/widgets/other/show_dialog.dart';
 import 'package:bionmed_app/widgets/other/title_tile.dart';
@@ -380,9 +379,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               .clear();
                           Get.find<ControllerLogin>().doctorByService.clear();
                           if (controller.dataService[index]['sequence'] == 4 
-                          ||
-                              controller.dataService[index]['sequence'] == 5 ||
-                              controller.dataService[index]['sequence'] == 6
+                          // ||
+                          //     controller.dataService[index]['sequence'] == 5 ||
+                          //     controller.dataService[index]['sequence'] == 6
                               ) {
                             log('coba ${Get.find<ControllerPayment>()
                                     .serviceId
@@ -492,7 +491,6 @@ getLocation() async {
   Get.find<ControllerPayment>().province.value =
       placemarks[0].subAdministrativeArea!;
 
-  print( "ZEEN " + Get.find<ControllerPayment>().lat.value.toString());
   // Get.defaultDialog(title: 'Aktif');
 }
 
@@ -509,7 +507,7 @@ popUpGetLokasi() {
         child: Column(
           children: [
             Image.asset("assets/images/lokasi.png"),
-            Text("BionMed mencatat dan menyimpan data lokasi agar dapat menampilkan dokter terdekat yang dapat melayani dan mencapai lokasi anda", textAlign: TextAlign.center,),
+            const Text("BionMed mencatat dan menyimpan data lokasi agar dapat menampilkan dokter terdekat yang dapat melayani dan mencapai lokasi anda", textAlign: TextAlign.center,),
             const SizedBox(
               height: 20.0,
             ),
@@ -534,7 +532,7 @@ popUpGetLokasi() {
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           'Tidak',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
@@ -564,7 +562,7 @@ popUpGetLokasi() {
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           'Ijinkan',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,

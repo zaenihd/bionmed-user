@@ -168,7 +168,7 @@ class AturUlangJadwal extends GetView<PilihJadwalController> {
                                                 3 >=
                                             int.parse(controller.endTime.value
                                                 .substring(0, 2))) {
-                                          controller.jadwalTerlewat3Jam();
+                                          controller.jadwalTerlewat3Jam("Pilih Jadwal Lain");
                                         } else {
                                           Get.bottomSheet(
                                               shape: RoundedRectangleBorder(

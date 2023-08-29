@@ -21,7 +21,6 @@ import 'package:flutter_callkit_incoming/entities/call_kit_params.dart';
 import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_zimkit/services/services.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -408,6 +407,22 @@ Future<void> enableGPS() async {
                       //   break;
                       // case Event.ACTION_DID_UPDATE_DEVICE_PUSH_TOKEN_VOIP:
                       //   break;
+                      case Event.actionDidUpdateDevicePushTokenVoip:
+                        break;
+                      case Event.actionCallCallback:
+                        break;
+                      case Event.actionCallToggleHold:
+                        break;
+                      case Event.actionCallToggleMute:
+                        break;
+                      case Event.actionCallToggleDmtf:
+                        break;
+                      case Event.actionCallToggleGroup:
+                        break;
+                      case Event.actionCallToggleAudioSession:
+                        break;
+                      case Event.actionCallCustom:
+                        break;
                     }
                   }));
             } else if (Get.find<ControllerPesanan>().dataOrder[i]['order']
@@ -484,6 +499,22 @@ Future<void> enableGPS() async {
                       //   break;
                       // case Event.ACTION_DID_UPDATE_DEVICE_PUSH_TOKEN_VOIP:
                       //   break;
+                      case Event.actionDidUpdateDevicePushTokenVoip:
+                        break;
+                      case Event.actionCallCallback:
+                        break;
+                      case Event.actionCallToggleHold:
+                        break;
+                      case Event.actionCallToggleMute:
+                        break;
+                      case Event.actionCallToggleDmtf:
+                        break;
+                      case Event.actionCallToggleGroup:
+                        break;
+                      case Event.actionCallToggleAudioSession:
+                        break;
+                      case Event.actionCallCustom:
+                        break;
                     }
                   }));
 
@@ -570,6 +601,22 @@ Future<void> enableGPS() async {
                       //   break;
                       // case Event.ACTION_DID_UPDATE_DEVICE_PUSH_TOKEN_VOIP:
                       //   break;
+                      case Event.actionDidUpdateDevicePushTokenVoip:
+                        break;
+                      case Event.actionCallCallback:
+                        break;
+                      case Event.actionCallToggleHold:
+                        break;
+                      case Event.actionCallToggleMute:
+                        break;
+                      case Event.actionCallToggleDmtf:
+                        break;
+                      case Event.actionCallToggleGroup:
+                        break;
+                      case Event.actionCallToggleAudioSession:
+                        break;
+                      case Event.actionCallCustom:
+                        break;
                     }
                   }));
             }
@@ -591,8 +638,8 @@ Future<void> enableGPS() async {
     Get.put(ControllerPayment());
     getLocation();
 
-    realtimeApi();
-    trimUpdateStatus();
+    // realtimeApi();
+    // trimUpdateStatus();
     // log('zen');
 
     // ignore: todo
@@ -640,7 +687,7 @@ Future<void> enableGPS() async {
           Method.POST,
           params);
       final readNotif = json.decode(result.toString());
-      log("readNotif['data'] . " + readNotif.toString());
+      log("readNotif['data'] . $readNotif");
       idOrderFromPesan.value = readNotif['data']['nurse_order']['id'];
       serviceId.value = readNotif['data']["nurse_order"]['serviceId'];
 

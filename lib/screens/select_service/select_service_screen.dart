@@ -23,7 +23,6 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
       appBar: AppBar(
         title: InkWell(
           onTap: () {
-            print(Get.find<ControllerLogin>().priceService.toString());
           },
           child: const Text('Pilih Layaaanan')),
         titleTextStyle: TextStyles.subtitle1,

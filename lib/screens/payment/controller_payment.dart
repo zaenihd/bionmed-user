@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:developer';
 
 import 'package:bionmed_app/constant/string.dart';
@@ -136,23 +138,22 @@ class ControllerPayment extends GetxController {
 
     loading(false);
     if (value['code'] == 200) {
-      // ignore: avoid_print
       // log('DATA == $value');
-      print('doctorScheduleId  :'  +Get.find<PilihJadwalController>().idService.value.toString());
-      print('customerId  :'  +Get.find<ControllerLogin>().costumerId.value.toString());
-      print('districts  :'  +districts.value.toString());
-      print('city  :'  +city.value.toString());
-      print('province  :'  +province.value.toString());
-      print('country  :'  +country.value.toString());
-      print('lat  :'  +lat.value.toString());
-      print('lat  :'  +long.value.toString());
-      print('serviceId  :'  +Get.find<PilihJadwalController>().serviceId.value.toString());
-      print('servicePriceId  :'  +  Get.find<PilihJadwalController>().servicePriceId.value.toString());
-      print('startDate  :'  +  Get.find<PilihJadwalController>().startDateCustomer.value.toString());
-      print('doctorId  :'  +  Get.find<PilihJadwalController>().docterId.value.toString());
-      print('date  :'  +  formatter.format(now.toLocal()).toString());
-      print('totalPrice  :'  +   Get.find<PilihJadwalController>().totalBiayaFix.value.toInt().toString());
-      print('discount  :'  +  Get.find<PilihJadwalController>().diskon.value.toInt().toString());
+      print('doctorScheduleId  :${Get.find<PilihJadwalController>().idService.value}');
+      print('customerId  :${Get.find<ControllerLogin>().costumerId.value}');
+      print('districts  :${districts.value}');
+      print('city  :${city.value}');
+      print('province  :${province.value}');
+      print('country  :${country.value}');
+      print('lat  :${lat.value}');
+      print('lat  :${long.value}');
+      print('serviceId  :${Get.find<PilihJadwalController>().serviceId.value}');
+      print('servicePriceId  :${Get.find<PilihJadwalController>().servicePriceId.value}');
+      print('startDate  :${Get.find<PilihJadwalController>().startDateCustomer.value}');
+      print('doctorId  :${Get.find<PilihJadwalController>().docterId.value}');
+      print('date  :${formatter.format(now.toLocal())}');
+      print('totalPrice  :${Get.find<PilihJadwalController>().totalBiayaFix.value.toInt()}');
+      print('discount  :${Get.find<PilihJadwalController>().diskon.value.toInt()}');
       
       idOrder.value = value['data']['id'];
       dataOrder.value = value['data'];
@@ -217,7 +218,6 @@ class ControllerPayment extends GetxController {
       dataOrder.value = value['data'];
       codeOrder.value = value['data']['code'];
       Get.to(() => const PaymentScreen());
-      // ignore: avoid_print
       print("CEKKKK MASUUUK $value");
     }
     if (value['code'] == 400) {
@@ -245,7 +245,6 @@ class ControllerPayment extends GetxController {
         idDoctor: dataPayloadOrder['doctorId'].toString(), idService: id);
     loading(false);
     
-    // ignore: avoid_print
     print("masuk sini ?$value");
 
     if (value['code'] == 200) {

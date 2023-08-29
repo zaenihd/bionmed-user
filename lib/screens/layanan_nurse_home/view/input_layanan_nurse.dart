@@ -83,8 +83,11 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
                     DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime(1800),
+                        firstDate: DateTime.now(),
                         lastDate: DateTime(2101));
+                    // initialDate: DateTime.now(),
+                    // firstDate: DateTime(1800),
+                    // lastDate: DateTime(2101));
                     if (pickedDate != null) {
                       // ignore: avoid_print
                       print(pickedDate);
@@ -649,7 +652,7 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
                     Get.to(() => TambahAlamat());
                   } else {
                     Get.to(() => TambahAlamat());
-                  popUpGetLokasi();
+                    popUpGetLokasi();
                   }
                 },
                 child: Cntr(
@@ -712,10 +715,37 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
               ),
               ButtonGradient(
                   onPressed: () {
-                    if (Get.find<ControllerPayment>().serviceId.value == 5) {
-                      controller.selectedGenderPasien.value = jenisKelamin[1];
+                    DateTime now = DateTime.now();
+
+                    if (int.parse(Get.put(PilihJadwalController())
+                            .startDate
+                            .value
+                            .substring(8, 10)) ==
+                        int.parse(DateFormat('yyyy-MM-dd')
+                            .format(now)
+                            .substring(8, 10))) {
+                      if (int.parse(Get.find<InputLayananController>()
+                              .jamTerpilihForSend
+                              .value
+                              .substring(0, 2)) <
+                          Get.find<InputLayananController>()
+                                  .jamSekarangPlus4JamFix
+                                  .value +
+                              4) {
+                        Get.put(PilihJadwalController())
+                            .jadwalTerlewat3Jam("Atur ulang jam");
+                      } else if (Get.find<ControllerPayment>()
+                              .serviceId
+                              .value ==
+                          5) {
+                        controller.selectedGenderPasien.value = jenisKelamin[1];
+                      } else {
+                        actionNurse();
+                      }
+                    }else{
+                        actionNurse();
                     }
-                    actionNurse();
+                    
                   },
                   label: 'Lanjutkan'),
 
@@ -730,7 +760,7 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
   }
 
   actionNurse() async {
-        log(controller.dataFilter.toString());
+    log(controller.dataFilter.toString());
 
     if (controller.tanggalC.text == "" ||
         controller.jamTerpilih.isEmpty ||
@@ -927,18 +957,22 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
         }
       } else {
         log('NO FILTER');
-        controller.dataFilter.add({"filter" : [{
-          "lat": Get.find<MapsController>().lat.value,
-          "long": Get.find<MapsController>().long.value}]
+        controller.dataFilter.add({
+          "filter": [
+            {
+              "lat": Get.find<MapsController>().lat.value,
+              "long": Get.find<MapsController>().long.value
+            }
+          ]
         });
         await controller.getNurseFilter();
         Get.to(() => ServiceOnCall(
               title: Get.find<ControllerPayment>().nameService.value,
             ));
       }
-        log('NO FILTER one');
+      log('NO FILTER one');
 
-        log(controller.dataFilter.toString());
+      log(controller.dataFilter.toString());
       await controller.getNurseFilter();
       Get.to(() => ServiceOnCall(
             title: Get.find<ControllerPayment>().nameService.value,

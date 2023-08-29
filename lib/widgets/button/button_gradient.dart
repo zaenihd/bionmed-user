@@ -40,7 +40,7 @@ class ButtonGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: margin ?? EdgeInsets.all(0),
+      margin: margin ?? const EdgeInsets.all(0),
       width: size ?? Get.width,
       height: height ?? 55,
       decoration: BoxDecoration(

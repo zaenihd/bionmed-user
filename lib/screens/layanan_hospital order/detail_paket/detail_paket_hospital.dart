@@ -2,8 +2,6 @@ import 'package:bionmed_app/widgets/button/button_gradient.dart';
 import 'package:bionmed_app/widgets/container/container.dart';
 import 'package:bionmed_app/widgets/txt/text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class DetailPaketHospital extends StatelessWidget {

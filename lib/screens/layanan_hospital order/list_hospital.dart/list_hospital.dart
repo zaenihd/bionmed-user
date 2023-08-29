@@ -15,7 +15,7 @@ class ListHospital extends StatelessWidget {
       body: ListView.builder(
         itemCount: 2,
         itemBuilder: (context, index) => Cntr(
-          margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+          margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
           height: 100,
           width: Get.width,
           radius: BorderRadius.circular(10),
@@ -29,7 +29,7 @@ class ListHospital extends StatelessWidget {
                 width: 115,
                 height: 85,
                 radius: BorderRadius.circular(10),
-                image: DecorationImage(
+                image: const DecorationImage(
                     image: AssetImage('assets/images/hospital.png'),
                     fit: BoxFit.cover
                     ),
@@ -49,7 +49,7 @@ class ListHospital extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.location_on,
                         color: Colors.green,
                       ),

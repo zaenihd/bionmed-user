@@ -1,10 +1,8 @@
-import 'dart:developer';
 
 import 'package:bionmed_app/screens/home/home.dart';
 import 'package:bionmed_app/screens/home/home_controller.dart';
 import 'package:bionmed_app/screens/home/home_screen.dart';
 import 'package:bionmed_app/screens/login/controller_login.dart';
-import 'package:bionmed_app/screens/splash/splash_controller.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
 import 'package:bionmed_app/widgets/button/button_primary.dart';
 import 'package:flutter/material.dart';

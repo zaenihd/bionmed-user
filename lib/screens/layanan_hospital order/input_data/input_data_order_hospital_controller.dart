@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:image_picker/image_picker.dart';
 
 class InputDataOrderHospitalController extends GetxController{
@@ -12,6 +11,7 @@ class InputDataOrderHospitalController extends GetxController{
   TextEditingController keluhanC = TextEditingController();
   
   RxString imageUrl = "".obs;
+  // ignore: prefer_typing_uninitialized_variables
   var files;
   final ImagePicker _picker = ImagePicker();
 

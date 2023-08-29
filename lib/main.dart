@@ -5,9 +5,6 @@ import 'package:bionmed_app/app/modules/home_binding.dart';
 import 'package:bionmed_app/app/routes/app_pages.dart';
 import 'package:bionmed_app/constant/utils.dart';
 import 'package:bionmed_app/screens/disclamerSplash/disclamer.dart';
-import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/screen/detail_pesanan_ambulance.dart';
-import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/screen/input_data_order_ambulance.dart';
-import 'package:bionmed_app/screens/layanan_hospital%20order/input_data/input_data_order_hospital.dart';
 import 'package:bionmed_app/screens/splash/splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +20,6 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'certificate_api.dart';
-import 'screens/layanan_hospital order/detail_pesanan_hospital/detail_pesanan_hospital.dart';
 
 
 void main() async {
@@ -80,7 +76,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Bionmed',
           home: setuju == null ? DisclamerSplash() : const SplashScreen(),
-          // home: DetailPesananHospitalView(),
+          // home: KetentuanLayananHospital(),
           theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Ubuntu'),
           initialBinding: RootBinding(),
           getPages: AppPages.pages,

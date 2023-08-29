@@ -28,7 +28,7 @@ class CardPesananService extends StatelessWidget {
     String role = data['user'] == null ? "" : data['user']['role'];
     return InkWell(
       onTap: () async {
-                            log('message ' + data['order']['status'].toString());
+                            log('message ${data['order']['status']}');
 
         if (data['order']['status'] != 0) {
           // Get.find<HomeController>().timePeriodic.value = false;

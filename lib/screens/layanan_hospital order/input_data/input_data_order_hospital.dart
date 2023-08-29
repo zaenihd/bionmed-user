@@ -3,7 +3,6 @@ import 'package:bionmed_app/constant/styles.dart';
 import 'package:bionmed_app/screens/home/home_controller.dart';
 import 'package:bionmed_app/screens/home/home_screen.dart';
 import 'package:bionmed_app/screens/layanan_hospital%20order/input_data/input_data_order_hospital_controller.dart';
-import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
 import 'package:bionmed_app/screens/pesanan/controller_pesanan.dart';
 import 'package:bionmed_app/screens/pesanan/maps.dart';
 import 'package:bionmed_app/screens/pesanan/pesanan_doctor_on_call.dart';
@@ -14,8 +13,6 @@ import 'package:bionmed_app/widgets/input/input_primary.dart';
 import 'package:bionmed_app/widgets/other/show_dialog.dart';
 import 'package:bionmed_app/widgets/txt/text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -121,7 +118,7 @@ class InputDataOrderHospital extends StatelessWidget {
               ),
               Txt(
                 text: 'Kebutuhan data diri pasien',
-                color: Color(0xff7C7C7C),
+                color: const Color(0xff7C7C7C),
               ),
               const SizedBox(
                 height: 16.0,

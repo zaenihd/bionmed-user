@@ -756,12 +756,10 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                                                         'order']
                                                                     ['service']
                                                                 ['name'];
-                                                            log("HAHAHAHAHA" +
-                                                                Get.find<
+                                                            log("HAHAHAHAHA${Get.find<
                                                                         ControllerPesanan>()
                                                                     .orderIdDetail
-                                                                    .value
-                                                                    .toString());
+                                                                    .value}");
                                                             Get.to(() =>
                                                                 const AturUlangJadwalNurse());
                                                           } else {
@@ -839,7 +837,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                             // ignore: prefer_const_constructors
                                             : LinearGradient(
                                                 colors: 
-                                                widget.data['order']['status'] == 0 ?[Color(0xFF2B88D9),Color(0XFF26E0F5)] :
+                                                widget.data['order']['status'] == 0 ?[const Color(0xFF2B88D9),const Color(0XFF26E0F5)] :
                                                 const [
                                                     Colors.grey,
                                                     Colors.grey,
@@ -1269,7 +1267,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
       },
       textColor: Colors.red,
       label: "Laporkan?",
-      color: Color.fromARGB(255, 253, 208, 208),
+      color: const Color.fromARGB(255, 253, 208, 208),
       // margin: EdgeInsets.symmetric(horizontal: 24,),
     );
   }
@@ -2017,16 +2015,16 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
     return Column(
       children: [
         Cntr(
-            margin: EdgeInsets.symmetric(horizontal: 25),
+            margin: const EdgeInsets.symmetric(horizontal: 25),
             radius: BorderRadius.circular(10),
-            padding: EdgeInsets.symmetric(horizontal: 26, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
             gradient: AppColor.gradient1,
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Tanggal Pemesanan',
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
@@ -2034,7 +2032,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                       DateFormat('d MMMM y, kk:mm', "id_ID")
                           .format(DateTime.parse(widget.data['order']['date'])),
                       // CurrencyFormat.convertToIdr(discount, 0),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 12,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
@@ -2055,7 +2053,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           'Mulai Order',
                           style: TextStyle(
@@ -2063,7 +2061,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                             fontSize: 12,
                           ),
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: 6.0,
                         ),
                         Text(
@@ -2084,7 +2082,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                               DateTime.parse(
                                   widget.data['order']['startDateCustomer'])),
                           // CurrencyFormat.convertToIdr(discount, 0),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 12,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
@@ -2097,7 +2095,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                               DateTime.parse(
                                   widget.data['order']['endDateCustomer'])),
                           // CurrencyFormat.convertToIdr(discount, 0),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 12,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
@@ -2142,9 +2140,9 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
         Cntr(
           width: Get.width,
             boxShadow:widget.data['order']['status'] != 6 && widget.data['order']['status'] != 5 && widget.data['order']['status'] != 99 && widget.data['order']['status'] != 0? [
-              BoxShadow(blurRadius: 10, spreadRadius: 1, color: Colors.grey)
+              const BoxShadow(blurRadius: 10, spreadRadius: 1, color: Colors.grey)
             ] :[],
-            padding: EdgeInsets.only(top: 30, bottom: 20),
+            padding: const EdgeInsets.only(top: 30, bottom: 20),
             color: Colors.white,
             child: widget.data['order']['status'] == 4
                 ? Column(
@@ -2247,7 +2245,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
       margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.centerLeft,
       width: Get.width,
-      color: Color(0xffF4F4F4),
+      color: const Color(0xffF4F4F4),
       radius: BorderRadius.circular(10),
       child: ExpansionTile(
           title: Txt(
@@ -2256,7 +2254,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
           ),
           children: [
             Cntr(
-              color: Color(0xffF4F4F4),
+              color: const Color(0xffF4F4F4),
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               radius: BorderRadius.circular(10),
               width: Get.width,
@@ -2289,8 +2287,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                       itemCount: Get.find<ControllerPesanan>().sopNurse.length,
                       itemBuilder: (context, index) => Cntr(
                         radius: BorderRadius.circular(10),
-                        margin: EdgeInsets.only(bottom: 10),
-                        padding: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.symmetric(
                           vertical: 10,
                           horizontal: 16,
                         ),
@@ -2327,7 +2325,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
       margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.centerLeft,
       width: Get.width,
-      color: Color(0xffF4F4F4),
+      color: const Color(0xffF4F4F4),
       radius: BorderRadius.circular(10),
       child: ExpansionTile(
           title: Txt(
@@ -2336,7 +2334,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
           ),
           children: [
             Cntr(
-              color: Color(0xffF4F4F4),
+              color: const Color(0xffF4F4F4),
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               radius: BorderRadius.circular(10),
               width: Get.width,
@@ -2576,7 +2574,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
       margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.centerLeft,
       width: Get.width,
-      color: Color(0xffF4F4F4),
+      color: const Color(0xffF4F4F4),
       radius: BorderRadius.circular(10),
       child: ExpansionTile(
           title: Txt(
@@ -2585,7 +2583,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
           ),
           children: [
             Cntr(
-              color: Color(0xffF4F4F4),
+              color: const Color(0xffF4F4F4),
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               radius: BorderRadius.circular(10),
               width: Get.width,
@@ -2653,10 +2651,10 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                     height: 5.0,
                   ),
                   Cntr(
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                     height: 80,
                     width: Get.width,
-                    border: Border.all(color: Color(0xffE2E2E2)),
+                    border: Border.all(color: const Color(0xffE2E2E2)),
                     radius: BorderRadius.circular(10),
                     child: Txt(
                       text: widget.data['order']['description'],
@@ -2684,7 +2682,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
 
   Cntr namaPerawat() {
     return Cntr(
-      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
       radius: BorderRadius.circular(10),
       width: Get.width,
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 26),
@@ -2762,6 +2760,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
   }
 }
 
+// ignore: must_be_immutable
 class Rating extends StatelessWidget {
   Rating({Key? key, this.rating, this.deskripsi}) : super(key: key);
 

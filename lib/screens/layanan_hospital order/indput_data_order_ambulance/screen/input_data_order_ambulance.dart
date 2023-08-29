@@ -1,20 +1,14 @@
 import 'package:bionmed_app/constant/colors.dart';
 import 'package:bionmed_app/constant/styles.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
-import 'package:bionmed_app/screens/login/controller_login.dart';
 import 'package:bionmed_app/screens/pesanan/maps.dart';
-import 'package:bionmed_app/screens/profile_doctor/profil_dokter_controller.dart';
-import 'package:bionmed_app/screens/select_service/select_service_screen.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
 import 'package:bionmed_app/widgets/container/container.dart';
 import 'package:bionmed_app/widgets/input/input_primary.dart';
 import 'package:bionmed_app/widgets/other/loading_indicator.dart';
-import 'package:bionmed_app/widgets/other/show_dialog.dart';
 import 'package:bionmed_app/widgets/txt/text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -95,8 +89,8 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
               ),
             ),
             child: ListView(
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.all(24),
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(24),
               children: [
                 Txt(
                   text: 'Data Pesanan',
@@ -108,7 +102,7 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
                 ),
                 Txt(
                   text: 'Lengkapi data pesanan anda disini',
-                  color: Color(0xff7C7C7C),
+                  color: const Color(0xff7C7C7C),
                   size: 11,
                   weight: FontWeight.normal,
                 ),
@@ -117,7 +111,7 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
                 ),
                 Txt(
                   text: 'Layanan Ambulance',
-                  color: Color(0xff7C7C7C),
+                  color: const Color(0xff7C7C7C),
                   weight: FontWeight.normal,
                 ),
                 const SizedBox(
@@ -163,7 +157,7 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
               ),
               Txt(
                   text: 'Tentukan Jadwal Penjemputan',
-                  color: Color(0xff555555),
+                  color: const Color(0xff555555),
                   weight: FontWeight.normal,
                 ),
               
@@ -213,7 +207,7 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
               Row(
                 children: [
                   Checkbox(
-                    shape: CircleBorder(),
+                    shape: const CircleBorder(),
                     value: true
                   , onChanged: (value) {
                     
@@ -267,7 +261,7 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
                 ),
               ),
 
-                 SizedBox(
+                 const SizedBox(
                 height: 50.0,
                 ),
                 ButtonGradient(onPressed: () async{

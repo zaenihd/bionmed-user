@@ -256,7 +256,7 @@ class _DetailProfileDoctorUmumState extends State<DetailProfileDoctorUmum> {
                                                               children: [
                                                                 myC.dataJadwalDokter[i]['schedules'].length >
                                                                         2
-                                                                    ? Icon(Icons
+                                                                    ? const Icon(Icons
                                                                         .swap_vert)
                                                                     : const SizedBox(
                                                                         height:

@@ -9,6 +9,7 @@ import 'package:bionmed_app/widgets/other/show_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 class RegisterController extends GetxController {

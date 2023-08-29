@@ -24,6 +24,8 @@ class InputLayananController extends GetxController {
 
   RxString jamTerpilih = "".obs;
   RxString jamTerpilihForSend = "".obs;
+  RxString jamSekarangPlus3Jam = "".obs;
+  RxInt jamSekarangPlus4JamFix = 0.obs;
   RxString dateTerpilih = "".obs;
   RxString selectedGenderPerawat = "".obs;
   RxString selectedGenderPasien = "".obs;
@@ -66,9 +68,12 @@ class InputLayananController extends GetxController {
           String dates = DateFormat("HH:mm", "en_US").format(newdate);
           String datesToSendApi =
               DateFormat("HH:mm:ss", "en_US").format(newdate);
+          jamSekarangPlus3Jam.value = DateTime.now().toString();
           startTime = newdate;
           jamTerpilih.value = dates;
           jamTerpilihForSend.value = datesToSendApi;
+          jamSekarangPlus4JamFix.value = int.parse(jamSekarangPlus3Jam.value.substring(10, 13));
+          log(jamSekarangPlus4JamFix.value.toString());
         },
         use24hFormat: true,
         mode: CupertinoDatePickerMode.time,

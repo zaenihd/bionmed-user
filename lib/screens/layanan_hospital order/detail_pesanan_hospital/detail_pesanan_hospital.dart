@@ -96,7 +96,7 @@ class DetailPesananHospitalView
       child: ExpansionTile(
           title: Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.access_time_filled,
                 color: Colors.white,
               ),
@@ -122,7 +122,7 @@ class DetailPesananHospitalView
           children: [
             Cntr(
               color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   Row(
@@ -226,7 +226,7 @@ class DetailPesananHospitalView
   Cntr tujuanAmbulance() {
     return Cntr(
       width: Get.width,
-      padding: EdgeInsets.all(25),
+      padding: const EdgeInsets.all(25),
       color: Colors.grey[300],
       radius: BorderRadius.circular(10),
       child: Column(
@@ -241,7 +241,7 @@ class DetailPesananHospitalView
           ),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.location_on,
                 color: Colors.green,
               ),
@@ -268,7 +268,7 @@ class DetailPesananHospitalView
           ),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.location_on,
                 color: Colors.green,
               ),
@@ -710,7 +710,7 @@ class DetailPesananHospitalView
                     child: ListView.builder(
                       itemCount: 4,
                       itemBuilder: (context, index) => Cntr(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         height: 50,
                         radius: BorderRadius.circular(10),
                         color: Colors.white,
@@ -873,7 +873,7 @@ class DetailPesananHospitalView
                             height: 32,
                           ),
                           ButtonGradient(
-                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
                             label: "Ya, Saya sudah",
                             onPressed: () {
                               Get.back();
@@ -884,7 +884,7 @@ class DetailPesananHospitalView
                             height: 15.0,
                           ),
                           ButtonPrimary(
-                              margin: EdgeInsets.symmetric(horizontal: 20),
+                              margin: const EdgeInsets.symmetric(horizontal: 20),
                               color: Colors.grey,
                               onPressed: () {
                                 Get.back();
@@ -934,7 +934,7 @@ class DetailPesananHospitalView
                             height: 22.0,
                           ),
                           ButtonGradient(
-                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
                             label: "Oke",
                             onPressed: () {
                               Get.back();
@@ -977,10 +977,10 @@ class DetailPesananHospitalView
                             height: 20.0,
                           ),
                           Cntr(
-                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
                             height: 260,
                             width: Get.width,
-                            image: DecorationImage(
+                            image: const DecorationImage(
                               image: NetworkImage(
                                   'https://picsum.photos/200/300/?blur'),
                             ),
@@ -989,7 +989,7 @@ class DetailPesananHospitalView
                             height: 22.0,
                           ),
                           ButtonGradient(
-                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
                             label: "Kembali",
                             onPressed: () {
                               Get.back();
@@ -1051,7 +1051,7 @@ class DetailPesananHospitalView
                             height: 24,
                           ),
                           ButtonGradient(
-                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
                             label: "Oke",
                             onPressed: () {
                               Get.back();
@@ -1187,8 +1187,8 @@ popUpKasiRating() {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 17),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey!)),
-                child: Text("Deskripsi")),
+                    border: Border.all(color: Colors.grey)),
+                child: const Text("Deskripsi")),
                   const SizedBox(
             height: 20.0,
             ),
@@ -1204,6 +1204,7 @@ popUpKasiRating() {
       ));
 }
 
+// ignore: must_be_immutable
 class Rating extends StatelessWidget {
   Rating({Key? key, this.rating}) : super(key: key);
 
@@ -1249,7 +1250,7 @@ class Rating extends StatelessWidget {
         Center(
           child: RatingBar.builder(
             ignoreGestures: true,
-            initialRating: double.parse(rating.toString() ?? "5"),
+            initialRating: double.parse(rating.toString()),
             minRating: 1,
             direction: Axis.horizontal,
             allowHalfRating: false,
@@ -1294,7 +1295,7 @@ class Rating extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        Align(alignment: Alignment.centerLeft, child: const Text('Deskripsi')),
+        const Align(alignment: Alignment.centerLeft, child: Text('Deskripsi')),
         const SizedBox(
           height: 10,
         ),
@@ -1304,8 +1305,8 @@ class Rating extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 17),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey!)),
-            child: Text("deskripsiRating.value"))
+                border: Border.all(color: Colors.grey)),
+            child: const Text("deskripsiRating.value"))
         // ),
       ],
     );

@@ -143,12 +143,12 @@ class _NotifScreenState extends State<NotifScreen> {
                                 width: Get.width / 2,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                  children: const [
                                     Text(
                                       'Lihat detail pemberitahuan',
                                       // Get.find<ControllerLogin>()
                                       //     .dataNotif[index]['description'],
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         color: AppColor.bodyColor,
@@ -333,7 +333,7 @@ class _NotifScreenState extends State<NotifScreen> {
                                             height: 10.0,
                                           ),
                                           Cntr(
-                                            margin: EdgeInsets.symmetric(
+                                            margin: const EdgeInsets.symmetric(
                                                 horizontal: 25),
                                             radius: BorderRadius.circular(10),
                                             color: const Color(0xffEFEFEF),
@@ -586,9 +586,9 @@ class _NotifScreenState extends State<NotifScreen> {
 
   Cntr cardPerawat(String title, String subtitle, String imageUrl) {
     return Cntr(
-      border: Border.all(color: Color(0xffE2E2E2)),
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.symmetric(horizontal: 25),
+      border: Border.all(color: const Color(0xffE2E2E2)),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 25),
       radius: BorderRadius.circular(10),
       child: Row(
         children: [
@@ -628,7 +628,7 @@ class _NotifScreenState extends State<NotifScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.centerLeft,
       width: Get.width,
-      border: Border.all(color: Color(0xffE2E2E2)),
+      border: Border.all(color: const Color(0xffE2E2E2)),
       radius: BorderRadius.circular(10),
       child: ExpansionTile(
           title: Row(
@@ -981,7 +981,7 @@ class _NotifScreenState extends State<NotifScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.check_circle,
                         color: Colors.green,
                         size: 14,

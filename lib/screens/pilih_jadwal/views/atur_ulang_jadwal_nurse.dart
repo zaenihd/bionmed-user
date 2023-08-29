@@ -119,7 +119,7 @@ class AturUlangJadwalNurse extends GetView<PilihJadwalController> {
                                   ),
                                   onTap: () async {
                                     // Get.find<ControllerPayment>().sequenceId.value = 
-                                    log('=========================' +   Get.find<ControllerPesanan>().orderIdDetail.value.toString());
+                                    log('=========================${Get.find<ControllerPesanan>().orderIdDetail.value}');
                                     controller.endTime.value =
                                         controller.dataJadwal[index]['endTime'];
                                     controller.idService.value =
@@ -175,7 +175,7 @@ class AturUlangJadwalNurse extends GetView<PilihJadwalController> {
                                                 3 >=
                                             int.parse(controller.endTime.value
                                                 .substring(0, 2))) {
-                                          controller.jadwalTerlewat3Jam();
+                                          controller.jadwalTerlewat3Jam("Pilih Jadwal Lain");
                                         } else {
                                           Get.bottomSheet(
                                               shape: RoundedRectangleBorder(
