@@ -638,8 +638,8 @@ Future<void> enableGPS() async {
     Get.put(ControllerPayment());
     getLocation();
 
-    // realtimeApi();
-    // trimUpdateStatus();
+    realtimeApi();
+    trimUpdateStatus();
     // log('zen');
 
     // ignore: todo

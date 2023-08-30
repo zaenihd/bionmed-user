@@ -379,9 +379,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               .clear();
                           Get.find<ControllerLogin>().doctorByService.clear();
                           if (controller.dataService[index]['sequence'] == 4 
-                          // ||
-                          //     controller.dataService[index]['sequence'] == 5 ||
-                          //     controller.dataService[index]['sequence'] == 6
+                          ||
+                              controller.dataService[index]['sequence'] == 5 ||
+                              controller.dataService[index]['sequence'] == 6
                               ) {
                             log('coba ${Get.find<ControllerPayment>()
                                     .serviceId
