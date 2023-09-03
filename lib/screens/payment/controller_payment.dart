@@ -46,7 +46,7 @@ class ControllerPayment extends GetxController {
   RxMap dataOrder = {}.obs;
   RxMap dataOrderPayment = {}.obs;
   RxString codeOrder = "".obs;
-  RxString nameService = "".obs;
+  RxInt nameService = 0.obs;
   RxString imageService = "".obs;
   RxInt idOrder = 0.obs;
   RxInt voucherId = 0.obs;

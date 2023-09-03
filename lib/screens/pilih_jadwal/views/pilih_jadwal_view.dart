@@ -357,10 +357,7 @@ class PilihJadwalView extends GetView<PilihJadwalController> {
                                                           onPressed: () {
                                                             Get.to(() =>
                                                                 ServiceOnCall(
-                                                                  title: Get.find<
-                                                                          ControllerPayment>()
-                                                                      .nameService
-                                                                      .value,
+                                                                  title:Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
                                                                 ));
                                                           })
                                                     ],
@@ -538,10 +535,7 @@ class PilihJadwalView extends GetView<PilihJadwalController> {
                                                           onPressed: () {
                                                             Get.to(() =>
                                                                 ServiceOnCall(
-                                                                  title: Get.find<
-                                                                          ControllerPayment>()
-                                                                      .nameService
-                                                                      .value,
+                                                                  title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
                                                                 ));
                                                           })
                                                     ],
@@ -691,10 +685,7 @@ class PilihJadwalView extends GetView<PilihJadwalController> {
                                                       onPressed: () {
                                                         Get.to(
                                                             () => ServiceOnCall(
-                                                                  title: Get.find<
-                                                                          ControllerPayment>()
-                                                                      .nameService
-                                                                      .value,
+                                                                  title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
                                                                 ));
                                                       })
                                                 ],

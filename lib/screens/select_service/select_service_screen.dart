@@ -24,7 +24,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
         title: InkWell(
           onTap: () {
           },
-          child: const Text('Pilih Layaaanan')),
+          child: const Text('Pilih Layanan')),
         titleTextStyle: TextStyles.subtitle1,
         elevation: 0.0,
         flexibleSpace: Container(

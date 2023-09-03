@@ -409,9 +409,9 @@ class _PagePesananJawalState extends State<PagePesananJawal> {
                     print(
                         "UWUW${Get.find<ControllerPayment>().dateOrderHomeVisit.value}");
                     if (Get.find<ControllerPayment>().nameService.value ==
-                            "Home Visit Doctor" ||
+                           2 ||
                         Get.find<ControllerPayment>().nameService.value ==
-                            "Nursing Home") {
+                            4) {
                       if (Get.find<PilihJadwalController>().startDate.value ==
                           "") {
                         showPopUp(
@@ -426,9 +426,8 @@ class _PagePesananJawalState extends State<PagePesananJawal> {
                             });
                       } else {
                         if (Get.find<ControllerPayment>().nameService.value ==
-                                "Home Visit Doctor" ||
-                            Get.find<ControllerPayment>().nameService.value ==
-                                "Nursing Home") {
+                                2||
+                            Get.find<ControllerPayment>().nameService.value == 4) {
                           Get.to(() => const PagePesananDoctorOnCall());
                         } else {
                           print(Get.find<ControllerPesanan>().spesialist.value);
@@ -451,9 +450,7 @@ class _PagePesananJawalState extends State<PagePesananJawal> {
                                       .idSpesialist
                                       .value);
                           Get.to(() => ServiceOnCall(
-                                title: Get.find<ControllerPayment>()
-                                    .nameService
-                                    .value,
+                                title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
                               ));
 
                           print(
@@ -493,9 +490,7 @@ class _PagePesananJawalState extends State<PagePesananJawal> {
                                 .idSpesialist
                                 .value);
                         Get.to(() => ServiceOnCall(
-                              title: Get.find<ControllerPayment>()
-                                  .nameService
-                                  .value,
+                              title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
                             ));
 
                         print(

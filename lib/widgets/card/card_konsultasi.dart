@@ -39,8 +39,8 @@ class CardPesananService extends StatelessWidget {
           Get.find<ControllerPesanan>().statusOrder.value =
               data['order']['status'];
           // Get.find<ControllerPesanan>().imageResep.value = data['order']['image_recipe'] == null ? "" : data['order']['image_recipe'];
-          if (data['order']['service']['name'] != "Home Visit Doctor" ||
-              data['order']['service']['name'] != "Nursing Home") {
+          if (data['order']['service']['sequence'] != 2 ||
+              data['order']['service']['sequence'] != 4) {
             // Get.find<ControllerPesanan>().orderMinute.value =
             //     data['order']['service_price']['minute'];
           }
@@ -51,7 +51,7 @@ class CardPesananService extends StatelessWidget {
           {
             // await Get.find<ControllerPesanan>().getOrderChat();
           }
-          if (data['order']['service']['name'] == 'Telemedicine') {
+          if (data['order']['service']['sequence'] == 1) {
             Get.find<ControllerPesanan>().orderMinute.value =
                 data['order']['service_price']['minute'];
           }
@@ -395,8 +395,8 @@ class CardPesananService extends StatelessWidget {
                             Get.find<ControllerPesanan>().statusOrder.value =
                                 data['order']['status'];
                             // Get.find<ControllerPesanan>().imageResep.value = data['order']['image_recipe'] == null ? "" : data['order']['image_recipe'];
-                            if (data['order']['service']['name'] !=
-                                "Home Visit Doctor") {
+                            if (data['order']['service']['sequence'] !=
+                                2) {
                               Get.find<ControllerPesanan>().orderMinute.value =
                                   data['order']['service_price']['minute'];
                             }
@@ -451,8 +451,8 @@ class CardPesananService extends StatelessWidget {
                         Get.find<ControllerPesanan>().statusOrder.value =
                             data['order']['status'];
                         // Get.find<ControllerPesanan>().imageResep.value = data['order']['image_recipe'] == null ? "" : data['order']['image_recipe'];
-                        if (data['order']['service']['name'] !=
-                            "Home Visit Doctor") {
+                        if (data['order']['service']['sequence'] !=
+                            2) {
                           Get.find<ControllerPesanan>().orderMinute.value =
                               data['order']['service_price']['minute'];
                         }

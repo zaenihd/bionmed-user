@@ -249,7 +249,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
         Get.find<ControllerPesanan>().updateStatusChat.value == 7 ||
         Get.find<ControllerPesanan>().updateStatusChat.value >= 5 ||
         myC.statusOrderDetail.value == 6 &&
-            widget.data['order']['service']['name'] == "Home Visit Doctor") {
+            widget.data['order']['service']['sequence'] == 2) {
       showPopUp(
           onTap: () {
             Get.find<ControllerPesanan>().isStart.value = false;
@@ -340,10 +340,10 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
         Get.find<ControllerPesanan>().updateStatusChat.value == 7 ||
         Get.find<ControllerPesanan>().updateStatusChat.value >= 5 ||
         myC.statusOrderDetail.value == 6 &&
-            widget.data['order']['service']['name'] == "Home Visit Doctor" ||
-        widget.data['order']['service']['name'] == "Nursing Home" ||
-        widget.data['order']['service']['name'] == "Mother Care" ||
-        widget.data['order']['service']['name'] == "Baby Care") {
+            widget.data['order']['service']['sequence'] == 2||
+        widget.data['order']['service']['sequence'] == 4 ||
+        widget.data['order']['service']['sequence'] == 5 ||
+        widget.data['order']['service']['sequence'] == 6) {
       showPopUp(
           onTap: () {
             Get.find<ControllerPesanan>().isStart.value = false;
@@ -465,19 +465,19 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   myC.statusOrderDetail.value == 5 ||
                   myC.statusOrderDetail.value == 2 ||
                   myC.statusOrderDetail.value == 3 &&
-                      widget.data['order']['service']['name'] ==
-                          "Home Visit Doctor" ||
+                      widget.data['order']['service']['sequence'] ==
+                          2 ||
                   myC.statusOrderDetail.value == 4 &&
-                      widget.data['order']['service']['name'] ==
-                          "Nursing Home" ||
+                      widget.data['order']['service']['sequence'] ==
+                          4 ||
                   myC.statusOrderDetail.value == 4 &&
-                      widget.data['order']['service']['name'] ==
-                          "Mother Care" ||
+                      widget.data['order']['service']['sequence'] ==
+                          5 ||
                   myC.statusOrderDetail.value == 4 &&
-                      widget.data['order']['service']['name'] == "Baby Care" ||
+                      widget.data['order']['service']['sequence'] == 6 ||
                   myC.statusOrderDetail.value == 4 &&
-                      widget.data['order']['service']['name'] ==
-                          "Home Visit Doctor" || myC.statusOrderDetail.value == 98
+                      widget.data['order']['service']['sequence'] ==
+                          2 || myC.statusOrderDetail.value == 98
               ? verticalSpace(0)
               : myC.statusOrderDetail.value == 99
                   ? Padding(
@@ -818,8 +818,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                                     role == 'nurse' ||
                                                 myC.statusOrderDetail.value == 6 &&
                                                     widget.data['order']['service']
-                                                            ['name'] ==
-                                                        "Home Visit Doctor" ||
+                                                            ['sequence'] ==
+                                                        2||
                                                 Get.find<ControllerPesanan>()
                                                         .updateStatusChat
                                                         .value ==
@@ -913,8 +913,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                           myC.statusOrderDetail.value == 3
                                               ? "Mulai Sekarang "
                                               : myC.statusOrderDetail.value == 4 &&
-                                                      widget.data['order']['service']['name'] ==
-                                                          "Telemedicine"
+                                                      widget.data['order']['service']['sequence'] ==
+                                                         1
                                                   ? "Sedang Berlangsung"
                                                   : myC.statusOrderDetail.value == 6 && myC.imageResep.value != "" ||
                                                           Get.find<ControllerPesanan>()
@@ -926,22 +926,21 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                                                   .value ==
                                                               7 ||
                                                           myC.statusOrderDetail.value == 5 &&
-                                                              widget.data['order']['service']['name'] ==
-                                                                  "Home Visit Doctor" ||
+                                                              widget.data['order']['service']['sequence'] ==
+                                                                  2 ||
                                                           myC.statusOrderDetail.value == 5 &&
-                                                              widget.data['order']['service']['name'] ==
-                                                                  "Nursing Home" ||
+                                                              widget.data['order']['service']['sequence'] ==
+                                                                  4 ||
                                                           myC.statusOrderDetail.value == 5 &&
-                                                              widget.data['order']['service']['name'] ==
-                                                                  "Mother Care" ||
+                                                              widget.data['order']['service']['sequence'] ==
+                                                                  5 ||
                                                           myC.statusOrderDetail.value == 5 &&
-                                                              widget.data['order']['service']['name'] == "Baby Care"
+                                                              widget.data['order']['service']['sequence'] == 6
                                                       ? "Konfirmasi Pesanan Selesai"
-                                                      : myC.statusOrderDetail.value == 6 && widget.data['order']['service']['name'] == "Home Visit Doctor" || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['name'] == "Nursing Home" || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['name'] == "Mother Care" || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['name'] == "Baby Care"
+                                                      : myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 2 || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 4|| myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 5 || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 6
                                                           ? "Konfirmasi selesai"
                                                           :
                                                           myC.statusOrderDetail.value == 0 ? "Bayar Sekarang" :
-                                                          
                                                            "Menunggu Resep Dari Dokter",
                                           textAlign: TextAlign.center,
                                         ),

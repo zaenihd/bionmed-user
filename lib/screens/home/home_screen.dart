@@ -369,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Get.find<ControllerPayment>().imageService.value =
                               controller.dataService[index]['image'];
                           Get.find<ControllerPayment>().nameService.value =
-                              controller.dataService[index]['name'];
+                              controller.dataService[index]['sequence'];
                           //CLEAR LIST
                           Get.put(InputLayananController())
                               .listDataNurse

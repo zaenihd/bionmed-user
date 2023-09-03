@@ -145,9 +145,7 @@ class _PagePesananDoctorOnCallState extends State<PagePesananDoctorOnCall> {
                       //     id: Get.find<ControllerPesanan>().idSpesialist.value);
                       await Get.find<ControllerPesanan>().getDoctorHomeVisit();
                       Get.to(() => ServiceOnCall(
-                                title: Get.find<ControllerPayment>()
-                                    .nameService
-                                    .value,
+                                title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
                               )
                           // await Get.find<ControllerLogin>().getDoctorByServiceId(
                           //     id: Get.find<ControllerPayment>()
