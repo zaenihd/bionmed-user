@@ -6,6 +6,7 @@ import 'package:bionmed_app/screens/payment/voucher_screen.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
 import 'package:bionmed_app/widgets/other/loading_indicator.dart';
 import 'package:bionmed_app/widgets/other/show_dialog.dart';
+import 'package:bionmed_app/widgets/txt/text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class PaymentScreenNurse extends StatefulWidget {
 }
 
 class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
-    final inputC = Get.put(InputLayananController());
+  final inputC = Get.put(InputLayananController());
 
   @override
   Widget build(BuildContext context) {
@@ -49,22 +50,25 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
                 onPressed: () async {
                   // Get.find<PilihJadwalController>().startDate.value = "";
 
-                  if (controller.vaCode.value == 'ovo' || controller.vaCode.value == 'dana' ||controller.vaCode.value == "shopeePay"|| controller.vaCode.value == "linkAja") {
-                   await controller.orderPlaceByDigital();
+                  if (controller.vaCode.value == 'ovo' ||
+                      controller.vaCode.value == 'dana' ||
+                      controller.vaCode.value == "shopeePay" ||
+                      controller.vaCode.value == "linkAja") {
+                    await controller.orderPlaceByDigital();
                   } else if (controller.vaCode.value == 'bniM') {
-                    showPopUp(onTap: () {
-                            Get.back();
-                          },
+                    showPopUp(
+                        onTap: () {
+                          Get.back();
+                        },
                         imageAction: "assets/json/eror.json",
                         description: "Under Development");
                   } else {
-                   await controller.createVa();
-                    
+                    await controller.createVa();
 
                     // Get.to(() => PaymentScreenDetai());
                   }
-                    // controller.createVa();
-                  
+                  // controller.createVa();
+
                   //   Get.find<ControllerPayment>().dicount.value = 0;
                   // //  Get.find<ControllerPayment>().orderAddVocuher(orderId: Get.find<ControllerPayment>().idOrder.value,voucherId:  )
                   //  Get.find<ControllerPesanan>()
@@ -141,7 +145,8 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
                 "Jenis Layanan",
                 style: TextStyles.subtitle3,
               ),
-              Text("${Get.find<ControllerPayment>().dataOrder['service']['name']}",
+              Text(
+                "${Get.find<ControllerPayment>().dataOrder['service']['name']}",
                 // Get.find<ControllerPayment>().dataOrder['service']['name'],
                 style:
                     TextStyles.subtitle3.copyWith(fontWeight: FontWeight.bold),
@@ -149,7 +154,7 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
             ],
           ),
           const SizedBox(
-          height: 10.0,
+            height: 10.0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,7 +163,8 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
                 "Harga Konsultasi",
                 style: TextStyles.subtitle3,
               ),
-              Text(priceFormat(double.parse(inputC.priceBeforeDiskon.value)),
+              Text(
+                priceFormat(double.parse(inputC.priceBeforeDiskon.value)),
                 // priceFormat(Get.find<ControllerPayment>()
                 //     .dataOrder['service_price']['price']),
                 style:
@@ -182,7 +188,8 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
                 //       Get.find<ControllerPayment>().dataOrder['service_price']
                 //           ['discount'] /
                 //       100)),
-                Text('${inputC.diskonPesananNurse}%',
+                Text(
+                  '${inputC.diskonPesananNurse}%',
                   // priceFormat(
                   //     Get.find<ControllerPayment>().dataOrder['discount']),
                   style: TextStyles.subtitle3.copyWith(
@@ -194,26 +201,28 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
           Visibility(
             visible: Get.find<ControllerPayment>().dicount.value != 0,
             child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Diskon Voucher",
-                style: TextStyles.subtitle3,
-              ),
-              // Text(
-              //   priceFormat((Get.find<ControllerPayment>()
-              //           .dataOrder['service_price']['price'] *
-              //       Get.find<ControllerPayment>().dataOrder['service_price']
-              //           ['discount'] /
-              //       100)),
-              Text('${Get.find<ControllerPayment>().dicount.value}%',
-                // priceFormat(
-                //     Get.find<ControllerPayment>().dataOrder['discount']),
-                style: TextStyles.subtitle3.copyWith(
-                    fontWeight: FontWeight.bold, color: AppColor.errorColor),
-              ),
-            ],
-          ),),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Diskon Voucher",
+                  style: TextStyles.subtitle3,
+                ),
+                // Text(
+                //   priceFormat((Get.find<ControllerPayment>()
+                //           .dataOrder['service_price']['price'] *
+                //       Get.find<ControllerPayment>().dataOrder['service_price']
+                //           ['discount'] /
+                //       100)),
+                Text(
+                  '${Get.find<ControllerPayment>().dicount.value}%',
+                  // priceFormat(
+                  //     Get.find<ControllerPayment>().dataOrder['discount']),
+                  style: TextStyles.subtitle3.copyWith(
+                      fontWeight: FontWeight.bold, color: AppColor.errorColor),
+                ),
+              ],
+            ),
+          ),
           verticalSpace(20.h),
           widgetCardSubAmount()
         ]),
@@ -245,7 +254,8 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
   Container widgetCardVoucher() {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: const Color(0xFFFFF9D8)),
+          borderRadius: BorderRadius.circular(10),
+          color: const Color(0xFFFFF9D8)),
       child: InkWell(
         onTap: () {
           Get.to(() => const VoucherScreen());
@@ -326,7 +336,8 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
   Container widgetCardPayment() {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: const Color(0xFFF9F9F9)),
+          borderRadius: BorderRadius.circular(10),
+          color: const Color(0xFFF9F9F9)),
       child: InkWell(
         onTap: () {
           Get.to(() => const MetodePaymentScreen());
@@ -360,25 +371,27 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
             "Total Biaya",
             style: TextStyles.body1,
           ),
-          Text(priceFormat(double.parse(inputC.totalPriceFix.toString())),)
-        //  Obx(()=>Get.find<PilihJadwalController>().totalBiayaFixWithVoucher.value == 0.0 ? 
-        //       Text(
-        //         priceFormat(Get.find<PilihJadwalController>().totalBiayaFix.value),
-        //         // "${Get.find<PilihJadwalController>().totalBiayaFix.value}",
+          Text(
+            priceFormat(double.parse(inputC.totalPriceFix.toString())),
+          )
+          //  Obx(()=>Get.find<PilihJadwalController>().totalBiayaFixWithVoucher.value == 0.0 ?
+          //       Text(
+          //         priceFormat(Get.find<PilihJadwalController>().totalBiayaFix.value),
+          //         // "${Get.find<PilihJadwalController>().totalBiayaFix.value}",
 
-        //     // priceFormat(Get.find<ControllerPayment>().dataOrder['totalPrice'] -
-        //     //     Get.find<ControllerPayment>().dataOrder['discount']),
-        //     style: TextStyles.subtitle3.copyWith(
-        //         fontWeight: FontWeight.bold, color: AppColor.successColor),
-        //   ) : Text(
-        //         priceFormat(Get.find<PilihJadwalController>().totalBiayaFixWithVoucher.value),
-        //         // "${Get.find<PilihJadwalController>().totalBiayaFix.value}",
+          //     // priceFormat(Get.find<ControllerPayment>().dataOrder['totalPrice'] -
+          //     //     Get.find<ControllerPayment>().dataOrder['discount']),
+          //     style: TextStyles.subtitle3.copyWith(
+          //         fontWeight: FontWeight.bold, color: AppColor.successColor),
+          //   ) : Text(
+          //         priceFormat(Get.find<PilihJadwalController>().totalBiayaFixWithVoucher.value),
+          //         // "${Get.find<PilihJadwalController>().totalBiayaFix.value}",
 
-        //     // priceFormat(Get.find<ControllerPayment>().dataOrder['totalPrice'] -
-        //     //     Get.find<ControllerPayment>().dataOrder['discount']),
-        //     style: TextStyles.subtitle3.copyWith(
-        //         fontWeight: FontWeight.bold, color: AppColor.successColor),
-        //   ),)
+          //     // priceFormat(Get.find<ControllerPayment>().dataOrder['totalPrice'] -
+          //     //     Get.find<ControllerPayment>().dataOrder['discount']),
+          //     style: TextStyles.subtitle3.copyWith(
+          //         fontWeight: FontWeight.bold, color: AppColor.successColor),
+          //   ),)
         ]),
       ),
     );
@@ -386,7 +399,7 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
 
   Row widgetDoctorProfile() {
     final inputC = Get.put(InputLayananController());
-    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
       // Get.find<ControllerPayment>().dataOrder['doctor']['image'] == null
       // Image.asset("assets/images/img-doctor1.png"),
       // Image.network("${inputC.detailNurse['image']}" ?? ,
@@ -394,35 +407,34 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
       //   width: 100.w,
       //   fit: BoxFit.contain,
       // ),
-       Obx(
-                          () => SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: CachedNetworkImage(
-                              imageUrl: inputC.detailNurse['image'] ?? "",
-                              width: Get.width,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  loadingIndicator(color: AppColor.primaryColor),
-                              errorWidget: (context, url, error) =>
-                                  Image.asset('assets/images/img-doctor2.png'),
-                            ),
-                          ),
-                        ),
+      Obx(
+        () => SizedBox(
+          height: 100,
+          width: 100,
+          child: CachedNetworkImage(
+            imageUrl: inputC.detailNurse['hospital'] == null
+                ? inputC.detailNurse['image']
+                : inputC.detailNurse['hospital']['image'],
+            width: Get.width,
+            fit: BoxFit.cover,
+            placeholder: (context, url) =>
+                loadingIndicator(color: AppColor.primaryColor),
+            errorWidget: (context, url, error) =>
+                Image.asset('assets/images/img-doctor2.png'),
+          ),
+        ),
+      ),
       horizontalSpace(10.h),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("${inputC.detailNurse['name']}",
+          Text(
+            inputC.detailNurse['hospital'] == null
+                ? inputC.detailNurse['name']
+                : inputC.detailNurse['hospital']['name'],
             // Get.find<ControllerPayment>().dataOrder['doctor']['name'],
             style: TextStyles.subtitle2,
           ),
-          verticalSpace(10),
-          // Text(
-          //   "Spesialis",
-          //   style: TextStyles.subtitle3,
-          // ),
-          verticalSpace(10.h),
           // Row(
           //   children: [
           //     Image.network(
@@ -435,33 +447,51 @@ class _PaymentScreenNurseState extends State<PaymentScreenNurse> {
           //       width: 120,
           //       child: Text(
           //               '${Get.find<ControllerLogin>().dataDoctorDetail['specialist']['name']}',
-              
+
           //         style: TextStyles.subtitle3,
           //       ),
           //     ),
           //   ],
           // ),
           verticalSpace(10.h),
-          Row(
-            children: [
-              Row(
-                children: List.generate(1,
-                    // Get.find<ControllerPayment>().dataOrder['doctor']['rating'],
-                    (index) {
-                  return const Icon(Icons.star,
-                      size: 16, color: AppColor.yellowColor);
-                }),
-              ),
-              horizontalSpace(10),
-              Text("",
-                // Get.find<ControllerPayment>()
-                //         .dataOrder['doctor']['rating']
-                //         .toString() +
-                //     ".0",
-                style: TextStyles.subtitle2,
-              ),
-            ],
-          ),
+          Visibility(
+              visible: inputC.detailNurse['hospital'] != null,
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    color: Colors.green,
+                    size: 15,
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Txt(
+                      text: Get.find<InputLayananController>()
+                          .detailNurse['hospital']['city'])
+                ],
+              )),
+          // Row(
+          //   children: [
+          //     Row(
+          //       children: List.generate(1,
+          //           // Get.find<ControllerPayment>().dataOrder['doctor']['rating'],
+          //           (index) {
+          //         return const Icon(Icons.star,
+          //             size: 16, color: AppColor.yellowColor);
+          //       }),
+          //     ),
+          //     horizontalSpace(10),
+          //     Text(
+          //       "",
+          //       // Get.find<ControllerPayment>()
+          //       //         .dataOrder['doctor']['rating']
+          //       //         .toString() +
+          //       //     ".0",
+          //       style: TextStyles.subtitle2,
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     ]);

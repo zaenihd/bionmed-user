@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Bionmed',
           home: setuju == null ? DisclamerSplash() : const SplashScreen(),
-          // home: KetentuanLayananHospital(),
+          // home:  ListHospital(),
           theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Ubuntu'),
           initialBinding: RootBinding(),
           getPages: AppPages.pages,

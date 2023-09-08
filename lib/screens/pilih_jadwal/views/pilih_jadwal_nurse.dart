@@ -52,20 +52,24 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                       child: Row(
                         children: [
                           Obx(
-                          () => SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: CachedNetworkImage(
-                              imageUrl: detailC.detailNurse['image'] ?? "",
-                              width: Get.width,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  loadingIndicator(color: AppColor.primaryColor),
-                              errorWidget: (context, url, error) =>
-                                  Image.asset('assets/images/img-doctor2.png'),
+                            () => SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: CachedNetworkImage(
+                                imageUrl: detailC.detailNurse['hospital'] ==
+                                        null
+                                    ? detailC.detailNurse['image']
+                                    : detailC.detailNurse['hospital']['image'],
+                                width: Get.width,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => loadingIndicator(
+                                    color: AppColor.primaryColor),
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                        'assets/images/img-doctor2.png'),
+                              ),
                             ),
                           ),
-                        ),
                           const SizedBox(
                             width: 10.0,
                           ),
@@ -88,8 +92,11 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                               SizedBox(
                                 width: Get.width / 1.8,
                                 child: Text(
-                                  // '${Get.find<ControllerLogin>().dataDoctorDetail['specialist']['name']}',
-                                  "",
+                                  detailC.detailNurse['hospital'] != null
+                                      ? detailC.detailNurse['hospital']['name']
+                                      :
+                                      // '${Get.find<ControllerLogin>().dataDoctorDetail['specialist']['name']}',
+                                      "",
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal),
@@ -135,32 +142,33 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                     color: Colors.white,
                                   ),
                                   onTap: () async {
-                                    log(Get.find<
-                                                        InputLayananController>()
-                                                    .jamTerpilihForSend
-                                                    .value
-                                                    .substring(0, 2));
+                                    log(Get.find<InputLayananController>()
+                                        .jamTerpilihForSend
+                                        .value
+                                        .substring(0, 2));
                                     controller.endTime.value =
                                         controller.dataJadwal[index]['endTime'];
                                     controller.idService.value =
                                         controller.dataJadwal[index]['id'];
-                                        log('dataa ${controller.idService.value}');
+                                    log('dataa ${controller.idService.value}');
                                     DateTime now = DateTime.now();
                                     controller.dateTimeNowHome.value =
                                         DateFormat('yyyy-MM-dd').format(now);
                                     await controller.registerSlotNurse(
                                         date: controller.startDate.value);
                                     if (controller.namaLayanan.value ==
-                                            "Home Visit" || 
+                                            "Home Visit" ||
                                         Get.find<ControllerPayment>()
-                                                          .serviceId
-                                                          .value ==
-                                            4 || Get.find<ControllerPayment>()
-                                                          .serviceId
-                                                          .value ==
-                                            5 || Get.find<ControllerPayment>()
-                                                          .serviceId
-                                                          .value ==
+                                                .serviceId
+                                                .value ==
+                                            4 ||
+                                        Get.find<ControllerPayment>()
+                                                .serviceId
+                                                .value ==
+                                            5 ||
+                                        Get.find<ControllerPayment>()
+                                                .serviceId
+                                                .value ==
                                             6) {
                                       if (controller.readyBooking.isTrue) {
                                         int hours = int.parse(controller
@@ -174,17 +182,11 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                             .startDateCustomer.value
                                             .substring(0, 10);
                                         controller.startDateCustomerHomeVisit
-                                            .value = "$date ${Get.find<
-                                                        InputLayananController>()
-                                                    .jamTerpilihForSend
-                                                    .value}";
-                                            log('ini adalah star${controller.startDateCustomerHomeVisit
-                                            .value}' );
-                                            log("ini adalaah 1 $date $hours:$minute");
-                                            log("ini adalaah 1 ${ Get.find<
-                                                        InputLayananController>()
-                                                    .jamSekarangPlus4JamFix
-                                                    .value}");
+                                                .value =
+                                            "$date ${Get.find<InputLayananController>().jamTerpilihForSend.value}";
+                                        log('ini adalah star${controller.startDateCustomerHomeVisit.value}');
+                                        log("ini adalaah 1 $date $hours:$minute");
+                                        log("ini adalaah 1 ${Get.find<InputLayananController>().jamSekarangPlus4JamFix.value}");
                                       }
                                       if (int.parse(jadwalC.startDate.value
                                               .substring(8, 10)) ==
@@ -195,18 +197,17 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                                 .dateTimeNow
                                                 .value =
                                             DateFormat('kk:mm').format(now);
-                                        if (int.parse(
-                                          Get.find<
-                                                        InputLayananController>()
-                                                    .jamTerpilihForSend
-                                                    .value
-                                                    .substring(0, 2))
-                                                 <
-                                            Get.find<
-                                                        InputLayananController>()
+                                        if (int.parse(Get.find<
+                                                    InputLayananController>()
+                                                .jamTerpilihForSend
+                                                .value
+                                                .substring(0, 2)) <
+                                            Get.find<InputLayananController>()
                                                     .jamSekarangPlus4JamFix
-                                                    .value + 4) {
-                                          controller.jadwalTerlewat3Jam("Pilih Jadwal Lain");
+                                                    .value +
+                                                4) {
+                                          controller.jadwalTerlewat3Jam(
+                                              "Pilih Jadwal Lain");
                                         } else {
                                           Get.bottomSheet(
                                               shape: RoundedRectangleBorder(
@@ -351,7 +352,19 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                                           onPressed: () {
                                                             Get.to(() =>
                                                                 ServiceOnCall(
-                                                                  title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
+                                                                  title: Get.find<ControllerPayment>()
+                                                                              .nameService
+                                                                              .value ==
+                                                                          2
+                                                                      ? "Personal Doctor"
+                                                                      : Get.find<ControllerPayment>().nameService.value ==
+                                                                              4
+                                                                          ? "Nursing Home"
+                                                                          : Get.find<ControllerPayment>().nameService.value == 5
+                                                                              ? "Mother Care"
+                                                                              : Get.find<ControllerPayment>().nameService.value == 6
+                                                                                  ? "Baby Care"
+                                                                                  : "Telemedicine",
                                                                 ));
                                                           })
                                                     ],
@@ -519,10 +532,21 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                                         label:
                                                             "Cari Dokter Lainnya",
                                                         onPressed: () {
-                                                          Get.to(() =>
-                                                              ServiceOnCall(
-                                                                title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
-                                                              ));
+                                                          Get.to(
+                                                              () =>
+                                                                  ServiceOnCall(
+                                                                    title: Get.find<ControllerPayment>().nameService.value ==
+                                                                            2
+                                                                        ? "Personal Doctor"
+                                                                        : Get.find<ControllerPayment>().nameService.value ==
+                                                                                4
+                                                                            ? "Nursing Home"
+                                                                            : Get.find<ControllerPayment>().nameService.value == 5
+                                                                                ? "Mother Care"
+                                                                                : Get.find<ControllerPayment>().nameService.value == 6
+                                                                                    ? "Baby Care"
+                                                                                    : "Telemedicine",
+                                                                  ));
                                                         })
                                                   ],
                                                 ),
@@ -669,7 +693,19 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                                       onPressed: () {
                                                         Get.to(
                                                             () => ServiceOnCall(
-                                                                  title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
+                                                                  title: Get.find<ControllerPayment>()
+                                                                              .nameService
+                                                                              .value ==
+                                                                          2
+                                                                      ? "Personal Doctor"
+                                                                      : Get.find<ControllerPayment>().nameService.value ==
+                                                                              4
+                                                                          ? "Nursing Home"
+                                                                          : Get.find<ControllerPayment>().nameService.value == 5
+                                                                              ? "Mother Care"
+                                                                              : Get.find<ControllerPayment>().nameService.value == 6
+                                                                                  ? "Baby Care"
+                                                                                  : "Telemedicine",
                                                                 ));
                                                       })
                                                 ],
@@ -677,9 +713,7 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                             ),
                                           ));
                                     }
-                                    log('ini adalah ${Get.find<ControllerPesanan>()
-                                                .serviceId
-                                                .value}');
+                                    log('ini adalah ${Get.find<ControllerPesanan>().serviceId.value}');
                                   },
                                 ),
                               ),

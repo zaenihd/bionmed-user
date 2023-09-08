@@ -376,7 +376,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   ),
                   // your app's logo?
                   image: Image.network(role == 'nurse'
-                      ? widget.data['order']['nurse']['image']
+                      ? widget.data['order']['nurse']['hospital'] != null ? widget.data['order']['nurse']['hospital']['image'] :widget.data['order']['nurse']['image']
                       : widget.data['order']['doctor']['image']),
                   submitButtonText: 'Kirim',
                   commentHint: 'Tetapkan petunjuk komentar khusus Anda',
@@ -2123,6 +2123,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                 ),
               ],
             )),
+            widget.data['order']['nurse']['hospital'] != null ?         namaHospital()
+:
         namaPerawat(),
         const SizedBox(
           height: 15.0,
@@ -2749,6 +2751,63 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   //   color: Colors.white,
                   //   size: 40,
                   // )
+                ],
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+  Cntr namaHospital(){
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+      radius: BorderRadius.circular(10),
+      width: Get.width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      gradient: AppColor.gradient1,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Cntr(
+                        color: Colors.transparent,
+                        height: 40, width: 40, image: DecorationImage(image: NetworkImage(widget.data['order']['service']['image']),fit: BoxFit.cover),),
+                  const SizedBox(
+                    height: 15.0,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Txt(
+                        text: widget.data['order']['nurse']['name'],
+                        weight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                        Txt(
+                        text: widget.data['order']['nurse']['hospital']['name'],
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Cntr(
+                    radius: BorderRadius.circular(5),
+                    width: Get.width,
+                    padding: const EdgeInsets.all(15),
+                  child: Txt(text: widget.data['order']['nurse']['description']),
+                  )
                 ],
               ),
             ],

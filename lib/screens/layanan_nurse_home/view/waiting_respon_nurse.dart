@@ -48,8 +48,15 @@ class WaitingResponNurse extends StatelessWidget {
                       height: 150,
                       width: 150,
                       image: DecorationImage(
-                          image: NetworkImage(Get.find<InputLayananController>()
-                              .detailNurse['image']),
+                          image: NetworkImage(
+                            Get.find<InputLayananController>()
+                                        .detailNurse['hospital'] ==
+                                    null
+                                ? Get.find<InputLayananController>()
+                                    .detailNurse['image']
+                                : Get.find<InputLayananController>()
+                                    .detailNurse['hospital']['image'],
+                          ),
                           fit: BoxFit.cover),
                     )),
               ),
@@ -58,10 +65,22 @@ class WaitingResponNurse extends StatelessWidget {
               height: 30.0,
             ),
             Txt(
-              text: Get.find<InputLayananController>().detailNurse['name'],
+              text: Get.find<InputLayananController>()
+                          .detailNurse['hospital'] ==
+                      null
+                  ? Get.find<InputLayananController>().detailNurse['name']
+                  : Get.find<InputLayananController>().detailNurse['hospital']
+                      ['name'],
               size: 24,
               weight: FontWeight.bold,
             ),
+            const SizedBox(
+            height: 10.0,
+            ),
+            Visibility(
+              visible: Get.find<InputLayananController>().detailNurse['hospital'] != null,
+              child: Txt(text: '${Get.find<InputLayananController>().detailNurse['name']}')),
+                                    
             // const SizedBox(
             //   height: 5.0,
             // ),
@@ -207,7 +226,27 @@ class WaitingResponNurse extends StatelessWidget {
                           ButtonGradient(
                               onPressed: () {
                                 Get.to(() => ServiceOnCall(
-                                      title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
+                                      title: Get.find<ControllerPayment>()
+                                                  .nameService
+                                                  .value ==
+                                              2
+                                          ? "Personal Doctor"
+                                          : Get.find<ControllerPayment>()
+                                                      .nameService
+                                                      .value ==
+                                                  4
+                                              ? "Nursing Home"
+                                              : Get.find<ControllerPayment>()
+                                                          .nameService
+                                                          .value ==
+                                                      5
+                                                  ? "Mother Care"
+                                                  : Get.find<ControllerPayment>()
+                                                              .nameService
+                                                              .value ==
+                                                          6
+                                                      ? "Baby Care"
+                                                      : "Telemedicine",
                                     ));
                               },
                               label: 'Pilih Perawat Lagi'),

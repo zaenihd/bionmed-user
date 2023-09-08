@@ -176,7 +176,7 @@ class _DetailNurseState extends State<DetailNurse> {
                           //   ),
                           // ),
                           const SizedBox(height: 16),
-ClipRRect(
+                          ClipRRect(
                             borderRadius: BorderRadius.circular(6),
                             clipBehavior: Clip.antiAlias,
                             child: Theme(
@@ -203,18 +203,29 @@ ClipRRect(
                                           width: Get.width / 1.2,
                                           height: 300,
                                           child: ListView.builder(
-                                              itemBuilder: (context, i) => Container(
-                                                padding: const EdgeInsets.only(left: 10),
-                                                margin: const EdgeInsets.only(top: 5, left: 5, right: 5),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: const BorderRadius.all(
-                                                  Radius.circular(12.0),
-                                                  ),
-                                                  border: Border.all(
-                                                width: 1.0,
-                                                color: Colors.grey[500]!,
-                                                ),),
-                                                child: Row(
+                                              itemBuilder: (context, i) =>
+                                                  Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10),
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            top: 5,
+                                                            left: 5,
+                                                            right: 5),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                        Radius.circular(12.0),
+                                                      ),
+                                                      border: Border.all(
+                                                        width: 1.0,
+                                                        color:
+                                                            Colors.grey[500]!,
+                                                      ),
+                                                    ),
+                                                    child: Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceBetween,
@@ -225,31 +236,50 @@ ClipRRect(
                                                             style: TextStyles
                                                                 .subtitle2),
                                                         Container(
-                                                          alignment: Alignment.center,
+                                                          alignment:
+                                                              Alignment.center,
                                                           height: 50,
                                                           width: 100,
-                                                          child: ListView.builder(
-                                                            padding: const EdgeInsets.only(top: 4, bottom: 4),
-                                                            itemCount: myC.dataJadwalDokter[i]['schedules'].length,
-                                                            itemBuilder: (context, index) => 
-                                                            Container(
-                                                              height: myC.dataJadwalDokter[i]['schedules'].length == 1? 40 : 20,
-                                                              width: 100,
-                                                              alignment:  Alignment.center,
-                                                              child: Text(
-                                                                  myC.dataJadwalDokter[
-                                                                                  i]
+                                                          child:
+                                                              ListView.builder(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 4,
+                                                                    bottom: 4),
+                                                            itemCount: myC
+                                                                .dataJadwalDokter[
+                                                                    i][
+                                                                    'schedules']
+                                                                .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                        index) =>
+                                                                    Container(
+                                                              height: myC
+                                                                          .dataJadwalDokter[
+                                                                              i]
                                                                               [
-                                                                              'isActive'] ==
-                                                                          false 
+                                                                              'schedules']
+                                                                          .length ==
+                                                                      1
+                                                                  ? 40
+                                                                  : 20,
+                                                              width: 100,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                  myC.dataJadwalDokter[i]['isActive'] ==
+                                                                          false
                                                                       ? "-"
-                                                                      : myC
-                                                                          .dataJadwalDokter[
-                                                                              i][
-                                                                              'schedules'][index]['startTime'] + " - " +  myC
-                                                                          .dataJadwalDokter[
-                                                                              i][
-                                                                              'schedules'][index]['endTime'],
+                                                                      : myC.dataJadwalDokter[i]['schedules'][index]
+                                                                              [
+                                                                              'startTime'] +
+                                                                          " - " +
+                                                                          myC.dataJadwalDokter[i]['schedules'][index]
+                                                                              [
+                                                                              'endTime'],
                                                                   // myC.dataJadwalDokter[
                                                                   //         i][
                                                                   //         'schedules']
@@ -265,7 +295,7 @@ ClipRRect(
                                                         )
                                                       ],
                                                     ),
-                                              ),
+                                                  ),
                                               itemCount:
                                                   myC.dataJadwalDokter.length),
                                         ),
@@ -441,9 +471,10 @@ ClipRRect(
                           // ),
                           // const SizedBox(height: 50),
                           ButtonGradient(
-                              onPressed: ()async { 
+                              onPressed: () async {
                                 await cLog.getPaketbyNurseFilter();
-                                    Get.find<ControllerLogin>().priceService.value = cLog.detailNurse['service_price_nurses'];
+                                Get.find<ControllerLogin>().priceService.value =
+                                    cLog.detailNurse['service_price_nurses'];
                                 // Get.find<ControllerPayment>().dates.value = "";
                                 // Get.find<ControllerServiceOnCall>()
                                 //     .controllerSearch

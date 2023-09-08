@@ -28,7 +28,7 @@ class CardPesananService extends StatelessWidget {
     String role = data['user'] == null ? "" : data['user']['role'];
     return InkWell(
       onTap: () async {
-                            log('message ${data['order']['status']}');
+        log('message ${data['order']['status']}');
 
         if (data['order']['status'] != 0) {
           // Get.find<HomeController>().timePeriodic.value = false;
@@ -97,7 +97,10 @@ class CardPesananService extends StatelessWidget {
                                   fit: BoxFit.cover)
                               : DecorationImage(
                                   image: NetworkImage(
-                                      data['order']['nurse']['image']),
+                                      data['order']['nurse']['hospital'] != null
+                                          ? data['order']['nurse']['hospital']
+                                              ['image']
+                                          : data['order']['nurse']['image']),
                                   fit: BoxFit.cover),
                         ),
                       )
@@ -130,7 +133,9 @@ class CardPesananService extends StatelessWidget {
                           width: Get.width * 0.48,
                           child: AutoSizeText(
                             role == 'nurse'
-                                ? data['order']['nurse']['name']
+                                ? data['order']['nurse']['hospital'] != null
+                                    ? data['order']['nurse']['hospital']['name']
+                                    : data['order']['nurse']['name']
                                 : data['order']['doctor']['name'],
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -395,8 +400,7 @@ class CardPesananService extends StatelessWidget {
                             Get.find<ControllerPesanan>().statusOrder.value =
                                 data['order']['status'];
                             // Get.find<ControllerPesanan>().imageResep.value = data['order']['image_recipe'] == null ? "" : data['order']['image_recipe'];
-                            if (data['order']['service']['sequence'] !=
-                                2) {
+                            if (data['order']['service']['sequence'] != 2) {
                               Get.find<ControllerPesanan>().orderMinute.value =
                                   data['order']['service_price']['minute'];
                             }
@@ -451,8 +455,7 @@ class CardPesananService extends StatelessWidget {
                         Get.find<ControllerPesanan>().statusOrder.value =
                             data['order']['status'];
                         // Get.find<ControllerPesanan>().imageResep.value = data['order']['image_recipe'] == null ? "" : data['order']['image_recipe'];
-                        if (data['order']['service']['sequence'] !=
-                            2) {
+                        if (data['order']['service']['sequence'] != 2) {
                           Get.find<ControllerPesanan>().orderMinute.value =
                               data['order']['service_price']['minute'];
                         }
@@ -474,7 +477,8 @@ class CardPesananService extends StatelessWidget {
                                     ? AppColor.primaryColor
                                     : data['order']['status'] == 4
                                         ? AppColor.bluePrimary2
-                                        : data['order']['status'] == 99 || data['order']['status'] == 98
+                                        : data['order']['status'] == 99 ||
+                                                data['order']['status'] == 98
                                             ? Colors.red
                                             : AppColor.greenColor,
                         // ignore: deprecated_member_use
@@ -489,11 +493,13 @@ class CardPesananService extends StatelessWidget {
                                     ? "Mulai Sekarang"
                                     : data['order']['status'] == 4
                                         ? "Sedang Berlangsung"
-                                        : data['order']['status'] == 99 
+                                        : data['order']['status'] == 99
                                             ? "Terlewatkan"
                                             : data['order']['status'] == 6
                                                 ? "Konfirmasi selesai"
-                                                :data['order']['status'] == 98 ? "Dibatalkan" : "Selesai",
+                                                : data['order']['status'] == 98
+                                                    ? "Dibatalkan"
+                                                    : "Selesai",
                         style: TextStyles.callout1,
                       ),
                     ),

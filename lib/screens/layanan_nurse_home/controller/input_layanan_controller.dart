@@ -101,7 +101,9 @@ class InputLayananController extends GetxController {
     isloading(true);
     try {
       final result = await RestClient().request(
-          '${MainUrl.urlApi}filter-nurse',
+          '${MainUrl.urlApi}filter-nurse/${Get.find<ControllerPayment>()
+                              .serviceId
+                              .value}',
           Method.POST,
           dataFilter.isEmpty ? params : dataFilter[0] as Map<String, dynamic>);
       // ignore: unused_local_variable

@@ -4,6 +4,7 @@ import 'package:bionmed_app/constant/colors.dart';
 import 'package:bionmed_app/constant/styles.dart';
 import 'package:bionmed_app/screens/home/home_controller.dart';
 import 'package:bionmed_app/screens/home/home_screen.dart';
+import 'package:bionmed_app/screens/layanan_hospital%20order/list_hospital.dart/list_hospital.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
 import 'package:bionmed_app/screens/payment/controller_payment.dart';
 import 'package:bionmed_app/screens/pesanan/controller_pesanan.dart';
@@ -715,8 +716,13 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
               ),
               ButtonGradient(
                   onPressed: () {
+                    if (Get.find<ControllerPayment>()
+                              .serviceId
+                              .value ==
+                          5) {
+                        log('message');
+                        controller.selectedGenderPasien.value = jenisKelamin[1];}
                     DateTime now = DateTime.now();
-
                     if (int.parse(Get.put(PilihJadwalController())
                             .startDate
                             .value
@@ -738,14 +744,16 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
                               .serviceId
                               .value ==
                           5) {
+                        log('message');
                         controller.selectedGenderPasien.value = jenisKelamin[1];
+                        actionNurse();
+
                       } else {
                         actionNurse();
                       }
-                    }else{
-                        actionNurse();
+                    } else {
+                      actionNurse();
                     }
-                    
                   },
                   label: 'Lanjutkan'),
 
@@ -760,7 +768,10 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
   }
 
   actionNurse() async {
+    
     log(controller.dataFilter.toString());
+                        controller.selectedGenderPasien.value = jenisKelamin[1];
+
 
     if (controller.tanggalC.text == "" ||
         controller.jamTerpilih.isEmpty ||
@@ -967,16 +978,43 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
         });
         await controller.getNurseFilter();
         Get.to(() => ServiceOnCall(
-              title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
+              title: Get.find<ControllerPayment>().nameService.value == 2
+                  ? "Personal Doctor"
+                  : Get.find<ControllerPayment>().nameService.value == 4
+                      ? "Nursing Home"
+                      : Get.find<ControllerPayment>().nameService.value == 5
+                          ? "Mother Care"
+                          : Get.find<ControllerPayment>().nameService.value == 6
+                              ? "Baby Care"
+                              : "Telemedicine",
             ));
       }
-      log('NO FILTER one');
+      if (Get.find<ControllerPayment>().serviceId.value == 5 || Get.find<ControllerPayment>().serviceId.value == 6) {
+        Get.to(() => ListHospital());
+        Get.put(InputLayananController()).listDataNurse.value =
+            Get.put(InputLayananController())
+                .listDataNurse
+                .where(
+                  (p0) => p0['hospital'] != null,
+                )
+                .toList();
+      } else {
+        log('NO FILTER one');
 
-      log(controller.dataFilter.toString());
-      await controller.getNurseFilter();
-      Get.to(() => ServiceOnCall(
-            title: Get.find<ControllerPayment>().nameService.value == 2 ? "Personal Doctor" : Get.find<ControllerPayment>().nameService.value == 4 ?"Nursing Home" : Get.find<ControllerPayment>().nameService.value == 5 ?"Mother Care" : Get.find<ControllerPayment>().nameService.value == 6? "Baby Care" : "Telemedicine",
-          ));
+        log(controller.dataFilter.toString());
+        await controller.getNurseFilter();
+        Get.to(() => ServiceOnCall(
+              title: Get.find<ControllerPayment>().nameService.value == 2
+                  ? "Personal Doctor"
+                  : Get.find<ControllerPayment>().nameService.value == 4
+                      ? "Nursing Home"
+                      : Get.find<ControllerPayment>().nameService.value == 5
+                          ? "Mother Care"
+                          : Get.find<ControllerPayment>().nameService.value == 6
+                              ? "Baby Care"
+                              : "Telemedicine",
+            ));
+      }
     }
   }
 }
