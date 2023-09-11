@@ -716,12 +716,10 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
               ),
               ButtonGradient(
                   onPressed: () {
-                    if (Get.find<ControllerPayment>()
-                              .serviceId
-                              .value ==
-                          5) {
-                        log('message');
-                        controller.selectedGenderPasien.value = jenisKelamin[1];}
+                    if (Get.find<ControllerPayment>().serviceId.value == 5) {
+                      log('message');
+                      controller.selectedGenderPasien.value = jenisKelamin[1];
+                    }
                     DateTime now = DateTime.now();
                     if (int.parse(Get.put(PilihJadwalController())
                             .startDate
@@ -745,13 +743,16 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
                               .value ==
                           5) {
                         log('message');
-                        controller.selectedGenderPasien.value = jenisKelamin[1];
-                        actionNurse();
-
+                        // controller.selectedGenderPasien.value = jenisKelamin[1];
+                        // actionNurse();
                       } else {
+                        log('message 1');
+
                         actionNurse();
                       }
                     } else {
+                      log('message 2');
+
                       actionNurse();
                     }
                   },
@@ -768,10 +769,8 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
   }
 
   actionNurse() async {
-    
     log(controller.dataFilter.toString());
-                        controller.selectedGenderPasien.value = jenisKelamin[1];
-
+    controller.selectedGenderPasien.value = jenisKelamin[1];
 
     if (controller.tanggalC.text == "" ||
         controller.jamTerpilih.isEmpty ||
@@ -976,6 +975,23 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
             }
           ]
         });
+        if (Get.find<ControllerPayment>().serviceId.value == 5 ||
+          Get.find<ControllerPayment>().serviceId.value == 6) {
+        log('NO FILTER one shot');
+
+                        log('message home');
+        await controller.getNurseFilter();
+
+
+        Get.to(() => ListHospital());
+        Get.put(InputLayananController()).listDataNurse.value =
+            Get.put(InputLayananController())
+                .listDataNurse
+                .where(
+                  (p0) => p0['hospital'] != null,
+                )
+                .toList();
+      } else {
         await controller.getNurseFilter();
         Get.to(() => ServiceOnCall(
               title: Get.find<ControllerPayment>().nameService.value == 2
@@ -988,8 +1004,16 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
                               ? "Baby Care"
                               : "Telemedicine",
             ));
-      }
-      if (Get.find<ControllerPayment>().serviceId.value == 5 || Get.find<ControllerPayment>().serviceId.value == 6) {
+      }}
+
+      if (Get.find<ControllerPayment>().serviceId.value == 5 ||
+          Get.find<ControllerPayment>().serviceId.value == 6) {
+        log('NO FILTER one shot');
+
+                        log('message home');
+        await controller.getNurseFilter();
+
+
         Get.to(() => ListHospital());
         Get.put(InputLayananController()).listDataNurse.value =
             Get.put(InputLayananController())

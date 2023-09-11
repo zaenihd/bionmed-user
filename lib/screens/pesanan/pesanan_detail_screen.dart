@@ -376,7 +376,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   ),
                   // your app's logo?
                   image: Image.network(role == 'nurse'
-                      ? widget.data['order']['nurse']['hospital'] != null ? widget.data['order']['nurse']['hospital']['image'] :widget.data['order']['nurse']['image']
+                      ? widget.data['order']['nurse']['hospital'] != null ? widget.data['order']['nurse']['hospital']['image'] : widget.data['order']['nurse']['image']
                       : widget.data['order']['doctor']['image']),
                   submitButtonText: 'Kirim',
                   commentHint: 'Tetapkan petunjuk komentar khusus Anda',
@@ -1961,7 +1961,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
         children: [
           CachedNetworkImage(
             imageUrl: role == 'nurse'
-                ? widget.data['order']['nurse']['image']
+                ? widget.data['order']['nurse']['hospital'] != null ? widget.data['order']['nurse']['hospital']['image'] ?? 'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42' : widget.data['order']['nurse']['image']
                 : widget.data['order']['doctor']['image'],
             width: 70.w,
             placeholder: (context, url) =>
@@ -1975,7 +1975,9 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
             children: [
               Text(
                 role == 'nurse'
-                    ? widget.data['order']['nurse']['name']
+                    ? widget.data['order']['nurse']['hospital'] != null ? widget.data['order']['nurse']['hospital']['name'] :
+                    
+                    widget.data['order']['nurse']['name']
                     : widget.data['order']['doctor']['name'],
                 style: TextStyles.subtitle2,
               ),

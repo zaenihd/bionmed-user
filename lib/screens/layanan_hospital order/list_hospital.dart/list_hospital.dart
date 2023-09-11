@@ -8,7 +8,6 @@ import 'package:bionmed_app/widgets/txt/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class ListHospital extends StatelessWidget {
   ListHospital({super.key});
   final myC = Get.put(ControllerServiceOnCall());
@@ -55,7 +54,9 @@ class ListHospital extends StatelessWidget {
             //       )
             //     :
 
-            Get.to(() =>  DetailHospital(data: inputC.listDataNurse[index] ,));
+            Get.to(() => DetailHospital(
+                  data: inputC.listDataNurse[index],
+                ));
           },
           child: Cntr(
             margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -73,8 +74,8 @@ class ListHospital extends StatelessWidget {
                   width: 115,
                   height: 85,
                   radius: BorderRadius.circular(10),
-                  image:  DecorationImage(
-                      image: NetworkImage(inputC.listDataNurse[index]['hospital']['image']),
+                  image: DecorationImage(
+                      image: NetworkImage(inputC.listDataNurse[index]['hospital']['image'] ?? 'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42'),
                       fit: BoxFit.cover),
                 ),
                 // Image.network('https://picsum.photos/seed/picsum/200/300'),
@@ -124,7 +125,7 @@ class ListHospital extends StatelessWidget {
                             //   ],
                             // ),
                             Row(
-                              children: [
+                              children:  [
                                 const Icon(
                                   Icons.star,
                                   color: Colors.yellow,

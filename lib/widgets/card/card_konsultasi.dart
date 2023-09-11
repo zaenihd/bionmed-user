@@ -90,18 +90,17 @@ class CardPesananService extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4.0),
                           // color: AppColor.bluePrimary2,
-                          image: data['order']['nurse']['image'] == ""
-                              ? const DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/img-doctor2.png'),
-                                  fit: BoxFit.cover)
-                              : DecorationImage(
-                                  image: NetworkImage(
-                                      data['order']['nurse']['hospital'] != null
-                                          ? data['order']['nurse']['hospital']
-                                              ['image']
-                                          : data['order']['nurse']['image']),
-                                  fit: BoxFit.cover),
+                          image: DecorationImage(
+                              image: NetworkImage(data['order']['nurse']
+                                          ['hospital'] !=
+                                      null
+                                  ? data['order']['nurse']['hospital']
+                                          ['image'] ??
+                                      'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42'
+                                  : data['order']['nurse']['image'] == ""
+                                      ? "https://englishtoday.co.id/wp-content/uploads/2022/07/nurses.jpg"
+                                      : data['order']['nurse']['image']),
+                              fit: BoxFit.cover),
                         ),
                       )
                     : Container(

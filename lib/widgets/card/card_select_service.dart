@@ -143,7 +143,8 @@ class CardSelectService extends StatelessWidget {
                     leading: SizedBox(
                         height: 50,
                         width: 50,
-                        child: Image.network(dataPaketFilter['package']
+                        child: 
+                        Image.network(dataPaketFilter['package']
                                 ['package_nurse_sops'][index]
                             ['nurse_work_scope']['icon'])),
                     title: Txt(

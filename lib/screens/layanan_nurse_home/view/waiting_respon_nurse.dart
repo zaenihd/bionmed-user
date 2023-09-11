@@ -54,8 +54,9 @@ class WaitingResponNurse extends StatelessWidget {
                                     null
                                 ? Get.find<InputLayananController>()
                                     .detailNurse['image']
-                                : Get.find<InputLayananController>()
-                                    .detailNurse['hospital']['image'],
+                                :  Get.find<InputLayananController>().detailNurse['hospital']
+                                            ['image'] ??
+                                        'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42',
                           ),
                           fit: BoxFit.cover),
                     )),

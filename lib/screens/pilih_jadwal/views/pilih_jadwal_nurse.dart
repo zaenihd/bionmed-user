@@ -59,7 +59,9 @@ class PilihJadwalViewNurse extends GetView<PilihJadwalController> {
                                 imageUrl: detailC.detailNurse['hospital'] ==
                                         null
                                     ? detailC.detailNurse['image']
-                                    : detailC.detailNurse['hospital']['image'],
+                                    : detailC.detailNurse['hospital']
+                                            ['image'] ??
+                                        'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42',
                                 width: Get.width,
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) => loadingIndicator(
