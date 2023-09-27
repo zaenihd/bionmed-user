@@ -37,6 +37,7 @@ class ControllerPesanan extends GetxController {
   RxBool dontShowAgainPesanan = false.obs;
   RxBool loadingButton = false.obs;
   RxList dataOrder = [].obs;
+  RxList dataOrderSedangerlangsung = [].obs;
   RxMap dataOrderChoice = {}.obs;
   RxString codeOrder = "".obs;
   RxString spesialist = "".obs;

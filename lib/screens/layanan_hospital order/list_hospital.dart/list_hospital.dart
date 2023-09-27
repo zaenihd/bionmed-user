@@ -99,7 +99,7 @@ class ListHospital extends StatelessWidget {
                           const SizedBox(
                             height: 10.0,
                           ),
-                          Txt(text: 'Kupang'),
+                          Txt(text: inputC.listDataNurse[index]['hospital']['city'] ?? "null"),
                         ],
                       ),
                       Cntr(

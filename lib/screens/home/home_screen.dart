@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:bionmed_app/constant/styles.dart';
 import 'package:bionmed_app/screens/home/home_controller.dart';
+import 'package:bionmed_app/screens/layanan_laboratory_klinik/view/input_laboratorium.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/view/input_layanan_nurse.dart';
 import 'package:bionmed_app/screens/pesanan/controller_pesanan.dart';
@@ -13,11 +14,14 @@ import 'package:bionmed_app/screens/login/controller_login.dart';
 import 'package:bionmed_app/screens/payment/controller_payment.dart';
 import 'package:bionmed_app/screens/splash/splash_controller.dart';
 import 'package:bionmed_app/widgets/card/card_dokter_by_home.dart';
+import 'package:bionmed_app/widgets/card/card_konsultasi.dart';
+import 'package:bionmed_app/widgets/container/container.dart';
 
 import 'package:bionmed_app/widgets/header/header_curved.dart';
 import 'package:bionmed_app/widgets/other/show_dialog.dart';
 import 'package:bionmed_app/widgets/other/title_tile.dart';
 import 'package:bionmed_app/widgets/search/form_search.dart';
+import 'package:bionmed_app/widgets/txt/text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -28,6 +32,7 @@ import '../../constant/colors.dart';
 import '../../widgets/card/card_artikel.dart';
 import '../../widgets/card/card_services.dart';
 import '../../widgets/card/carousel_banner.dart';
+import '../layanan_hospital order/indput_data_order_ambulance/screen/input_data_order_ambulance.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -57,6 +62,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    myC.listLayananDokterDanPerawat.value = Get.find<ControllerLogin>()
+        .dataService
+        .where((p0) =>
+            p0['name'] == "Telemedicine" ||
+            p0['name'] == "Personal Doctor" ||
+            p0['name'] == "Nursing Home")
+        .toList();
+    myC.listLayananRumahSakit.value = Get.find<ControllerLogin>()
+        .dataService
+        .where((p0) =>
+            p0['name'] != "Telemedicine" &&
+            p0['name'] != "Personal Doctor" &&
+            p0['name'] != "Nursing Home")
+        .toList();
+    log(myC.listLayananRumahSakit.value.toString());
+
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
       body: GetBuilder<ControllerLogin>(
@@ -241,210 +262,180 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     );
                 //   }),
                 // ),
-                SizedBox(height: defaultPadding - 12),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TitleTile(title: "Layanan Kami", onTap: () {}),
-                      InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        topRight: Radius.circular(30))),
-                                context: context,
-                                builder: (context) {
-                                  return SizedBox(
-                                    height: 400,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.only(
-                                              bottom: 18, top: 14),
-                                          width: Get.width / 1.9,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: const Color(0xffEDEDED)),
-                                        ),
-                                        const Text(
-                                          "Layanan Kami",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 300,
-                                          child: GridView.builder(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: defaultPadding,
-                                                vertical: defaultPadding),
-                                            shrinkWrap: true,
-                                            physics: const ScrollPhysics(),
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                              childAspectRatio: 3 / 4,
-                                              crossAxisCount: 3,
-                                              crossAxisSpacing: 18,
-                                              mainAxisSpacing: 18,
-                                            ),
-                                            itemCount:
-                                                controller.dataService.length,
-                                            itemBuilder: (context, index) {
-                                              return CardServices(
-                                                onTap: () {
-                                                  Get.find<ControllerPayment>()
-                                                          .serviceId
-                                                          .value =
-                                                      controller.dataService[
-                                                          index]['id'];
-                                                  Get.find<ControllerPayment>()
-                                                      .nameService
-                                                      .value = controller
-                                                          .dataService[index]
-                                                      ['name'];
-                                                  // Get.find<ControllerLogin>().getDoctorByServiceId(
-                                                  //     id: controller.dataService[index]['id'].toString(),
-                                                  //     day: DateFormat("EEEE", "id_ID")
-                                                  //         .format(DateTime.now()),
-                                                  //     jam: DateFormat("HH:mm", "id_ID")
-                                                  //         .format(DateTime.now()));
+                Get.find<ControllerPesanan>()
+                        .dataOrder
+                        .where((p0) => p0['order']['status'] == 4)
+                        .isEmpty
+                    ? const SizedBox(
+                        height: 1.0,
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: defaultPadding),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: defaultPadding),
+                            child: Txt(
+                              text: 'Pesanan Berlangsung',
+                              weight: FontWeight.bold,
+                              size: 16,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Cntr(
+                              height: 250,
+                              width: Get.width,
+                              child: ListView.builder(
+                                  itemCount: Get.find<ControllerPesanan>()
+                                      .dataOrder
+                                      .where((p0) => p0['order']['status'] == 4)
+                                      .length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    Get.find<ControllerPesanan>()
+                                            .dataOrderSedangerlangsung
+                                            .value =
+                                        Get.find<ControllerPesanan>()
+                                            .dataOrder
+                                            .where((p0) =>
+                                                p0['order']['status'] == 4)
+                                            .toList();
+                                    return Cntr(
+                                      // width: 500,
+                                      // height: 200,
+                                      child: CardPesananService(
+                                        data: Get.find<ControllerPesanan>()
+                                            .dataOrderSedangerlangsung[index],
+                                      ),
+                                    );
+                                  })
+                              //  CardService1(
+                              //     myC: Get.find<ControllerPesanan>(),
+                              //     statusList1: 4,
+                              //     statusList: 4,
+                              //   ),
 
-                                                  Get.to(
-                                                      const PagePesananJawal());
-                                                },
-                                                imageUrl: controller
-                                                        .dataService[index]
-                                                    ['image'],
-                                                name: controller
-                                                    .dataService[index]['name'],
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                });
-                          },
-                          child: const Text(
-                            'Lihat Semua',
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold),
-                          ))
-                    ],
-                  ),
+                              ),
+                        ],
+                      ),
+                const SizedBox(
+                  height: 20.0,
                 ),
-                GridView.builder(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: defaultPadding, vertical: defaultPadding),
-                  shrinkWrap: true,
-                  physics: const ScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 3 / 4,
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 18,
-                    mainAxisSpacing: 18,
-                  ),
-                  itemCount: controller.dataService.length,
-                  itemBuilder: (context, index) {
-                    return CardServices(
-                      onTap: () async {
-                        bool isLocationEnabled =
-                            await Get.find<HomeController>().checkGpsStatus();
-                        if (isLocationEnabled) {
-                          // Get.put(SplashScreenController()).getLocation();
-                          // Get.defaultDialog(title: 'Aktif');
-                          Get.find<ControllerPayment>().serviceId.value =
-                              controller.dataService[index]['id'];
-                          Get.find<ControllerPayment>().sequenceId.value =
-                              controller.dataService[index]['sequence'];
-                          Get.find<ControllerPayment>().imageService.value =
-                              controller.dataService[index]['image'];
-                          Get.find<ControllerPayment>().nameService.value =
-                              controller.dataService[index]['sequence'];
-                          //CLEAR LIST
-                          Get.put(InputLayananController())
-                              .listDataNurse
-                              .clear();
-                          Get.find<ControllerPesanan>()
-                              .listDokterHomeVisit
-                              .clear();
-                          Get.find<ControllerLogin>().doctorByService.clear();
-                          if (controller.dataService[index]['sequence'] == 4 
-                          ||
-                              controller.dataService[index]['sequence'] == 5 ||
-                              controller.dataService[index]['sequence'] == 6
-                              ) {
-                            log('coba ${Get.find<ControllerPayment>()
-                                    .serviceId
-                                    .value}');
-                            Get.to(() => const InputLayananNurse());
-                            // }else if(controller.dataService[index]['sequence'] == 3){
-                            //   Get.to(()=>const InputLaboKlinik());
-                          } else if (controller.dataService[index]
-                                      ['sequence'] ==
-                                  1 ||
-                              controller.dataService[index]['sequence'] == 2) {
-                            Get.to(() => const PagePesananJawal());
-                            getLocation();
-                            // popUpGetLokasi();
-                          } else {
-                            showPopUp(
-                                onTap: () {
-                                  Get.back();
-                                },
-                                imageAction: "assets/json/eror.json",
-                                description: "Layanan ini masih\nBelum aktif");
-                          }
-                          // Pindah ke halaman berikutnya
-                        } else {
-                          // Get.put(SplashScreenController()).getLocation();
-                          showPopUp(
-                              labelButton: 'Aktifkan',
-                              onPress: () async {
-                              Get.put(SplashScreenController()).getLocation();
-                                // Get.find<HomeController>().enableGPS();
-                                Geolocator.openLocationSettings();
-                                Get.back();
-                              },
-                              imageSize: 200,
-                              onTap: () {
-                                Get.back();
-                              },
-                              imageUri: "assets/images/lokasi.png",
-                              description:
-                                  "Aktifkan GPS anda\nuntuk melakukan pemesanan");
-                        }
-                      },
-                      imageUrl: controller.dataService[index]['image'],
-                      name: controller.dataService[index]['name'],
-                    );
-                  },
-                ),
+                listLayananDokterDanPerawat(context),
+                listLayananRumahSakit(context)
+                //INI ADALAH SEMUA LAYANAN YAAAAA=================================
+                // GridView.builder(
+                //   padding: EdgeInsets.symmetric(
+                //       horizontal: defaultPadding, vertical: defaultPadding),
+                //   shrinkWrap: true,
+                //   physics: const ScrollPhysics(),
+                //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                //     childAspectRatio: 3 / 4,
+                //     crossAxisCount: 3,
+                //     crossAxisSpacing: 18,
+                //     mainAxisSpacing: 18,
+                //   ),
+                //   itemCount: controller.dataService.length,
+                //   itemBuilder: (context, index) {
+                //     return CardServices(
+                //       onTap: () async {
+                //         bool isLocationEnabled =
+                //             await Get.find<HomeController>().checkGpsStatus();
+                //         if (isLocationEnabled) {
+                //           // Get.put(SplashScreenController()).getLocation();
+                //           // Get.defaultDialog(title: 'Aktif');
+                //           Get.find<ControllerPayment>().serviceId.value =
+                //               controller.dataService[index]['id'];
+                //           Get.find<ControllerPayment>().sequenceId.value =
+                //               controller.dataService[index]['sequence'];
+                //           Get.find<ControllerPayment>().imageService.value =
+                //               controller.dataService[index]['image'];
+                //           Get.find<ControllerPayment>().nameService.value =
+                //               controller.dataService[index]['sequence'];
+                //           //CLEAR LIST
+                //           Get.put(InputLayananController())
+                //               .listDataNurse
+                //               .clear();
+                //           Get.find<ControllerPesanan>()
+                //               .listDokterHomeVisit
+                //               .clear();
+                //           Get.find<ControllerLogin>().doctorByService.clear();
+                //           if (controller.dataService[index]['sequence'] == 4
+                //           ||
+                //               controller.dataService[index]['sequence'] == 5 ||
+                //               controller.dataService[index]['sequence'] == 6
+                //               ) {
+                //             log('coba ${Get.find<ControllerPayment>()
+                //                     .serviceId
+                //                     .value}');
+                //             Get.to(() => const InputLayananNurse());
+                //             // }else if(controller.dataService[index]['sequence'] == 3){
+                //             //   Get.to(()=>const InputLaboKlinik());
+                //           } else if (controller.dataService[index]
+                //                       ['sequence'] ==
+                //                   1 ||
+                //               controller.dataService[index]['sequence'] == 2) {
+                //             Get.to(() => const PagePesananJawal());
+                //             getLocation();
+                //             // popUpGetLokasi();
+                //           } else {
+                //             showPopUp(
+                //                 onTap: () {
+                //                   Get.back();
+                //                 },
+                //                 imageAction: "assets/json/eror.json",
+                //                 description: "Layanan ini masih\nBelum aktif");
+                //           }
+                //           // Pindah ke halaman berikutnya
+                //         } else {
+                //           // Get.put(SplashScreenController()).getLocation();
+                //           showPopUp(
+                //               labelButton: 'Aktifkan',
+                //               onPress: () async {
+                //               Get.put(SplashScreenController()).getLocation();
+                //                 // Get.find<HomeController>().enableGPS();
+                //                 Geolocator.openLocationSettings();
+                //                 Get.back();
+                //               },
+                //               imageSize: 200,
+                //               onTap: () {
+                //                 Get.back();
+                //               },
+                //               imageUri: "assets/images/lokasi.png",
+                //               description:
+                //                   "Aktifkan GPS anda\nuntuk melakukan pemesanan");
+                //         }
+                //       },
+                //       imageUrl: controller.dataService[index]['image'],
+                //       name: controller.dataService[index]['name'],
+                //     );
+                //   },
+                // ),
+                ,
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: defaultPadding),
                   child: TitleTile(title: "Rekomendasi Dokter", onTap: () {}),
                 ),
                 SizedBox(height: defaultPadding - 10),
                 controller.dataDoctor.isNotEmpty
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: controller.dataDoctor.length,
-                        physics: const ScrollPhysics(),
-                        itemBuilder: (BuildContext context, index) {
-                          return 
-                          CardRecDoctorByHome(
-                            data: controller.dataDoctor[index],
-                          );
-                        },
+                    ? Cntr(
+                        width: Get.width,
+                        height: 128,
+                        // padding: const EdgeInsets.all(2),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: controller.dataDoctor.length,
+                          physics: const ScrollPhysics(),
+                          itemBuilder: (BuildContext context, index) {
+                            return CardRecDoctorByHome(
+                              data: controller.dataDoctor[index],
+                            );
+                          },
+                        ),
                       )
                     : verticalSpace(0),
                 SizedBox(height: defaultPadding),
@@ -472,6 +463,529 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             );
           }),
+    );
+  }
+
+  Column listLayananRumahSakit(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TitleTile(title: "Layanan Rumah Sakit", onTap: () {}),
+              InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30))),
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                            height: 400,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      bottom: 18, top: 14),
+                                  width: Get.width / 1.9,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xffEDEDED)),
+                                ),
+                                const Text(
+                                  "Layanan Kami",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 300,
+                                  child: GridView.builder(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultPadding,
+                                        vertical: defaultPadding),
+                                    shrinkWrap: true,
+                                    physics: const ScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      childAspectRatio: 3 / 4,
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 18,
+                                      mainAxisSpacing: 18,
+                                    ),
+                                    itemCount: myC.listLayananRumahSakit.length,
+                                    itemBuilder: (context, index) {
+                                      return CardServices(
+                                        onTap: () async {
+                                          bool isLocationEnabled =
+                                              await Get.find<HomeController>()
+                                                  .checkGpsStatus();
+                                          if (isLocationEnabled) {
+                                            // Get.put(SplashScreenController()).getLocation();
+                                            // Get.defaultDialog(title: 'Aktif');
+                                            Get.find<ControllerPayment>()
+                                                    .serviceId
+                                                    .value =
+                                                myC.listLayananRumahSakit[index]
+                                                    ['id'];
+                                            Get.find<ControllerPayment>()
+                                                    .sequenceId
+                                                    .value =
+                                                myC.listLayananRumahSakit[index]
+                                                    ['sequence'];
+                                            Get.find<ControllerPayment>()
+                                                    .imageService
+                                                    .value =
+                                                myC.listLayananRumahSakit[index]
+                                                    ['image'];
+                                            Get.find<ControllerPayment>()
+                                                    .nameService
+                                                    .value =
+                                                myC.listLayananRumahSakit[index]
+                                                    ['sequence'];
+                                            //CLEAR LIST
+                                            Get.put(InputLayananController())
+                                                .listDataNurse
+                                                .clear();
+                                            Get.find<ControllerPesanan>()
+                                                .listDokterHomeVisit
+                                                .clear();
+                                            Get.find<ControllerLogin>()
+                                                .doctorByService
+                                                .clear();
+                                            if (myC.listLayananRumahSakit[index]
+                                                        ['sequence'] ==
+                                                    4 ||
+                                                myC.listLayananRumahSakit[index]
+                                                        ['sequence'] ==
+                                                    5 ||
+                                                myC.listLayananRumahSakit[index]
+                                                        ['sequence'] ==
+                                                    6) {
+                                              log('coba ${Get.find<ControllerPayment>().serviceId.value}');
+                                              Get.to(() =>
+                                                  const InputLayananNurse());
+                                              // }else if( myC.listLayananRumahSakit[index]['sequence'] == 3){
+                                              //   Get.to(()=>const InputLaboKlinik());
+                                            } else if (myC.listLayananRumahSakit[
+                                                        index]['sequence'] ==
+                                                    1 ||
+                                                myC.listLayananRumahSakit[index]
+                                                        ['sequence'] ==
+                                                    2) {
+                                              Get.to(() =>
+                                                  const PagePesananJawal());
+                                              getLocation();
+                                              // popUpGetLokasi();
+                                            } else {
+                                              showPopUp(
+                                                  onTap: () {
+                                                    Get.back();
+                                                  },
+                                                  imageAction:
+                                                      "assets/json/eror.json",
+                                                  description:
+                                                      "Layanan ini masih\nBelum aktif");
+                                            }
+                                            // Pindah ke halaman berikutnya
+                                          } else {
+                                            // Get.put(SplashScreenController()).getLocation();
+                                            showPopUp(
+                                                labelButton: 'Aktifkan',
+                                                onPress: () async {
+                                                  Get.put(SplashScreenController())
+                                                      .getLocation();
+                                                  // Get.find<HomeController>().enableGPS();
+                                                  Geolocator
+                                                      .openLocationSettings();
+                                                  Get.back();
+                                                },
+                                                imageSize: 200,
+                                                onTap: () {
+                                                  Get.back();
+                                                },
+                                                imageUri:
+                                                    "assets/images/lokasi.png",
+                                                description:
+                                                    "Aktifkan GPS anda\nuntuk melakukan pemesanan");
+                                          }
+                                        },
+                                        imageUrl:
+                                            myC.listLayananRumahSakit[index]
+                                                ['image'],
+                                        name: myC.listLayananRumahSakit[index]
+                                            ['name'],
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                  },
+                  child: const Text(
+                    'Lihat Semua',
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  ))
+            ],
+          ),
+        ),
+        //INI ADALAH HOSPITAL LAYANAN YAAAYAAAAA=================================
+        GridView.builder(
+          padding: EdgeInsets.symmetric(
+              horizontal: defaultPadding, vertical: defaultPadding),
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 3 / 4,
+            crossAxisCount: 3,
+            crossAxisSpacing: 18,
+            mainAxisSpacing: 18,
+          ),
+          itemCount: myC.listLayananRumahSakit.length,
+          itemBuilder: (context, index) {
+            return CardServices(
+              onTap: () async {
+                bool isLocationEnabled =
+                    await Get.find<HomeController>().checkGpsStatus();
+                if (isLocationEnabled) {
+                  // Get.put(SplashScreenController()).getLocation();
+                  // Get.defaultDialog(title: 'Aktif');
+                  Get.find<ControllerPayment>().serviceId.value =
+                      myC.listLayananRumahSakit[index]['id'];
+                  Get.find<ControllerPayment>().sequenceId.value =
+                      myC.listLayananRumahSakit[index]['sequence'];
+                  Get.find<ControllerPayment>().imageService.value =
+                      myC.listLayananRumahSakit[index]['image'];
+                  Get.find<ControllerPayment>().nameService.value =
+                      myC.listLayananRumahSakit[index]['sequence'];
+                  //CLEAR LIST
+                  Get.put(InputLayananController()).listDataNurse.clear();
+                  Get.find<ControllerPesanan>().listDokterHomeVisit.clear();
+                  Get.find<ControllerLogin>().doctorByService.clear();
+                  if (myC.listLayananRumahSakit[index]['sequence'] == 4 ||
+                      myC.listLayananRumahSakit[index]['sequence'] == 5 ||
+                      myC.listLayananRumahSakit[index]['sequence'] == 6) {
+                    log('coba ${Get.find<ControllerPayment>().serviceId.value}');
+                    Get.to(() => const InputLayananNurse());
+                    // }else if( myC.listLayananRumahSakit[index]['sequence'] == 3){
+                    //   Get.to(()=>const InputLaboKlinik());
+                  } else if (myC.listLayananRumahSakit[index]['sequence'] ==
+                          1 ||
+                      myC.listLayananRumahSakit[index]['sequence'] == 2) {
+                    Get.to(() => const PagePesananJawal());
+                    getLocation();
+                    // popUpGetLokasi();
+                  }
+                   else if (myC.listLayananRumahSakit[index]['sequence'] ==
+                      8) {
+                    // Get.defaultDialog();
+                    Get.to(()=> const InputDataOrderAmbulance());
+                  } 
+                  else if(myC.listLayananRumahSakit[index]['sequence'] ==
+                      3){
+                    Get.to(const InputLaboKlinik());
+                  }
+                  else {
+                    print(myC.listLayananRumahSakit[index]['sequence'].toString());
+                    showPopUp(
+                        onTap: () {
+                          Get.back();
+                        },
+                        imageAction: "assets/json/eror.json",
+                        description: "Layanan ini masih\nBelum aktif");
+                  }
+                  // Pindah ke halaman berikutnya
+                } else {
+                  // Get.put(SplashScreenController()).getLocation();
+                  showPopUp(
+                      labelButton: 'Aktifkan',
+                      onPress: () async {
+                        Get.put(SplashScreenController()).getLocation();
+                        // Get.find<HomeController>().enableGPS();
+                        Geolocator.openLocationSettings();
+                        Get.back();
+                      },
+                      imageSize: 200,
+                      onTap: () {
+                        Get.back();
+                      },
+                      imageUri: "assets/images/lokasi.png",
+                      description:
+                          "Aktifkan GPS anda\nuntuk melakukan pemesanan");
+                }
+              },
+              imageUrl: myC.listLayananRumahSakit[index]['image'],
+              name: myC.listLayananRumahSakit[index]['name'],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Column listLayananDokterDanPerawat(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TitleTile(title: "Layanan Dokter & Perawat", onTap: () {}),
+              InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30))),
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                            height: 400,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      bottom: 18, top: 14),
+                                  width: Get.width / 1.9,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xffEDEDED)),
+                                ),
+                                const Text(
+                                  "Layanan Kami",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 300,
+                                  child: GridView.builder(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultPadding,
+                                        vertical: defaultPadding),
+                                    shrinkWrap: true,
+                                    physics: const ScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      childAspectRatio: 3 / 4,
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 18,
+                                      mainAxisSpacing: 18,
+                                    ),
+                                    itemCount:
+                                        myC.listLayananDokterDanPerawat.length,
+                                    itemBuilder: (context, index) {
+                                      return CardServices(
+                                        onTap: () async {
+                                          bool isLocationEnabled =
+                                              await Get.find<HomeController>()
+                                                  .checkGpsStatus();
+                                          if (isLocationEnabled) {
+                                            // Get.put(SplashScreenController()).getLocation();
+                                            // Get.defaultDialog(title: 'Aktif');
+                                            Get.find<ControllerPayment>()
+                                                    .serviceId
+                                                    .value =
+                                                myC.listLayananDokterDanPerawat[
+                                                    index]['id'];
+                                            Get.find<ControllerPayment>()
+                                                    .sequenceId
+                                                    .value =
+                                                myC.listLayananDokterDanPerawat[
+                                                    index]['sequence'];
+                                            Get.find<ControllerPayment>()
+                                                    .imageService
+                                                    .value =
+                                                myC.listLayananDokterDanPerawat[
+                                                    index]['image'];
+                                            Get.find<ControllerPayment>()
+                                                    .nameService
+                                                    .value =
+                                                myC.listLayananDokterDanPerawat[
+                                                    index]['sequence'];
+                                            //CLEAR LIST
+                                            Get.put(InputLayananController())
+                                                .listDataNurse
+                                                .clear();
+                                            Get.find<ControllerPesanan>()
+                                                .listDokterHomeVisit
+                                                .clear();
+                                            Get.find<ControllerLogin>()
+                                                .doctorByService
+                                                .clear();
+                                            if (myC.listLayananDokterDanPerawat[
+                                                        index]['sequence'] ==
+                                                    4 ||
+                                                myC.listLayananDokterDanPerawat[
+                                                        index]['sequence'] ==
+                                                    5 ||
+                                                myC.listLayananDokterDanPerawat[
+                                                        index]['sequence'] ==
+                                                    6) {
+                                              log('coba ${Get.find<ControllerPayment>().serviceId.value}');
+                                              Get.to(() =>
+                                                  const InputLayananNurse());
+                                              // }else if( myC.listLayananDokterDanPerawat[index]['sequence'] == 3){
+                                              //   Get.to(()=>const InputLaboKlinik());
+                                            } else if (myC.listLayananDokterDanPerawat[
+                                                        index]['sequence'] ==
+                                                    1 ||
+                                                myC.listLayananDokterDanPerawat[
+                                                        index]['sequence'] ==
+                                                    2) {
+                                              Get.to(() =>
+                                                  const PagePesananJawal());
+                                              getLocation();
+                                              // popUpGetLokasi();
+                                            } else {
+                                              showPopUp(
+                                                  onTap: () {
+                                                    Get.back();
+                                                  },
+                                                  imageAction:
+                                                      "assets/json/eror.json",
+                                                  description:
+                                                      "Layanan ini masih\nBelum aktif");
+                                            }
+                                            // Pindah ke halaman berikutnya
+                                          } else {
+                                            // Get.put(SplashScreenController()).getLocation();
+                                            showPopUp(
+                                                labelButton: 'Aktifkan',
+                                                onPress: () async {
+                                                  Get.put(SplashScreenController())
+                                                      .getLocation();
+                                                  // Get.find<HomeController>().enableGPS();
+                                                  Geolocator
+                                                      .openLocationSettings();
+                                                  Get.back();
+                                                },
+                                                imageSize: 200,
+                                                onTap: () {
+                                                  Get.back();
+                                                },
+                                                imageUri:
+                                                    "assets/images/lokasi.png",
+                                                description:
+                                                    "Aktifkan GPS anda\nuntuk melakukan pemesanan");
+                                          }
+                                        },
+                                        imageUrl:
+                                            myC.listLayananDokterDanPerawat[
+                                                index]['image'],
+                                        name: myC.listLayananDokterDanPerawat[
+                                            index]['name'],
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                  },
+                  child: const Text(
+                    'Lihat Semua',
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  ))
+            ],
+          ),
+        ),
+        //INI LAYANAN DOKTER DAN PERAWAT
+        GridView.builder(
+          padding: EdgeInsets.symmetric(
+              horizontal: defaultPadding, vertical: defaultPadding),
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 3 / 4,
+            crossAxisCount: 3,
+            crossAxisSpacing: 18,
+            mainAxisSpacing: 18,
+          ),
+          itemCount: myC.listLayananDokterDanPerawat.length,
+          itemBuilder: (context, index) {
+            return CardServices(
+              onTap: () async {
+                bool isLocationEnabled =
+                    await Get.find<HomeController>().checkGpsStatus();
+                if (isLocationEnabled) {
+                  // Get.put(SplashScreenController()).getLocation();
+                  // Get.defaultDialog(title: 'Aktif');
+                  Get.find<ControllerPayment>().serviceId.value =
+                      myC.listLayananDokterDanPerawat[index]['id'];
+                  Get.find<ControllerPayment>().sequenceId.value =
+                      myC.listLayananDokterDanPerawat[index]['sequence'];
+                  Get.find<ControllerPayment>().imageService.value =
+                      myC.listLayananDokterDanPerawat[index]['image'];
+                  Get.find<ControllerPayment>().nameService.value =
+                      myC.listLayananDokterDanPerawat[index]['sequence'];
+                  //CLEAR LIST
+                  Get.put(InputLayananController()).listDataNurse.clear();
+                  Get.find<ControllerPesanan>().listDokterHomeVisit.clear();
+                  Get.find<ControllerLogin>().doctorByService.clear();
+                  if (myC.listLayananDokterDanPerawat[index]['sequence'] == 4 ||
+                      myC.listLayananDokterDanPerawat[index]['sequence'] == 5 ||
+                      myC.listLayananDokterDanPerawat[index]['sequence'] == 6) {
+                    log('coba ${Get.find<ControllerPayment>().serviceId.value}');
+                    Get.to(() => const InputLayananNurse());
+                    // }else if( myC.listLayananDokterDanPerawat[index]['sequence'] == 3){
+                    //   Get.to(()=>const InputLaboKlinik());
+                  } else if (myC.listLayananDokterDanPerawat[index]
+                              ['sequence'] ==
+                          1 ||
+                      myC.listLayananDokterDanPerawat[index]['sequence'] == 2) {
+                    Get.to(() => const PagePesananJawal());
+                    getLocation();
+                    // popUpGetLokasi();
+                  } else {
+                    showPopUp(
+                        onTap: () {
+                          Get.back();
+                        },
+                        imageAction: "assets/json/eror.json",
+                        description: "Layanan ini masih\nBelum aktif");
+                  }
+                  // Pindah ke halaman berikutnya
+                } else {
+                  // Get.put(SplashScreenController()).getLocation();
+                  showPopUp(
+                      labelButton: 'Aktifkan',
+                      onPress: () async {
+                        Get.put(SplashScreenController()).getLocation();
+                        // Get.find<HomeController>().enableGPS();
+                        Geolocator.openLocationSettings();
+                        Get.back();
+                      },
+                      imageSize: 200,
+                      onTap: () {
+                        Get.back();
+                      },
+                      imageUri: "assets/images/lokasi.png",
+                      description:
+                          "Aktifkan GPS anda\nuntuk melakukan pemesanan");
+                }
+              },
+              imageUrl: myC.listLayananDokterDanPerawat[index]['image'],
+              name: myC.listLayananDokterDanPerawat[index]['name'],
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -507,14 +1021,16 @@ popUpGetLokasi() {
         child: Column(
           children: [
             Image.asset("assets/images/lokasi.png"),
-            const Text("BionMed mencatat dan menyimpan data lokasi agar dapat menampilkan dokter terdekat yang dapat melayani dan mencapai lokasi anda", textAlign: TextAlign.center,),
+            const Text(
+              "BionMed mencatat dan menyimpan data lokasi agar dapat menampilkan dokter terdekat yang dapat melayani dan mencapai lokasi anda",
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(
               height: 20.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                
                 Container(
                     margin: EdgeInsets.zero,
                     height: 45,
@@ -537,7 +1053,7 @@ popUpGetLokasi() {
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         ))),
-                        Container(
+                Container(
                     margin: EdgeInsets.zero,
                     height: 45,
                     width: Get.width / 3.3,
@@ -546,12 +1062,12 @@ popUpGetLokasi() {
                     ),
                     child: ElevatedButton(
                         onPressed: () async {
-                           bool isLocationEnabled =
-                            await Get.find<HomeController>().checkGpsStatus();
-                          if(isLocationEnabled){
-                          Get.back();
+                          bool isLocationEnabled =
+                              await Get.find<HomeController>().checkGpsStatus();
+                          if (isLocationEnabled) {
+                            Get.back();
                             getLocation();
-                          }else{
+                          } else {
                             Get.back();
                             Get.put(SplashScreenController()).getLocation();
                           }

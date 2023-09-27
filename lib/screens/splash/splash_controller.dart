@@ -15,6 +15,7 @@ class SplashScreenController extends GetxController {
   final cLogin = Get.find<ControllerLogin>();
   @override
   void onInit() async {
+    Get.put(ControllerLogin());
     Get.put(ControllerPayment());
     var phone = await box.read('phone');
     // ignore: unused_local_variable

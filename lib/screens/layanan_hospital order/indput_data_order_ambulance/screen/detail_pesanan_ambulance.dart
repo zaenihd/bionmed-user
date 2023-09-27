@@ -1,5 +1,8 @@
 import 'package:bionmed_app/constant/colors.dart';
+import 'package:bionmed_app/constant/styles.dart';
+import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/controller/input_data_order_ambulance_controller.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
+import 'package:bionmed_app/screens/pesanan/maps.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
 import 'package:bionmed_app/widgets/container/container.dart';
 import 'package:bionmed_app/widgets/other/loading_indicator.dart';
@@ -18,7 +21,8 @@ class DataPesananAMbulance extends StatefulWidget {
 class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
   final cLog = Get.put(InputLayananController());
   // final myC = Get.put(ProfileJadwalController());
-  // final myC = Get.put(MapsController());
+  final myC = Get.put(MapsController());
+  final controller = Get.put(InputDataOrderAmbulanceController());
 
   @override
   Widget build(BuildContext context) {
@@ -108,19 +112,20 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                   radius: BorderRadius.circular(10),
                   width: Get.width,
                   padding: const EdgeInsets.all(18),
-                  color: const Color(0xffCCCCCC),
+                  // color: const Color(0xffCCCCCC),
+                  gradient: AppColor.gradient1,
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Txt(
-                            text: 'Layanan',
-                            color: const Color(0xff7C7C7C),
+                            text: 'Jadwal',
+                            color: Colors.white,
                           ),
                           Txt(
                             text: 'Ambulance Jenazah',
-                            color: Colors.black,
+                            color: Colors.white,
                             weight: FontWeight.bold,
                           ),
                         ],
@@ -132,18 +137,65 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Txt(
-                            text: 'Jadwal',
-                            color: const Color(0xff7C7C7C),
+                            text: 'Layanan',
+                            color: Colors.white,
                           ),
                           Txt(
                             text: '13, Juni 2023',
-                            color: Colors.black,
+                            color: Colors.white,
                             weight: FontWeight.bold,
                           ),
                         ],
                       ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          zonaCsr(context);
+                        },
+                        child: Cntr(
+                          radius: BorderRadius.circular(10),
+                          alignment: Alignment.center,
+                          width: Get.width,
+                          border: Border.all(color: Colors.white),
+                          color: Colors.transparent,
+                          padding: const EdgeInsets.all(15),
+                          child: Txt(
+                            text: 'Lihat zona CSR',
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
                     ],
                   ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Txt(
+                          text: 'Tentukan tujuan',
+                          size: 16,
+                          weight: FontWeight.w500,
+                        ),
+                        const SizedBox(
+                        height: 10.0,
+                        ),
+                        Txt(
+                          text: 'Masukkan tujuan lokasi anda',
+                          size: 11,
+                          weight: FontWeight.normal,
+                        ),
+                      ],
+                    ),
+                    Image.asset('assets/icons/icons_map.png')
+                  ],
                 ),
                 const SizedBox(
                   height: 20.0,
@@ -152,10 +204,35 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                 const SizedBox(
                   height: 20.0,
                 ),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 18,
+                    ),
+                    const SizedBox(
+                      width: 5.0,
+                    ),
+                    Txt(
+                      text: 'Anda termasuk zona',
+                      color: Colors.amber,
+                    ),
+                    Txt(
+                      text: ' CSR Rumah Sakit (Gratis)',
+                      color: Colors.amber,
+                      weight: FontWeight.bold,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
                 Cntr(
                   radius: BorderRadius.circular(10),
                   width: Get.width,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                   color: const Color.fromARGB(62, 0, 221, 37),
                   child: Row(
                     children: [
@@ -179,9 +256,7 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
       ),
       bottomSheet: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ButtonGradient(onPressed: () async{
-
-                  }, label: "Pesan Sekarang"),
+        child: ButtonGradient(onPressed: () async {}, label: "Pesan Sekarang"),
       ),
     );
   }
@@ -189,87 +264,311 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
   Cntr tujuanAmbulance() {
     return Cntr(
       width: Get.width,
-      padding: const EdgeInsets.all(25),
-      color: Colors.grey[300],
-      radius: BorderRadius.circular(10),
-      child: Column(
+      // padding: const EdgeInsets.all(25),
+      // color: Colors.grey[300],
+      // radius: BorderRadius.circular(10),
+      child:
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     Row(
+          //       children: [
+          //         const Icon(
+          //           Icons.location_on,
+          //           color: Colors.green,
+          //         ),
+          //         const SizedBox(
+          //           width: 10.0,
+          //         ),
+          //         Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: [
+          //             Row(
+          //               children: [
+          //                 Txt(text: 'Alamat'),
+          //                 const SizedBox(
+          //                   width: 6.0,
+          //                 ),
+          //                 InkWell(
+          //                   onTap: () async {
+          //                     myC.isTujuan.value = false;
+          //                     controller.isLoadingAlamat.value = true;
+          //                     await myC.getCurrentLocation().then((value) {
+          //                       myC.lat.value = value.latitude;
+          //                       myC.long.value = value.longitude;
+          //                     });
+          //                     await myC.getUserLocation();
+          //                     Get.to(() => const Maaapp());
+          //                     controller.isLoadingAlamat.value = false;
+          //                   },
+          //                   child: const Icon(
+          //                     Icons.edit_note_rounded,
+          //                     size: 18,
+          //                   ),
+          //                 )
+          //               ],
+          //             ),
+          //             const SizedBox(
+          //               height: 10.0,
+          //             ),
+          //             SizedBox(
+          //               // height: 30,
+          //               width: Get.width / 1.7,
+          //               child: Obx(() => Txt(
+          //                     text: controller.isLoadingAlamat.isTrue
+          //                         ? "Membuat Map...."
+          //                         :
+          //                         myC.city.isEmpty ? "Alamat anda" :
+          //                         '${myC.desa.value} ${myC.kecamatan.value} ${myC.city.value}, ${myC.kabupaten.value}, ${myC.kodePos.value}, ${myC.negara.value}',
+          //                     weight:myC.city.isEmpty ? FontWeight. FontWeight.bold,
+          //                   )),
+          //             ),
+          //           ],
+          //         )
+          //       ],
+          //     ),
+          //     const SizedBox(
+          //       height: 20.0,
+          //     ),
+          //     Row(
+          //       children: [
+          //         const Icon(
+          //           Icons.location_on,
+          //           color: Colors.green,
+          //         ),
+          //         const SizedBox(
+          //           width: 10.0,
+          //         ),
+          //         Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: [
+          //             Row(
+          //               children: [
+          //                 Txt(text: 'Tujuan'),
+          //                 const SizedBox(
+          //                   width: 6.0,
+          //                 ),
+          //                 InkWell(
+          //                   onTap: () async {
+          //                     myC.isTujuan.value = true;
+          //                     controller.isLoadingTujuan.value = true;
+          //                     await myC.getCurrentLocation().then((value) {
+          //                       myC.latTujuan.value = value.latitude;
+          //                       myC.longTujuan.value = value.longitude;
+          //                     });
+          //                     await myC.getUserLocation();
+          //                     Get.to(() => const Maaapp());
+          //                     controller.isLoadingTujuan.value = false;
+          //                   },
+          //                   child: const Icon(
+          //                     Icons.edit_note_rounded,
+          //                     size: 18,
+          //                   ),
+          //                 )
+          //               ],
+          //             ),
+          //             const SizedBox(
+          //               height: 10.0,
+          //             ),
+          //             SizedBox(
+          //               // height: 30,
+          //               width: Get.width / 1.7,
+          //               child: Obx(() => Txt(
+          //                     text: controller.isLoadingTujuan.isTrue
+          //                         ? "Membuat Map...."
+          //                         : '${myC.desaTujuan.value} ${myC.kecamatanTujuan.value} ${myC.cityTujuan.value}, ${myC.kabupatenTujuan.value}, ${myC.kodePosTujuan.value}, ${myC.negaraTujuan.value}',
+          //                     weight: FontWeight.bold,
+          //                   )),
+          //             ),
+          //           ],
+          //         )
+          //       ],
+          //     ),
+          //   ],
+          // ),
+
+          Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(
-                Icons.location_on,
-                color: Colors.green,
-              ),
-              const SizedBox(
-                width: 10.0,
-              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Txt(text: 'Alamat'),
-                      const SizedBox(
-                        width: 6.0,
-                      ),
-                      const Icon(
-                        Icons.edit_note_rounded,
-                        size: 18,
-                      )
-                    ],
+                  InkWell(
+                    onTap: () async {
+                      controller.serviceAmbulance.value = 1;
+                      myC.isTujuan.value = false;
+                      controller.isLoadingAlamat.value = true;
+                      await myC.getCurrentLocation().then((value) {
+                        myC.lat.value = value.latitude;
+                        myC.long.value = value.longitude;
+                      });
+                      await myC.getUserLocation();
+                      Get.to(() => const Maaapp());
+                      controller.isLoadingAlamat.value = false;
+                    },
+                    child: Cntr(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      height: 45,
+                      alignment: Alignment.centerLeft,
+                      width: Get.width / 1.3,
+                      color: AppColor.bgForm,
+                      radius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey[300]!),
+                      child: Obx(() => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Cntr(
+                                color: Colors.transparent,
+                                width: Get.width / 1.6,
+                                child: Txt(
+                                  textOverFlow: TextOverflow.ellipsis,
+                                  text: controller.isLoadingAlamat.isTrue
+                                      ? "Memuat maps.."
+                                      : myC.city.isNotEmpty
+                                          ? '${myC.desa.value} ${myC.kecamatan.value} ${myC.city.value}, ${myC.kabupaten.value}, ${myC.kodePos.value}, ${myC.negara.value}'
+                                          : 'Masukkan posisi alamat anda',
+                                  color: myC.city.isNotEmpty
+                                      ? Colors.black
+                                      : AppColor.bodyColor.shade500,
+                                ),
+                              ),
+                              const Icon(
+                                Icons.map,
+                                color: Colors.green,
+                              )
+                            ],
+                          )),
+                    ),
                   ),
                   const SizedBox(
-                    height: 10.0,
+                    height: 20.0,
                   ),
-                  Txt(
-                    text: 'Jl.Padjajaran',
-                    weight: FontWeight.bold,
-                  ),
-                ],
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          Row(
-            children: [
-              const Icon(
-                Icons.location_on,
-                color: Colors.green,
-              ),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Txt(text: 'Tujuan'),
-                      const SizedBox(
-                        width: 6.0,
+                  InkWell(
+                    onTap: () async {
+                      myC.isTujuan.value = true;
+                      controller.isLoadingTujuan.value = true;
+                      await myC.getCurrentLocation().then((value) {
+                        myC.latTujuan.value = value.latitude;
+                        myC.longTujuan.value = value.longitude;
+                      });
+                      await myC.getUserLocation();
+                      Get.to(() => const Maaapp());
+                      controller.isLoadingTujuan.value = false;
+                    },
+                    child: Cntr(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      height: 45,
+                      alignment: Alignment.centerLeft,
+                      width: Get.width / 1.3,
+                      color: AppColor.bgForm,
+                      radius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey[300]!),
+                      child: Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Cntr(
+                              color: Colors.transparent,
+                              width: Get.width / 1.6,
+                              child: Txt(
+                                textOverFlow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                text: controller.isLoadingTujuan.isTrue
+                                    ? "Memuat maps.."
+                                    : myC.cityTujuan.isNotEmpty
+                                        ? '${myC.desaTujuan.value} ${myC.kecamatanTujuan.value} ${myC.cityTujuan.value}, ${myC.kabupatenTujuan.value}, ${myC.kodePosTujuan.value}, ${myC.negaraTujuan.value}'
+                                        : 'Masukkan tujuan anda',
+                                color: myC.cityTujuan.isNotEmpty
+                                    ? Colors.black
+                                    : AppColor.bodyColor.shade500,
+                              ),
+                            ),
+                            const Icon(
+                                Icons.map,
+                              color: Colors.green,
+                            )
+                          ],
+                        ),
                       ),
-                      const Icon(
-                        Icons.edit_note_rounded,
-                        size: 18,
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  Txt(
-                    text: 'Jl.Padjajaran',
-                    weight: FontWeight.bold,
+                    ),
                   ),
                 ],
-              )
+              ),
+              Image.asset('assets/icons/arrow.png')
             ],
           ),
         ],
       ),
     );
+  }
+
+  zonaCsr(BuildContext context) {
+    return showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        context: context,
+        builder: (context) {
+          return SizedBox(
+              height: 600,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 18, top: 14),
+                            width: Get.width / 1.9,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffEDEDED)),
+                          ),
+                          Image.asset('assets/icons/scr.png'),
+                          const SizedBox(
+                          height: 20.0,
+                          ),
+                          const Text(
+                            'Zona gratis (CSR)',
+                            style: TextStyle( fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          SizedBox(
+                            height: 280,
+                            width: Get.width,
+                            child: ListView.builder(
+                              itemCount: 3,
+                              itemBuilder: (context, index) => Cntr(
+                                
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: defaultPadding, vertical: 5),
+
+                                color: Colors.grey[200],
+                                radius: BorderRadius.circular(10),
+                                padding: const EdgeInsets.all(15),
+                                child: Row(
+                                  children: [
+                                    Txt(
+                                      text: 'Cibungbulang, Bogor, Jawa barat',
+                                    ),
+                                    const Icon(
+                                      Icons.map_outlined,
+                                      color: Colors.green,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ])
+                  ]));
+        });
   }
 }

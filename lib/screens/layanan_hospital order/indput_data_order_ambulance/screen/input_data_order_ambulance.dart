@@ -1,5 +1,7 @@
 import 'package:bionmed_app/constant/colors.dart';
 import 'package:bionmed_app/constant/styles.dart';
+import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/controller/input_data_order_ambulance_controller.dart';
+import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/screen/detail_pesanan_ambulance.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
 import 'package:bionmed_app/screens/pesanan/maps.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
@@ -24,6 +26,7 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
   final cLog = Get.put(InputLayananController());
   // final myC = Get.put(ProfileJadwalController());
   final myC = Get.put(MapsController());
+  final controller = Get.put(InputDataOrderAmbulanceController());
 
   @override
   Widget build(BuildContext context) {
@@ -98,186 +101,245 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
                   weight: FontWeight.bold,
                 ),
                 const SizedBox(
-                height: 10.0,
+                  height: 10.0,
                 ),
                 Txt(
-                  text: 'Lengkapi data pesanan anda disini',
+                  text: 'Atur jadwal pesanan anda',
                   color: const Color(0xff7C7C7C),
                   size: 11,
                   weight: FontWeight.normal,
                 ),
+                // const SizedBox(
+                //   height: 20.0,
+                // ),
+                // Txt(
+                //   text: 'Layanan Ambulance',
+                //   color: const Color(0xff7C7C7C),
+                //   weight: FontWeight.normal,
+                // ),
+                // const SizedBox(
+                //   height: 10.0,
+                // ),
+                // InkWell(
+                //   onTap: () async {},
+                //   child: Cntr(
+                //     padding: const EdgeInsets.only(left: 10, right: 10),
+                //     height: 45,
+                //     alignment: Alignment.centerLeft,
+                //     width: Get.width,
+                //     color: AppColor.bgForm,
+                //     radius: BorderRadius.circular(10),
+                //     border: Border.all(color: Colors.grey[300]!),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         // Obx(
+                //         //   () => controller.tampunganNurseId.isNotEmpty ||
+                //         //           controller.nursepaketData[index]['package_nurse_sops'] !=
+                //         //               []
+                //         //       ? Txt(
+                //         //           text: controller.tampunganNurseId.isEmpty ? "${controller.nursepaketData[index]['package_nurse_sops'].length} Dipilih" : '${controller.tampunganNurseId.length} Dipilih')
+                //         //       :
+                //         Txt(
+                //           text: 'Pilih tipe layanan',
+                //           color: AppColor.bodyColor.shade500,
+                //         ),
+                //         // ),
+                //         Icon(
+                //           Icons.arrow_forward_ios,
+                //           color: AppColor.bodyColor.shade500,
+                //           size: 15,
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
-                height: 20.0,
+                  height: 20.0,
                 ),
                 Txt(
-                  text: 'Layanan Ambulance',
-                  color: const Color(0xff7C7C7C),
-                  weight: FontWeight.normal,
-                ),
-                const SizedBox(
-                height: 10.0,
-                ),
-                 InkWell(
-                onTap: () async {
-                },
-                child: Cntr(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  height: 45,
-                  alignment: Alignment.centerLeft,
-                  width: Get.width,
-                  color: AppColor.bgForm,
-                  radius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey[300]!),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Obx(
-                      //   () => controller.tampunganNurseId.isNotEmpty ||
-                      //           controller.nursepaketData[index]['package_nurse_sops'] !=
-                      //               []
-                      //       ? Txt(
-                      //           text: controller.tampunganNurseId.isEmpty ? "${controller.nursepaketData[index]['package_nurse_sops'].length} Dipilih" : '${controller.tampunganNurseId.length} Dipilih')
-                      //       :
-                      Txt(
-                        text: 'Pilih tipe layanan',
-                        color: AppColor.bodyColor.shade500,
-                      ),
-                      // ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: AppColor.bodyColor.shade500,
-                        size: 15,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-              height: 20.0,
-              ),
-              Txt(
                   text: 'Tentukan Jadwal Penjemputan',
                   color: const Color(0xff555555),
                   weight: FontWeight.normal,
                 ),
-              
-              // ignore: avoid_unnecessary_containers
-              Container(
-                child: InputPrimary(
-                  controller: TextEditingController(),
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1800),
-                        lastDate: DateTime(2101));
-                    if (pickedDate != null) {
-                      // ignore: avoid_print
-                      print(pickedDate);
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(pickedDate);
-                      // ignore: avoid_print
-                      print(formattedDate);
-                      // Get.put(PilihJadwalController()).day.value =
-                      //     DateFormat("EEEE", "id_ID").format(pickedDate);
-                      // Get.find<ControllerPesanan>().day.value =
-                      //     DateFormat("EEEE", "id_ID").format(pickedDate);
-                      // String starDate =
-                      //     DateFormat("yyyy-MM-dd HH:mm:ss").format(pickedDate);
-                      // Get.put(PilihJadwalController()).startDate.value =
-                      //     starDate;
 
-                      // controller.tanggalC.text = formattedDate;
-                    } else {
-                      // ignore: avoid_print
-                      print("Date is not selected");
-                    }
-                  },
-                  hintText: "dd/mm/yy",
-                  onChange: (val) {},
-                  validate: (value) {
-                    if (value.toString().isNotEmpty) {
-                      return null;
-                    }
-                    return "Tanggal lahir tidak boleh kosong";
-                  },
-                  prefixIcon: const Icon(Icons.calendar_month),
-                ),
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    shape: const CircleBorder(),
-                    value: true
-                  , onChanged: (value) {
-                    
-                  },),
-                  Txt(text: 'Pesan Langsung ?')
-                ],
-              ),
-              Txt(text: 'Alamat anda'),
-              const SizedBox(
-              height: 10.0,
-              ),
-              InkWell(
-                onTap: () async {
-                },
-                child: Cntr(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  height: 45,
-                  alignment: Alignment.centerLeft,
-                  width: Get.width,
-                  color: AppColor.bgForm,
-                  radius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey[300]!),
-                  child: Txt(
-                    text: 'Masukkan posisi alamat anda',
-                    color: AppColor.bodyColor.shade500,
+                // ignore: avoid_unnecessary_containers
+                Container(
+                  child: InputPrimary(
+                    controller: TextEditingController(),
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1800),
+                          lastDate: DateTime(2101));
+                      if (pickedDate != null) {
+                        // ignore: avoid_print
+                        print(pickedDate);
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        // ignore: avoid_print
+                        print(formattedDate);
+                        // Get.put(PilihJadwalController()).day.value =
+                        //     DateFormat("EEEE", "id_ID").format(pickedDate);
+                        // Get.find<ControllerPesanan>().day.value =
+                        //     DateFormat("EEEE", "id_ID").format(pickedDate);
+                        // String starDate =
+                        //     DateFormat("yyyy-MM-dd HH:mm:ss").format(pickedDate);
+                        // Get.put(PilihJadwalController()).startDate.value =
+                        //     starDate;
+
+                        // controller.tanggalC.text = formattedDate;
+                      } else {
+                        // ignore: avoid_print
+                        print("Date is not selected");
+                      }
+                    },
+                    hintText: "dd/mm/yy",
+                    onChange: (val) {},
+                    validate: (value) {
+                      if (value.toString().isNotEmpty) {
+                        return null;
+                      }
+                      return "Tanggal lahir tidak boleh kosong";
+                    },
+                    prefixIcon: const Icon(Icons.calendar_month),
                   ),
                 ),
-              ),
-              const SizedBox(
-              height: 20.0,
-              ),
-              Txt(text: 'Tujuan'),
-              const SizedBox(
-              height: 10.0,
-              ),
-              InkWell(
-                onTap: () async {
-                },
-                child: Cntr(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  height: 45,
-                  alignment: Alignment.centerLeft,
-                  width: Get.width,
-                  color: AppColor.bgForm,
-                  radius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey[300]!),
-                  child: Txt(
-                    text: 'Masukkan tujuan alamat ',
-                    color: AppColor.bodyColor.shade500,
-                  ),
+                Row(
+                  children: [
+                    Obx(() => Checkbox(
+                          shape: const CircleBorder(),
+                          value: controller.isPesanSekarang.value,
+                          onChanged: (value) {
+                            controller.isPesanSekarang.value = value!;
+                          },
+                        )),
+                    Txt(text: 'Pesan Langsung ?')
+                  ],
                 ),
-              ),
+                // Txt(text: 'Alamat anda'),
+                // const SizedBox(
+                //   height: 10.0,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //       InkWell(
+                //       onTap: () async {
+                //         controller.serviceAmbulance.value = 1;
+                //         myC.isTujuan.value = false;
+                //         controller.isLoadingAlamat.value = true;
+                //         await myC.getCurrentLocation().then((value) {
+                //           myC.lat.value = value.latitude;
+                //           myC.long.value = value.longitude;
+                //         });
+                //         await myC.getUserLocation();
+                //         Get.to(() => const Maaapp());
+                //         controller.isLoadingAlamat.value = false;
+                //       },
+                //       child: Cntr(
+                //         padding: const EdgeInsets.only(left: 10, right: 10),
+                //         height: 45,
+                //         alignment: Alignment.centerLeft,
+                //         width: Get.width / 1.3,
+                //         color: AppColor.bgForm,
+                //         radius: BorderRadius.circular(10),
+                //         border: Border.all(color: Colors.grey[300]!),
+                //         child: Obx(() => Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: [
+                //             Cntr(
+                //               color: Colors.transparent ,
+                //                   width: Get.width /1.6,
 
-                 const SizedBox(
-                height: 50.0,
-                ),
-                ButtonGradient(onPressed: () async{
-                   await myC.getCurrentLocation().then((value) {
-                          myC.lat.value = value.latitude;
-                          myC.long.value = value.longitude;
-                        });
-                        await myC.getUserLocation();
-                        Get.to(() => const Maaapp());
+                //               child: Txt(
+                //                 textOverFlow: TextOverflow.ellipsis,
+                //                     text: controller.isLoadingAlamat.isTrue
+                //                         ? "Memuat maps.."
+                //                         : myC.city.isNotEmpty
+                //                             ? '${myC.desa.value} ${myC.kecamatan.value} ${myC.city.value}, ${myC.kabupaten.value}, ${myC.kodePos.value}, ${myC.negara.value}'
+                //                             : 'Masukkan posisi alamat anda',
+                //                     color: myC.city.isNotEmpty
+                //                         ? Colors.black
+                //                         : AppColor.bodyColor.shade500,
+                //                   ),
+                //             ),
+                //             const Icon(Icons.location_on, color: Colors.green,)
 
-                }, label: "Pesan Sekarang"),
+                //           ],
+                //         )),
+                //       ),
+                //     ),
+                //     const SizedBox(
+                //       height: 20.0,
+                //     ),
+                //     Txt(text: 'Tujuan'),
+                //     const SizedBox(
+                //       height: 10.0,
+                //     ),
+                //     InkWell(
+                //       onTap: () async {
+                //         myC.isTujuan.value = true;
+                //         controller.isLoadingTujuan.value = true;
+                //         await myC.getCurrentLocation().then((value) {
+                //           myC.latTujuan.value = value.latitude;
+                //           myC.longTujuan.value = value.longitude;
+                //         });
+                //         await myC.getUserLocation();
+                //         Get.to(() => const Maaapp());
+                //         controller.isLoadingTujuan.value = false;
+                //       },
+                //       child: Cntr(
+                //         padding: const EdgeInsets.only(left: 10, right: 10),
+                //         height: 45,
+                //         alignment: Alignment.centerLeft,
+                //         width: Get.width / 1.3,
+                //         color: AppColor.bgForm,
+                //         radius: BorderRadius.circular(10),
+                //         border: Border.all(color: Colors.grey[300]!),
+                //         child: Obx(() => Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: [
+                //             Cntr(
+                //               color: Colors.transparent ,
+                //               width: Get.width /1.6,
+                //               child: Txt(
+                //                 textOverFlow: TextOverflow.ellipsis,
+                //                 maxLines: 1,
+                //                 text: controller.isLoadingTujuan.isTrue
+                //                     ? "Memuat maps.."
+                //                     : myC.cityTujuan.isNotEmpty
+                //                         ? '${myC.desaTujuan.value} ${myC.kecamatanTujuan.value} ${myC.cityTujuan.value}, ${myC.kabupatenTujuan.value}, ${myC.kodePosTujuan.value}, ${myC.negaraTujuan.value}'
+                //                         : 'Masukkan tujuan anda',
+                //                 color: myC.cityTujuan.isNotEmpty
+                //                     ? Colors.black
+                //                     : AppColor.bodyColor.shade500,
+                //               ),
+                //             ),
+                //             const Icon(Icons.location_on, color: Colors.green,)
+                //           ],
+                //         ),),
+                //       ),
+                //     ),
+                //     ],),
+                //     Image.asset('assets/icons/arrow.png')
+                //   ],
+                // ),
+                
               ],
             ),
           ),
         ],
       ),
+      bottomSheet: ButtonGradient(
+        margin: const EdgeInsets.all(24),
+        onPressed: () async {
+                  Get.to(()=> const DataPesananAMbulance());
+                }, label: "Lanjutkan"),
     );
   }
 }
@@ -297,7 +359,6 @@ class TambahAlamatAmbulance extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: ButtonGradient(
               onPressed: () {
-                
                 // if (myC.alamatMaps.value == "") {
                 //   showPopUp(
                 //       onTap: () {
@@ -319,7 +380,7 @@ class TambahAlamatAmbulance extends StatelessWidget {
                 //     print("UWUW${myC.alamatLengkap.value}");
                 //   }
                 // }
-                    Get.back();
+                Get.back();
               },
               label: "Simpan"),
         ),
@@ -345,15 +406,14 @@ class TambahAlamatAmbulance extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
                 Text(
                   "Detail Alamat",
                   style: TextStyles.subtitle2,
                 ),
                 const SizedBox(
-                height: 20.0,
+                  height: 20.0,
                 ),
-                 Container(
+                Container(
                     // padding: EdgeInsets.only(left: 15, right: 15),
                     alignment: Alignment.centerLeft,
                     width: Get.width,
@@ -382,8 +442,7 @@ class TambahAlamatAmbulance extends StatelessWidget {
                       },
                       controller: myC.alamat,
                       decoration: InputDecoration(
-                          hintText:
-                              "Nama",
+                          hintText: "Nama",
                           hintStyle:
                               TextStyle(color: Colors.grey[400], fontSize: 14),
                           border: const OutlineInputBorder(
@@ -415,8 +474,9 @@ class TambahAlamatAmbulance extends StatelessWidget {
                 //   keyboardType: TextInputType.number,
                 //   hintText: "Masukan No Handphone",
                 // ),
-                Obx(
-                  () => InkWell(
+                // Obx(
+                //   () => 
+                  InkWell(
                       onTap: () async {
                         myC.isLoadingMaps(true);
                         await myC.getCurrentLocation().then((value) {
@@ -457,7 +517,7 @@ class TambahAlamatAmbulance extends StatelessWidget {
                                 ),
                         ),
                       )),
-                ),
+                // ),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -492,8 +552,7 @@ class TambahAlamatAmbulance extends StatelessWidget {
                       maxLines: 5,
                       controller: myC.alamat,
                       decoration: InputDecoration(
-                          hintText:
-                              "Patokan rumah",
+                          hintText: "Patokan rumah",
                           hintStyle:
                               TextStyle(color: Colors.grey[400], fontSize: 14),
                           border: const OutlineInputBorder(

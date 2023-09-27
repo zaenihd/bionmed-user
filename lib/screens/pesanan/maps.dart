@@ -1,10 +1,9 @@
 // ignore_for_file: unused_field, unused_element, unnecessary_new
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/screen/input_data_order_ambulance.dart';
-import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/controller/input_data_order_ambulance_controller.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
 // import 'package:bionmed/app/modules/doctor_app/register/controllers/register_controller.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +113,12 @@ class MaaappState extends State<Maaapp> {
                           mapC.kabupaten.value = placemark.administrativeArea!;
                           mapC.lat.value = e.latitude;
                           mapC.long.value = e.longitude;
+                          mapC.cityTujuan.value =
+                              placemark.subAdministrativeArea!;
+                          mapC.kabupatenTujuan.value =
+                              placemark.administrativeArea!;
+                          mapC.latTujuan.value = e.latitude;
+                          mapC.longTujuan.value = e.longitude;
                         },
                       ),
                       Marker(
@@ -129,6 +134,12 @@ class MaaappState extends State<Maaapp> {
                           mapC.kabupaten.value = placemark.administrativeArea!;
                           mapC.lat.value = e.latitude;
                           mapC.long.value = e.longitude;
+                          mapC.cityTujuan.value =
+                              placemark.subAdministrativeArea!;
+                          mapC.kabupatenTujuan.value =
+                              placemark.administrativeArea!;
+                          mapC.latTujuan.value = e.latitude;
+                          mapC.longTujuan.value = e.longitude;
                         },
                       ),
                     ].toSet(),
@@ -151,7 +162,7 @@ class MaaappState extends State<Maaapp> {
                   country: "ID",
                   language: "id",
                   hasClearButton: true,
-                  placeType: PlaceType.address,
+                  placeType: PlaceType.establishment,
                   placeholder: "Cari Lokasi",
                   apiKey: "AIzaSyDFEfnWAt9nwFFb8fJXy3USgo94KgnTLSo",
                   onSelected: (Place place) async {
@@ -160,22 +171,42 @@ class MaaappState extends State<Maaapp> {
                     final geolocation = await place.geolocation;
                     final GoogleMapController controller =
                         await _controller.future;
+                    // controller.animateCamera(
+                    //   CameraUpdate.newLatLng(
+                    //     LatLng(
+                    //         geolocation!.fullJSON['geometry']['bounds']
+                    //             ['northeast']['lat'],
+                    //         geolocation.fullJSON['geometry']['bounds']
+                    //             ['northeast']['lng']),
+                    //   ),
+                    // );
                     controller.animateCamera(
                       CameraUpdate.newLatLng(
                         LatLng(
-                            geolocation!.fullJSON['geometry']['bounds']
-                                ['northeast']['lat'],
-                            geolocation.fullJSON['geometry']['bounds']
-                                ['northeast']['lng']),
+                            geolocation!.fullJSON['geometry']['location']
+                                ['lat'],
+                            geolocation.fullJSON['geometry']['location']
+                                ['lng']),
                       ),
                     );
+                    log(geolocation.fullJSON.toString());
 
-                    mapC.lat.value = geolocation.fullJSON['geometry']['bounds']
-                        ['northeast']['lat'];
-                    mapC.long.value = geolocation.fullJSON['geometry']['bounds']
-                        ['northeast']['lng'];
-                    mapC.getUserLocationSearch();
-
+                    // mapC.lat.value = geolocation.fullJSON['geometry']['bounds']
+                    //     ['northeast']['lat'];
+                    // mapC.long.value = geolocation.fullJSON['geometry']['bounds']
+                    //     ['northeast']['lng'];
+                    // mapC.getUserLocationSearch();
+                    if (mapC.isTujuan.isFalse) {
+                      mapC.lat.value = geolocation.fullJSON['geometry']['location']['lat'];
+                      mapC.long.value = geolocation.fullJSON['geometry']['location']['lng'];
+                    } else {
+                      mapC.latTujuan.value = geolocation.fullJSON['geometry']['location']['lat'];
+                      mapC.longTujuan.value = geolocation.fullJSON['geometry']['location']['lng'];
+                    }
+                    print("zen nini ${mapC.latTujuan.value}");
+                    print("zen nini ${mapC.longTujuan.value}");
+                    await mapC.getUserLocation();
+                    //  mapC.getUserLocationSearch();
                     // controller.animateCamera(
                     //     CameraUpdate.newLatLng(geolocation!.coordinates));
                     // // controller.animateCamera(CameraUpdate.newLatLngBounds(geolocation.bounds, 0));
@@ -220,10 +251,15 @@ class MaaappState extends State<Maaapp> {
                                   Obx(
                                     () => SizedBox(
                                       width: 180,
-                                      child: AutoSizeText(
-                                        '${mapC.city}, ${mapC.kabupaten}',
-                                        maxLines: 1,
-                                      ),
+                                      child: mapC.city.isEmpty
+                                          ? AutoSizeText(
+                                              '${mapC.cityTujuan}, ${mapC.kabupatenTujuan}',
+                                              maxLines: 1,
+                                            )
+                                          : AutoSizeText(
+                                              '${mapC.city}, ${mapC.kabupaten}',
+                                              maxLines: 1,
+                                            ),
                                     ),
                                   )
                                 ],
@@ -235,8 +271,16 @@ class MaaappState extends State<Maaapp> {
                                     '${mapC.desa.value} ${mapC.kecamatan.value} ${mapC.city.value} ${mapC.kabupaten.value} ${mapC.kodePos.value} ${mapC.negara.value}';
                                 final GoogleMapController controller =
                                     await _controller.future;
-                                controller.animateCamera(CameraUpdate.newLatLng(
-                                    LatLng(mapC.lat.value, mapC.long.value)));
+                                if (mapC.isTujuan.isFalse) {
+                                  controller.animateCamera(
+                                      CameraUpdate.newLatLng(LatLng(
+                                          mapC.lat.value, mapC.long.value)));
+                                } else {
+                                  controller.animateCamera(
+                                      CameraUpdate.newLatLng(LatLng(
+                                          mapC.latTujuan.value,
+                                          mapC.longTujuan.value)));
+                                }
                                 // mapC.getUserLocationSearch();
                                 showModalBottomSheet(
                                     shape: const RoundedRectangleBorder(
@@ -276,21 +320,42 @@ class MaaappState extends State<Maaapp> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Obx(
-                                                    () => Text(
-                                                      '${mapC.desa}',
-                                                      // 'Jadwal Sudah Penuh',
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
+                                                    () => mapC.isTujuan.isTrue
+                                                        ? Text(
+                                                            '${mapC.desaTujuan}',
+                                                            // 'Jadwal Sudah Penuh',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          )
+                                                        : Text(
+                                                            '${mapC.desa}',
+                                                            // 'Jadwal Sudah Penuh',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
                                                   ),
                                                   Obx(
-                                                    () => Text(
-                                                      '${mapC.kecamatan}, ${mapC.kabupaten} , ${mapC.city}',
-                                                      // 'Jadwal Sudah Penuh',
-                                                      style: const TextStyle(),
-                                                    ),
+                                                    () => mapC.isTujuan.isTrue
+                                                        ? Text(
+                                                            '${mapC.kecamatanTujuan}, ${mapC.kabupatenTujuan} , ${mapC.cityTujuan}',
+                                                            // 'Jadwal Sudah Penuh',
+                                                            style:
+                                                                const TextStyle(),
+                                                          )
+                                                        : Text(
+                                                            '${mapC.kecamatan}, ${mapC.kabupaten} , ${mapC.city}',
+                                                            // 'Jadwal Sudah Penuh',
+                                                            style:
+                                                                const TextStyle(),
+                                                          ),
                                                   )
                                                 ],
                                               ),
@@ -299,17 +364,16 @@ class MaaappState extends State<Maaapp> {
                                               ),
                                               ButtonGradient(
                                                   onPressed: () {
-                                                    if (Get.put(InputDataOrderAmbulanceController())
-                                                            .serviceAmbulance
-                                                            .value ==
-                                                        1) {
-                                                      Get.to(() =>
-                                                          TambahAlamatAmbulance());
-                                                    } else {
-                                                      Get.back();
-                                                      Get.back();
-                                                    }
-
+                                                    // if (Get.put(InputDataOrderAmbulanceController())
+                                                    //         .serviceAmbulance
+                                                    //         .value ==
+                                                    //     1) {
+                                                    //   Get.to(() =>
+                                                    //       TambahAlamatAmbulance());
+                                                    // } else {
+                                                    // }
+                                                    Get.back();
+                                                    Get.back();
                                                     // mapC.alamat.text = mapC
                                                     //         .desa.isEmpty
                                                     //     ? ""
@@ -452,43 +516,92 @@ class MapsController extends GetxController {
   RxString kecamatan = ''.obs;
   RxString kodePos = ''.obs;
   RxString desa = ''.obs;
-  RxString isButtonActive = "".obs;
+
+  RxBool isTujuan = false.obs;
+
+  RxString cityTujuan = ''.obs;
+  RxString kabupatenTujuan = ''.obs;
+  RxString negaraTujuan = ''.obs;
+  RxString kecamatanTujuan = ''.obs;
+  RxString kodePosTujuan = ''.obs;
+  RxString desaTujuan = ''.obs;
 
   // late double lat;
   // late double long;
   RxDouble lat = 0.0.obs;
   RxDouble long = 0.0.obs;
+  RxDouble latTujuan = 0.0.obs;
+  RxDouble longTujuan = 0.0.obs;
   String locationMessage = "Current Location";
   RxBool isLoadingMaps = false.obs;
   RxDouble latMaps = 0.0.obs;
   RxDouble longMaps = 0.0.obs;
+  RxString isButtonActive = "".obs;
 
   getUserLocation() async {
+    //  Position position = await Geolocator.getCurrentPosition(
+    //       desiredAccuracy: LocationAccuracy.high);
     isLoadingMaps(true);
+    if (isTujuan.isFalse) {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(lat.value, long.value);
+      Placemark place = placemarks[0];
+      city.value = place.subAdministrativeArea.toString();
+      kabupaten.value = place.administrativeArea.toString();
+      desa.value = place.subLocality.toString();
+      negara.value = place.country.toString();
+      kecamatan.value = place.locality.toString();
+      kodePos.value = place.postalCode.toString();
+      log('user nih boss ==============');
+      // lat.value = position.latitude;
+      // long.value = position.longitude;
+    } else {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latTujuan.value, longTujuan.value);
+      Placemark place = placemarks[0];
+      cityTujuan.value = place.subAdministrativeArea.toString();
+      kabupatenTujuan.value = place.administrativeArea.toString();
+      desaTujuan.value = place.subLocality.toString();
+      negaraTujuan.value = place.country.toString();
+      kecamatanTujuan.value = place.locality.toString();
+      kodePosTujuan.value = place.postalCode.toString();
+      log('Tujuan nih boss ==============');
 
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(lat.value, long.value);
-    Placemark place = placemarks[0];
-    city.value = place.subAdministrativeArea.toString();
-    kabupaten.value = place.administrativeArea.toString();
-    desa.value = place.subLocality.toString();
-    negara.value = place.country.toString();
-    kecamatan.value = place.locality.toString();
-    kodePos.value = place.postalCode.toString();
-    // isLoadingMaps(false);
+      // latTujuan.value = position.latitude;
+      // longTujuan.value = position.longitude;
+    }
+    isLoadingMaps(false);
   }
 
   getUserLocationSearch() async {
-    await getUserLocation();
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(lat.value, lat.value);
-    Placemark place = placemarks[0];
-    city.value = place.subAdministrativeArea.toString();
-    kabupaten.value = place.administrativeArea.toString();
-    desa.value = place.subLocality.toString();
-    negara.value = place.country.toString();
-    kecamatan.value = place.locality.toString();
-    kodePos.value = place.postalCode.toString();
+    //  Position position = await Geolocator.getCurrentPosition(
+    //       desiredAccuracy: LocationAccuracy.high);
+
+    if (isTujuan.isFalse) {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(lat.value, lat.value);
+      Placemark place = placemarks[0];
+      city.value = place.subAdministrativeArea.toString();
+      kabupaten.value = place.administrativeArea.toString();
+      desa.value = place.subLocality.toString();
+      negara.value = place.country.toString();
+      kecamatan.value = place.locality.toString();
+      kodePos.value = place.postalCode.toString();
+      // lat.value = position.latitude;
+      // long.value = position.longitude;
+    } else {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latTujuan.value, longTujuan.value);
+      Placemark place = placemarks[0];
+      cityTujuan.value = place.subAdministrativeArea.toString();
+      kabupatenTujuan.value = place.administrativeArea.toString();
+      desaTujuan.value = place.subLocality.toString();
+      negaraTujuan.value = place.country.toString();
+      kecamatanTujuan.value = place.locality.toString();
+      kodePosTujuan.value = place.postalCode.toString();
+      // latTujuan.value = position.latitude;
+      // longTujuan.value = position.longitude;
+    }
   }
 
   Future<Position> getCurrentLocation() async {

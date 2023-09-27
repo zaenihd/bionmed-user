@@ -36,6 +36,8 @@ class HomeController extends GetxController {
   RxString titlePesan = ''.obs;
   RxBool realtimeApiGet = true.obs;
   RxString description = "".obs;
+  RxList listLayananDokterDanPerawat = [].obs;
+  RxList listLayananRumahSakit = [].obs;
 
   Future<bool> checkGpsStatus() async {
   LocationPermission permission = await Geolocator.checkPermission();
@@ -637,7 +639,6 @@ Future<void> enableGPS() async {
   void onInit() {
     Get.put(ControllerPayment());
     getLocation();
-
     realtimeApi();
     trimUpdateStatus();
     // log('zen');

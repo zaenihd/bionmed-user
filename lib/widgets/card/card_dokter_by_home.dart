@@ -58,7 +58,7 @@ class _CardRecDoctorByHomeState extends State<CardRecDoctorByHome> {
             Get.to(() => const DetailProfileDoctorUmumFromHome());
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: defaultPadding, vertical: 7),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         padding: const EdgeInsets.all(6),
         height: 128,
         width: Get.width,

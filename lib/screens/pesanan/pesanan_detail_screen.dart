@@ -2128,6 +2128,29 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
             widget.data['order']['nurse']['hospital'] != null ?         namaHospital()
 :
         namaPerawat(),
+        // detailAmbulance(),
+        // const SizedBox(
+        // height: 20.0,
+        // ),
+        // InkWell(
+        //         onTap: () {
+        //           popUpLihatGambar(Get.context!);
+        //         },
+        //         child: Cntr(
+        //           margin: const EdgeInsets.symmetric(horizontal: 24),
+        //           alignment: Alignment.center,
+        //           radius: BorderRadius.circular(10),
+        //           color: Colors.transparent,
+        //           height: 40,
+        //           width: Get.width,
+        //           border: Border.all(color: Colors.blue),
+        //           child: Txt(
+        //             text: "Lihat bukti selesai",
+        //             color: Colors.blue,
+        //           ),
+        //         ),
+        //       ),
+
         const SizedBox(
           height: 15.0,
         ),
@@ -2136,6 +2159,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
         const SizedBox(
           height: 20.0,
         ),
+        // buktiPengambilanSample(),
         detailPaketNurse(),
         const SizedBox(
           height: 25.0,
@@ -2315,6 +2339,52 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                         ),
                       ),
                     ),
+                  )
+                ],
+              ),
+            ),
+          ]),
+    );
+  }
+
+  Cntr buktiPengambilanSample() {
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 25),
+      alignment: Alignment.centerLeft,
+      width: Get.width,
+      color: const Color(0xffF4F4F4),
+      radius: BorderRadius.circular(10),
+      child: ExpansionTile(
+          title: Txt(
+            text: 'Bukti pengambilan sample',
+            weight: FontWeight.bold,
+          ),
+          children: [
+            Cntr(
+              color: const Color(0xffF4F4F4),
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              radius: BorderRadius.circular(10),
+              width: Get.width,
+              child: Column(
+                children: [
+                  Cntr(height: 120,
+                  width:  Get.width,
+                radius: BorderRadius.circular(10),
+                image: const DecorationImage(image: NetworkImage('https://picsum.photos/200/300'), fit: BoxFit.cover),),
+                  const SizedBox(
+                    height: 12.0,
+                  ),
+                  Cntr(
+                    radius: BorderRadius.circular(10),
+                    padding: const EdgeInsets.all(15),
+                    border: Border.all(color: Colors.grey[300]!),
+                    color: Colors.grey[100],
+                    height:
+                        100,
+                    width: 
+                    Get.width,
+                    child: 
+                    Txt(text: 'Sudah melakukan penganmbila tes pada jam 15.00 WiB dirumah pasien')
                   )
                 ],
               ),
@@ -2570,6 +2640,159 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
             ),
           ]),
     );
+  }
+
+  Cntr detailAmbulance() {
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      radius: BorderRadius.circular(10),
+      width: Get.width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 26),
+      gradient: AppColor.gradient1,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              const SizedBox(
+                height: 16.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Txt(
+                        text: 'Detail Ambulance',
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Txt(
+                        text: 'DK 1234 FGH',
+                        weight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Txt(
+                        text: 'Ambulance Standar 1',
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // popUpkirimLaporanSelesaiAmbulance(Get.context!);
+                    },
+                    child: Cntr(
+                      radius: BorderRadius.circular(100),
+                      height: 80,
+                      width: 80,
+                      image: const DecorationImage(
+                          image: NetworkImage(
+                              'https://fastly.picsum.photos/id/201/200/300.jpg?blur=2&hmac=Bk1YAURRJgndPj6oL1nVMMPuskT1OVuu7itxEp71aH4'),
+                          fit: BoxFit.cover),
+                      border: Border.all(color: Colors.white, width: 4),
+                    ),
+                  ),
+
+                  // const Icon(
+                  //   Icons.access_time_filled_outlined,
+                  //   color: Colors.white,
+                  //   size: 40,
+                  // )
+                ],
+              ),
+              const SizedBox(
+                height: 15.0,
+              ),
+              InkWell(
+                onTap: () {
+                  popUpLihatGambar(Get.context!);
+                },
+                child: Cntr(
+                  alignment: Alignment.center,
+                  radius: BorderRadius.circular(10),
+                  color: Colors.transparent,
+                  height: 40,
+                  width: Get.width,
+                  border: Border.all(color: Colors.white),
+                  child: Txt(
+                    text: "Lihat gambar",
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  popUpLihatGambar(BuildContext context) {
+    showModalBottomSheet(
+        isDismissible: false,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        context: context,
+        builder: (context) {
+          return SizedBox(
+              height: 500,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 18, top: 14),
+                            width: Get.width / 1.9,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffEDEDED)),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Cntr(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            height: 260,
+                            width: Get.width,
+                            image: const DecorationImage(
+                              image: NetworkImage(
+                                  'https://picsum.photos/200/300/?blur'),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 22.0,
+                          ),
+                          ButtonGradient(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            label: "Kembali",
+                            onPressed: () {
+                              Get.back();
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30.0,
+                          ),
+                        ])
+                  ]));
+        });
   }
 
   Cntr dataPemesanNurse() {
