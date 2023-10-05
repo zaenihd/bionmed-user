@@ -39,7 +39,9 @@ class CardService1 extends StatelessWidget {
                         myC.dataOrder[index]['user']['role'] == 'nurse'
                             ? myC.dataOrder[index]['order']
                                 ['service_price_nurse']['name']
-                            : myC.dataOrder[index]['order']['service_price']
+                            : 
+                             myC.dataOrder[index]['user']['role'] == 'ambulance' ? "zen" :
+                            myC.dataOrder[index]['order']['service_price']
                                 ['name'];
                     // ignore: unused_local_variable
                     var dataService =

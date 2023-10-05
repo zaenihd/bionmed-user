@@ -509,7 +509,7 @@ class _DetailProfileDoctorUmumState extends State<DetailProfileDoctorUmum> {
                                 print(Get.find<ControllerPayment>()
                                     .dataPayloadOrder['doctorId']
                                     .toString());
-                                Get.to(() => const SelectServiceScreen());
+                                Get.to(() =>  SelectServiceScreen());
                               },
                               label: 'Daftar Konsultasi')
                         ],

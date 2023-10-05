@@ -286,7 +286,7 @@ class _DetailProfileDoctorSpesialisState
                 ),
                 const SizedBox(height: 50),
                 ButtonGradient(onPressed: () {
-                  Get.to(() => const SelectServiceScreen());
+                  Get.to(() =>  SelectServiceScreen());
                   // print('object');
                 }, label: 'Daftar Konsultasi')
               ],

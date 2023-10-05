@@ -5,6 +5,7 @@ import 'package:bionmed_app/constant/helper.dart';
 import 'package:bionmed_app/screens/payment/metode_pembayaran_screen.dart';
 import 'package:bionmed_app/screens/pesanan/controller_pesanan.dart';
 import 'package:bionmed_app/screens/pesanan/pesanan_detail_screen.dart';
+import 'package:bionmed_app/widgets/txt/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -47,6 +48,8 @@ class CardPesananService extends StatelessWidget {
           Get.find<ControllerPesanan>().idOrder.value = data['order']['id'];
           if (role == 'nurse') {
             await Get.find<ControllerPesanan>().getDetailOrderNurse();
+          } else if (role == 'ambulance') {
+            await Get.find<ControllerPesanan>().getDetailOrderAmbulance();
           }
           {
             // await Get.find<ControllerPesanan>().getOrderChat();
@@ -103,23 +106,46 @@ class CardPesananService extends StatelessWidget {
                               fit: BoxFit.cover),
                         ),
                       )
-                    : Container(
-                        height: 86,
-                        width: 71,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4.0),
-                          // color: AppColor.bluePrimary2,
-                          image: data['order']['doctor']['image'] == ""
-                              ? const DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/img-doctor2.png'),
-                                  fit: BoxFit.cover)
-                              : DecorationImage(
-                                  image: NetworkImage(
-                                      data['order']['doctor']['image']),
-                                  fit: BoxFit.cover),
-                        ),
-                      ),
+                    : role == 'ambulance'
+                        ? Container(
+                            height: 86,
+                            width: 71,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              // color: AppColor.bluePrimary2,
+                              image: data['order']['ambulance']['hospital']
+                                              ['image'] ==
+                                          "" ||
+                                      data['order']['ambulance']['hospital']
+                                              ['image'] ==
+                                          null
+                                  ? const DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/img-doctor2.png'),
+                                      fit: BoxFit.cover)
+                                  : DecorationImage(
+                                      image: NetworkImage(data['order']
+                                          ['ambulance']['hospital']['image']),
+                                      fit: BoxFit.cover),
+                            ),
+                          )
+                        : Container(
+                            height: 86,
+                            width: 71,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              // color: AppColor.bluePrimary2,
+                              image: data['order']['doctor']['image'] == ""
+                                  ? const DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/img-doctor2.png'),
+                                      fit: BoxFit.cover)
+                                  : DecorationImage(
+                                      image: NetworkImage(
+                                          data['order']['doctor']['image']),
+                                      fit: BoxFit.cover),
+                            ),
+                          ),
                 const SizedBox(width: 14),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +161,10 @@ class CardPesananService extends StatelessWidget {
                                 ? data['order']['nurse']['hospital'] != null
                                     ? data['order']['nurse']['hospital']['name']
                                     : data['order']['nurse']['name']
-                                : data['order']['doctor']['name'],
+                                : role == 'ambulance'
+                                    ? data['order']['ambulance']['hospital']
+                                        ['name']
+                                    : data['order']['doctor']['name'],
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -217,6 +246,8 @@ class CardPesananService extends StatelessWidget {
                         style: TextStyles.callout1
                             .copyWith(color: AppColor.bodyColor.shade700)),
                     verticalSpace(5),
+                    data['user']['role'] == "ambulance" && data['order']['is_csr'] == 1
+            ? Txt(text: 'Gratis', weight: FontWeight.bold, color: Colors.green,):
                     Text(
                         priceFormat(data['order']['totalPrice']
                             //  -
@@ -507,36 +538,111 @@ class CardPesananService extends StatelessWidget {
               ),
             ),
           )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Belum Bayar ",
-                  style: TextStyles.callout1.copyWith(color: Colors.red)),
-              Container(
-                height: 26,
-                decoration: isLive
-                    ? BoxDecoration(
-                        gradient: AppColor.gradient1,
-                        borderRadius: BorderRadius.circular(2))
-                    : null,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Get.find<ControllerPesanan>().codeOrder.value =
-                        data['order']['code'].toString();
-                    Get.find<ControllerPesanan>().dataOrderChoice.value = data;
-                    Get.to(() => const MetodePaymentScreen(
-                          paymentScreen: true,
-                        ));
-                  },
-                  style: ElevatedButton.styleFrom(
-                      elevation: 0.0, backgroundColor: AppColor.redColor),
-                  child: Text(
-                    "Pilih Pembayaran",
-                    style: TextStyles.callout1,
+        : data['user']['role'] == "ambulance" && data['order']['is_csr'] == 1
+            ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("",
+                      style: TextStyles.callout1.copyWith(color: Colors.red)),
+                Container(
+                    height: 26,
+                    decoration: isLive
+                        ? BoxDecoration(
+                            gradient: AppColor.gradient1,
+                            borderRadius: BorderRadius.circular(2))
+                        : null,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // Get.find<HomeController>().timePeriodic.value = false;
+                        // Get.find<HomeController>().realtimeApiGet.value = false;
+                        // if (Get.find<HomeController>().realtimeApiGet.isFalse) {
+                        //   await Get.find<HomeController>().realtimeApi();
+                        // }
+                        Get.find<ControllerPesanan>().statusOrder.value =
+                            data['order']['status'];
+                        // Get.find<ControllerPesanan>().imageResep.value = data['order']['image_recipe'] == null ? "" : data['order']['image_recipe'];
+                        if (data['order']['service']['sequence'] != 2) {
+                          Get.find<ControllerPesanan>().orderMinute.value =
+                              data['order']['service_price']['minute'];
+                        }
+                        Get.find<ControllerPesanan>().idOrder.value =
+                            data['order']['id'];
+                        await Get.find<ControllerPesanan>().getOrderChat();
+                        Get.to(() => PesananDetailScreen(
+                              data: data,
+                            ));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0.0,
+                        // ignore: deprecated_member_use
+                        primary: data['order']['status'] == 1
+                            ? AppColor.successColor
+                            : data['order']['status'] == 2
+                                ? AppColor.yellowColor
+                                : data['order']['status'] == 3
+                                    ? AppColor.primaryColor
+                                    : data['order']['status'] == 4
+                                        ? AppColor.bluePrimary2
+                                        : data['order']['status'] == 99 ||
+                                                data['order']['status'] == 98
+                                            ? Colors.red
+                                            : AppColor.greenColor,
+                        // ignore: deprecated_member_use
+                        onSurface: Colors.transparent,
+                      ),
+                      child: Text(
+                        data['order']['status'] == 1
+                            ? "Sudah Bayar"
+                            : data['order']['status'] == 2
+                                ? "Terjadwalkan"
+                                : data['order']['status'] == 3
+                                    ? "Mulai Sekarang"
+                                    : data['order']['status'] == 4
+                                        ? "Sedang Berlangsung"
+                                        : data['order']['status'] == 99
+                                            ? "Terlewatkan"
+                                            : data['order']['status'] == 6
+                                                ? "Konfirmasi selesai"
+                                                : data['order']['status'] == 98
+                                                    ? "Dibatalkan"
+                                                    : "Selesai",
+                        style: TextStyles.callout1,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ],
-          );
+              ],
+            )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Belum Bayar ",
+                      style: TextStyles.callout1.copyWith(color: Colors.red)),
+                  Container(
+                    height: 26,
+                    decoration: isLive
+                        ? BoxDecoration(
+                            gradient: AppColor.gradient1,
+                            borderRadius: BorderRadius.circular(2))
+                        : null,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.find<ControllerPesanan>().codeOrder.value =
+                            data['order']['code'].toString();
+                        Get.find<ControllerPesanan>().dataOrderChoice.value =
+                            data;
+                        Get.to(() => const MetodePaymentScreen(
+                              paymentScreen: true,
+                            ));
+                      },
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0.0, backgroundColor: AppColor.redColor),
+                      child: Text(
+                        "Pilih Pembayaran",
+                        style: TextStyles.callout1,
+                      ),
+                    ),
+                  ),
+                ],
+              );
   }
 }

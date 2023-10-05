@@ -240,6 +240,49 @@ class ControllerPesanan extends GetxController {
     }
   }
 
+  Future<dynamic> getDetailOrderAmbulance() async {
+    final params = <String, dynamic>{};
+    // ignore: unused_local_variable
+    RxInt statusOrderChat = 0.obs;
+
+    // isloadingDetail(true);
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/order/detail/$idOrder', Method.GET, params);
+      final servis = json.decode(result.toString());
+      detailDataOrder.value = [{"order" : servis['data']}];
+      // updateStatusChat.value = servis['data']['statusOrder'];
+      // updateStatusPayment.value = servis['data']['statusPayment'];
+      nameDoctor.value = servis['data']['ambulance']['name'];
+      statusOrderDetail.value = servis['data']['status'];
+      doctorId.value = servis['data']['ambulance']['id'];
+      // servicePriceId.value =servis['data']['servicePriceId'];
+      // serviceId.value = servis['data']['serviceId'];
+      imageDoctor.value = servis['data']['ambulance']['image'] ?? "https://picsum.photos/200/300/?blur";
+      totalPrice.value = servis['data']['totalPrice'];
+      orderIdDetail.value = servis['data']['id'];
+      // ignore: prefer_if_null_operators
+      imageResep.value = servis['data']['image_recipe'] == null
+          ? ""
+          : servis['data']['image_recipe'];
+      // sopNurse.value = servis['data']['service_price_ambulance']['package_nurse_sops'];
+
+      // dataGetOrder = servis['data'];
+      print('ini data : ${updateStatusChat.value}');
+      print("WHOO ");
+
+      if (servis['code'] == 200) {
+        log('zzzz masuk cuy$servis');
+
+        // print("cek data order get DariAPI =======" + name.toString());
+        // isloadingDetail(false);
+      }
+      // isloadingDetail(false);
+    } on Exception catch (e) {
+      print('zzzz $e');
+    }
+  }
+
   RxMap detailDokter = {}.obs;
 
   Future<dynamic> getOrderDetail() async {
@@ -483,6 +526,25 @@ class ControllerPesanan extends GetxController {
     try {
       final result = await RestClient().request(
           '${MainUrl.urlApi}nurse/update/order/$orderId', Method.POST, params);
+      final status = json.decode(result.toString());
+      // ratingDoctor.value = status['data']['rating'];
+      print('zezeze $status');
+      // }
+      loadingButton(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error =-=-=$e");
+    }
+  }
+
+  Future<dynamic> updateStatusAmbulance(
+      {required int status, required int orderId}) async {
+    final params = <String, dynamic>{"status": status};
+    loadingButton(true);
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/update/order/$orderId', Method.POST, params);
       final status = json.decode(result.toString());
       // ratingDoctor.value = status['data']['rating'];
       print('zezeze $status');

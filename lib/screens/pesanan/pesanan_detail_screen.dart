@@ -16,7 +16,6 @@ import 'package:bionmed_app/screens/pesanan/lihat_resep.dart';
 import 'package:bionmed_app/screens/pilih_jadwal/controllers/pilih_jadwal_controller.dart';
 import 'package:bionmed_app/screens/pilih_jadwal/views/atur_ulang_jadwal.dart';
 import 'package:bionmed_app/screens/pilih_jadwal/views/atur_ulang_jadwal_nurse.dart';
-import 'package:bionmed_app/screens/profile_doctor/detail_dokter_in_order.dart';
 import 'package:bionmed_app/screens/videoCall/page_call.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
 import 'package:bionmed_app/widgets/button/button_primary.dart';
@@ -283,7 +282,10 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   // your app's logo?
                   image: Image.network(role == 'nurse'
                       ? widget.data['order']['nurse']['image']
-                      : widget.data['order']['doctor']['image']),
+                      : 
+                    role == 'ambulance' ? widget.data['order']['ambulance']['name'] :
+                      
+                      widget.data['order']['doctor']['image']),
                   submitButtonText: 'Kirim',
                   commentHint: 'Tetapkan petunjuk komentar khusus Anda',
                   // ignore: avoid_print
@@ -340,7 +342,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
         Get.find<ControllerPesanan>().updateStatusChat.value == 7 ||
         Get.find<ControllerPesanan>().updateStatusChat.value >= 5 ||
         myC.statusOrderDetail.value == 6 &&
-            widget.data['order']['service']['sequence'] == 2||
+            widget.data['order']['service']['sequence'] == 2 ||
         widget.data['order']['service']['sequence'] == 4 ||
         widget.data['order']['service']['sequence'] == 5 ||
         widget.data['order']['service']['sequence'] == 6) {
@@ -376,8 +378,13 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   ),
                   // your app's logo?
                   image: Image.network(role == 'nurse'
-                      ? widget.data['order']['nurse']['hospital'] != null ? widget.data['order']['nurse']['hospital']['image'] : widget.data['order']['nurse']['image']
-                      : widget.data['order']['doctor']['image']),
+                      ? widget.data['order']['nurse']['hospital'] != null
+                          ? widget.data['order']['nurse']['hospital']['image']
+                          : widget.data['order']['nurse']['image']
+                      : 
+                    role == 'ambulance' ? widget.data['order']['ambulance']['image'] :
+                      
+                      widget.data['order']['doctor']['image']),
                   submitButtonText: 'Kirim',
                   commentHint: 'Tetapkan petunjuk komentar khusus Anda',
                   // ignore: avoid_print
@@ -389,6 +396,106 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                     //     idOrder: widget.data['order']['id'].toString(),
                     //     context: context);
                     await Get.find<ControllerPesanan>().updateStatusNurse(
+                        status: 5, orderId: widget.data['order']['id']);
+                    Get.back();
+                    await Get.find<ControllerPesanan>().sendRating(
+                        rating: int.parse(response.rating.toStringAsFixed(0)),
+                        deskripsi: response.comment,
+                        orderId: widget.data['order']['id']);
+
+                    // Get.find<ControllerPesanan>().updateStatus(
+                    //     data: data,
+                    //     status: 5,
+                    //     idOrder: Get.find<ControllerPesanan>()
+                    //         .idOrder
+                    //         .value
+                    //         .toString(),
+                    //     context: context);
+                    Get.back();
+
+                    // ApiPesanan().ratingDoctor(
+                    //     rating: int.parse(response.rating.toStringAsFixed(0)),
+                    //     descriptionRating: response.comment,
+                    //     idOrder: widget.data['order']['id'].toString());
+                    showPopUp(
+                        onTap: () {
+                          Get.back();
+                        },
+                        description:
+                            "Terimakasih Atas Konfirmasi\nPenyelesaian Layanan Ini\nRating yang anda beri akan membantu\nmeningkatkan kualitas layanan kami",
+                        onPress: () {
+                          Get.back();
+                        });
+                  },
+                );
+              },
+            );
+            Get.find<ControllerPesanan>().isStart.value = false;
+          });
+    }
+    // else{
+    //   Get.defaultDialog(
+    //     title: "Mohon Maaf",
+    //     middleText: "Dokter Belum Mengirimkan Resep"
+    //   );
+    // }
+  }
+
+void actionButtonAmbulance() async {
+    final myC = Get.put(ControllerPesanan());
+    await Get.find<ControllerPesanan>().getDetailOrderAmbulance();
+    if (myC.statusOrderDetail.value == 6 &&
+            Get.find<ControllerPesanan>().imageResep.value != "" ||
+        Get.find<ControllerPesanan>().updateStatusChat.value == 7 ||
+        Get.find<ControllerPesanan>().updateStatusChat.value >= 5 ||
+        myC.statusOrderDetail.value == 6 &&
+            widget.data['order']['service']['sequence'] == 8) {
+      showPopUp(
+          onTap: () {
+            Get.find<ControllerPesanan>().isStart.value = false;
+            Get.back();
+          },
+          description: "Apakah anda yakin telah selesai ?",
+          onPress: () {
+            Get.back();
+            showDialog(
+              context: context,
+              barrierDismissible:
+                  true, // set to false if you want to force a rating
+              builder: (context) {
+                return RatingDialog(
+                  initialRating: 1.0,
+                  // your app's name?
+                  title: const Text(
+                    'Rating Pesanan',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  // encourage your user to leave a high rating?
+                  message: const Text(
+                    'Ketuk bintang untuk mengatur peringkat pesamam. Tambahkan lebih banyak deskripsi di sini jika Anda mau.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  // your app's logo?
+                  image:
+                   Image.network( widget.data['order']['ambulance']['hospital']['image'] ?? "https://img.freepik.com/free-vector/emergency-ambulance-white-background_1308-95157.jpg?w=2000&t=st=1696392963~exp=1696393563~hmac=c89c3c2066e77ed4f5fb52c2b80a613b0bd8d3e9e6742b7ef25399de40675efa"
+                    // role == 'ambulance' ? widget.data['order']['ambulance']['image'] :
+                    ),
+                  submitButtonText: 'Kirim',
+                  commentHint: 'Tetapkan petunjuk komentar khusus Anda',
+                  // ignore: avoid_print
+                  onCancelled: () => print('cancelled'),
+                  onSubmitted: (response) async {
+                    // Get.find<ControllerPesanan>().updateStatus(
+                    //     status: 5,
+                    //     data: widget.data,
+                    //     idOrder: widget.data['order']['id'].toString(),
+                    //     context: context);
+                    await Get.find<ControllerPesanan>().updateStatusAmbulance(
                         status: 5, orderId: widget.data['order']['id']);
                     Get.back();
                     await Get.find<ControllerPesanan>().sendRating(
@@ -454,6 +561,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
   Widget build(BuildContext context) {
     if (role == 'nurse') {
       Get.find<ControllerPesanan>().getDetailOrderNurse();
+    } else if (role == 'ambulance') {
+      myC.getDetailOrderAmbulance();
     } else {
       myC.getOrderDetail();
     }
@@ -465,19 +574,16 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   myC.statusOrderDetail.value == 5 ||
                   myC.statusOrderDetail.value == 2 ||
                   myC.statusOrderDetail.value == 3 &&
-                      widget.data['order']['service']['sequence'] ==
-                          2 ||
+                      widget.data['order']['service']['sequence'] == 2 ||
                   myC.statusOrderDetail.value == 4 &&
-                      widget.data['order']['service']['sequence'] ==
-                          4 ||
+                      widget.data['order']['service']['sequence'] == 4 ||
                   myC.statusOrderDetail.value == 4 &&
-                      widget.data['order']['service']['sequence'] ==
-                          5 ||
+                      widget.data['order']['service']['sequence'] == 5 ||
                   myC.statusOrderDetail.value == 4 &&
                       widget.data['order']['service']['sequence'] == 6 ||
                   myC.statusOrderDetail.value == 4 &&
-                      widget.data['order']['service']['sequence'] ==
-                          2 || myC.statusOrderDetail.value == 98
+                      widget.data['order']['service']['sequence'] == 2 ||
+                  myC.statusOrderDetail.value == 98 || widget.data['order']['service']['sequence'] == 8
               ? verticalSpace(0)
               : myC.statusOrderDetail.value == 99
                   ? Padding(
@@ -756,10 +862,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                                                         'order']
                                                                     ['service']
                                                                 ['name'];
-                                                            log("HAHAHAHAHA${Get.find<
-                                                                        ControllerPesanan>()
-                                                                    .orderIdDetail
-                                                                    .value}");
+                                                            log("HAHAHAHAHA${Get.find<ControllerPesanan>().orderIdDetail.value}");
                                                             Get.to(() =>
                                                                 const AturUlangJadwalNurse());
                                                           } else {
@@ -805,7 +908,10 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                           () => Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Cntr(
-                                height: role == "nurse" &&  myC.statusOrderDetail.value != 0? 100 :50,
+                                height: role == "nurse" &&
+                                        myC.statusOrderDetail.value != 0
+                                    ? 100
+                                    : 50,
                                 child: Column(
                                   children: [
                                     Container(
@@ -813,13 +919,16 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                       height: 45,
                                       decoration: BoxDecoration(
                                         gradient: myC.statusOrderDetail.value == 3 ||
-                                                myC.statusOrderDetail.value == 4 ||
+                                                myC.statusOrderDetail.value ==
+                                                    4 ||
                                                 myC.statusOrderDetail.value == 6 &&
                                                     role == 'nurse' ||
-                                                myC.statusOrderDetail.value == 6 &&
-                                                    widget.data['order']['service']
+                                                myC.statusOrderDetail.value ==
+                                                        6 &&
+                                                    widget.data['order']
+                                                                ['service']
                                                             ['sequence'] ==
-                                                        2||
+                                                        2 ||
                                                 Get.find<ControllerPesanan>()
                                                         .updateStatusChat
                                                         .value ==
@@ -828,7 +937,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                                         .updateStatusChat
                                                         .value >=
                                                     5 ||
-                                                myC.statusOrderDetail.value == 6 &&
+                                                myC.statusOrderDetail.value ==
+                                                        6 &&
                                                     Get.find<ControllerPesanan>()
                                                             .imageResep
                                                             .value !=
@@ -836,26 +946,27 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                             ? AppColor.gradient1
                                             // ignore: prefer_const_constructors
                                             : LinearGradient(
-                                                colors: 
-                                                widget.data['order']['status'] == 0 ?[const Color(0xFF2B88D9),const Color(0XFF26E0F5)] :
-                                                const [
-                                                    Colors.grey,
-                                                    Colors.grey,
-                                                  ],
+                                                colors: widget.data['order']['status'] == 0
+                                                    ? [const Color(0xFF2B88D9), const Color(0XFF26E0F5)]
+                                                    : const [
+                                                        Colors.grey,
+                                                        Colors.grey,
+                                                      ],
                                                 begin: Alignment.topLeft,
                                                 end: Alignment.bottomRight),
                                         borderRadius: BorderRadius.circular(5),
                                       ),
-                                      child: 
-                                      
-                                      ElevatedButton(
+                                      child: ElevatedButton(
                                         onPressed: () {
                                           // ignore: avoid_print
                                           if (myC.statusOrderDetail.value == 3 ||
-                                              myC.statusOrderDetail.value == 4 ||
-                                              myC.statusOrderDetail.value == 6 &&
+                                              myC.statusOrderDetail.value ==
+                                                  4 ||
+                                              myC.statusOrderDetail.value ==
+                                                      6 &&
                                                   role == 'nurse' ||
-                                              myC.statusOrderDetail.value == 6 &&
+                                              myC.statusOrderDetail.value ==
+                                                      6 &&
                                                   role == 'doctor' ||
                                               Get.find<ControllerPesanan>()
                                                       .updateStatusChat
@@ -865,7 +976,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                                       .updateStatusChat
                                                       .value >=
                                                   5 ||
-                                              myC.statusOrderDetail.value == 6 &&
+                                              myC.statusOrderDetail.value ==
+                                                      6 &&
                                                   Get.find<ControllerPesanan>()
                                                           .imageResep
                                                           .value !=
@@ -878,21 +990,29 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                               }
                                             }
                                             myC.isStart.value = true;
-                              
+
                                             // _start = 15;
                                             // startTimer();
                                             // setState(() {
                                             //   isloading = true;
                                             // });
-                              
+
                                           } else {
-                                            if(widget.data['order']['status'] == 0){
-                                              Get.find<ControllerPesanan>().codeOrder.value =
-                        widget.data['order']['code'].toString();
-                    Get.find<ControllerPesanan>().dataOrderChoice.value = widget.data;
-                    Get.to(() => const MetodePaymentScreen(
-                          paymentScreen: true,
-                        ));
+                                            if (widget.data['order']
+                                                    ['status'] ==
+                                                0) {
+                                              Get.find<ControllerPesanan>()
+                                                  .codeOrder
+                                                  .value = widget.data['order']
+                                                      ['code']
+                                                  .toString();
+                                              Get.find<ControllerPesanan>()
+                                                  .dataOrderChoice
+                                                  .value = widget.data;
+                                              Get.to(() =>
+                                                  const MetodePaymentScreen(
+                                                    paymentScreen: true,
+                                                  ));
                                             }
 
                                             // print('object');
@@ -906,17 +1026,22 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                           // shadowColor: Colors.transparent,
                                           elevation: 0.0,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(6.0),
+                                            borderRadius:
+                                                BorderRadius.circular(6.0),
                                           ),
                                         ),
-                                        child: Text(
+                                        child: 
+                                        Text(
                                           myC.statusOrderDetail.value == 3
                                               ? "Mulai Sekarang "
                                               : myC.statusOrderDetail.value == 4 &&
-                                                      widget.data['order']['service']['sequence'] ==
-                                                         1
+                                                      widget.data['order']['service']
+                                                              ['sequence'] ==
+                                                          1
                                                   ? "Sedang Berlangsung"
-                                                  : myC.statusOrderDetail.value == 6 && myC.imageResep.value != "" ||
+                                                  : myC.statusOrderDetail.value == 6 &&
+                                                              myC.imageResep.value !=
+                                                                  "" ||
                                                           Get.find<ControllerPesanan>()
                                                                   .updateStatusChat
                                                                   .value >=
@@ -929,34 +1054,38 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                                               widget.data['order']['service']['sequence'] ==
                                                                   2 ||
                                                           myC.statusOrderDetail.value == 5 &&
-                                                              widget.data['order']['service']['sequence'] ==
+                                                              widget.data['order']['service']
+                                                                      ['sequence'] ==
                                                                   4 ||
-                                                          myC.statusOrderDetail.value == 5 &&
-                                                              widget.data['order']['service']['sequence'] ==
-                                                                  5 ||
-                                                          myC.statusOrderDetail.value == 5 &&
-                                                              widget.data['order']['service']['sequence'] == 6
+                                                          myC.statusOrderDetail.value == 5 && widget.data['order']['service']['sequence'] == 5 ||
+                                                          myC.statusOrderDetail.value == 5 && widget.data['order']['service']['sequence'] == 6
                                                       ? "Konfirmasi Pesanan Selesai"
-                                                      : myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 2 || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 4|| myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 5 || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 6
+                                                      : myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 2 || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 4 || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 5 || myC.statusOrderDetail.value == 6 && widget.data['order']['service']['sequence'] == 6
                                                           ? "Konfirmasi selesai"
-                                                          :
-                                                          myC.statusOrderDetail.value == 0 ? "Bayar Sekarang" :
-                                                           "Menunggu Resep Dari Dokter",
+                                                          : myC.statusOrderDetail.value == 0
+                                                              ? "Bayar Sekarang"
+                                                              : "Menunggu Resep Dari Dokter",
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
-                                      
                                     ),
-                                    role == "nurse" && widget.data['order']['status'] != 0 ?
-                                   Column(children: [
-                                     const SizedBox(
-                                    height: 10.0,
-                                    ),
-                                    Txt(text: 'jika anda belum mengkonfirmasi selama 24 jam, maka pesanan akan dinyatakan selesai', textAlign: TextAlign.center,),
-                                   ],) : const SizedBox(
-                                   height: 1.0,
-                                   ),
-
+                                    role == "nurse" &&
+                                            widget.data['order']['status'] != 0
+                                        ? Column(
+                                            children: [
+                                              const SizedBox(
+                                                height: 10.0,
+                                              ),
+                                              Txt(
+                                                text:
+                                                    'jika anda belum mengkonfirmasi selama 24 jam, maka pesanan akan dinyatakan selesai',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          )
+                                        : const SizedBox(
+                                            height: 1.0,
+                                          ),
                                   ],
                                 ),
                               )
@@ -1017,7 +1146,9 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                     children: [
                       widgetDoctor(),
                       widget.data['order']['status'] == 1 ||
-                              widget.data['order']['status'] == 2 || widget.data['order']['status'] == 2 && role != "nurse"
+                              widget.data['order']['status'] == 2 ||
+                              widget.data['order']['status'] == 2 &&
+                                  role != "nurse"
                           ? Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
@@ -1100,17 +1231,21 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                 ),
                               ]),
                             )
-                          : 
-                           widget.data['order']['status'] == 0 ? const SizedBox(
-                           height: 1.0,
-                           ) :
-                          widgetStepOrder(),
-                          const SizedBox(
-                          height: 20.0,
-                          ),
+                          : widget.data['order']['status'] == 0
+                              ? const SizedBox(
+                                  height: 1.0,
+                                )
+                              : 
+                              role == 'ambulance' ? widgetStepOrderAmbulance() :
+                              widgetStepOrder(),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
                       role == "nurse"
                           ? detailPesananNurse(context)
-                          : detailOrderDokter(),
+                          : 
+                          role == "ambulance" ? detailPesananAmbulance(context) : 
+                          detailOrderDokter(),
                     ],
                   ),
                 ),
@@ -1362,7 +1497,13 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                 Text(
                   role == 'nurse'
                       ? priceFormat(widget.data['order']['totalPrice'])
-                      : priceFormat(
+                      : 
+                    role == 'ambulance' ?
+                    priceFormat(widget.data['order']['totalPrice'])
+                    //  widget.data['order']['ambulance']['name'] 
+                     :
+                      
+                      priceFormat(
                           widget.data['order']['service_price']['price']),
                   style: TextStyles.subtitle1,
                 ),
@@ -1381,7 +1522,11 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   Text(
                     role == 'nurse'
                         ? '${widget.data['order']['service_price_nurse']['discount']} %'
-                        : '${widget.data['order']['service_price']['discount']} %',
+                        : 
+                    role == 'ambulance' ?
+                    '${widget.data['order']['service_price_ambulance']['discount']} %' :
+                        
+                        '${widget.data['order']['service_price']['discount']} %',
                     style: TextStyles.subtitle1,
                   ),
                 ],
@@ -1564,12 +1709,14 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
             ],
           ),
           verticalSpace(20.h),
-          Obx(() => myC.statusOrderDetail.value == 3 || myC.statusOrderDetail.value == 2 && role == 'nurse'
+          Obx(() => myC.statusOrderDetail.value == 3 ||
+                  myC.statusOrderDetail.value == 2 && role == 'nurse'
               ? Row(
                   children: [
                     Image.asset(
-                      role == 'nurse' ? 'assets/images/step_oneN.png':
-                      'assets/images/step_one.png',
+                      role == 'nurse'
+                          ? 'assets/images/step_oneN.png'
+                          : 'assets/images/step_one.png',
                       height: 244,
                       width: 279,
                     ),
@@ -1579,8 +1726,9 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                   ? Row(
                       children: [
                         Image.asset(
-                          role == 'nurse' ? 'assets/images/step_twoN.png':
-                          'assets/images/step_two.png',
+                          role == 'nurse'
+                              ? 'assets/images/step_twoN.png'
+                              : 'assets/images/step_two.png',
                           height: 244,
                           width: 279,
                         ),
@@ -1590,8 +1738,9 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                       ? Row(
                           children: [
                             Image.asset(
-                              role == 'nurse' ? 'assets/images/step_threeN.png':
-                              'assets/images/step_three.png',
+                              role == 'nurse'
+                                  ? 'assets/images/step_threeN.png'
+                                  : 'assets/images/step_three.png',
                               height: 244,
                               width: 279,
                             ),
@@ -1601,35 +1750,120 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                           ? Row(
                               children: [
                                 Image.asset(
-                                  role == 'nurse' ? 'assets/images/step_fiveN.png':
-                                  'assets/images/step_four.png',
+                                  role == 'nurse'
+                                      ? 'assets/images/step_fiveN.png'
+                                      : 'assets/images/step_four.png',
                                   height: 244,
                                   width: 279,
                                 ),
                               ],
                             )
-                          : myC.statusOrderDetail.value == 98 ? 
-                          Row(
+                          : myC.statusOrderDetail.value == 98
+                              ? Row(
+                                  children: [
+                                    Image.asset(
+                                      role == 'nurse'
+                                          ? 'assets/images/step_failN2.png'
+                                          : 'assets/images/step_fail.png',
+                                      height: 244,
+                                      width: 279,
+                                    ),
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Image.asset(
+                                      role == 'nurse'
+                                          ? 'assets/images/step_failN.png'
+                                          : 'assets/images/step_fail.png',
+                                      height: 244,
+                                      width: 279,
+                                    ),
+                                  ],
+                                ))
+        ],
+      ),
+    );
+  }
+
+  Padding widgetStepOrderAmbulance() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                "Info Order",
+                style: TextStyles.subtitle2,
+              ),
+            ],
+          ),
+          verticalSpace(20.h),
+           myC.statusOrderDetail.value == 2
+              ? Row(
+                  children: [
+                    Image.asset('assets/images/status2Am.png',
+                      height: 244,
+                      width: 279,
+                    ),
+                  ],
+                )
+              : myC.statusOrderDetail.value == 4 && widget.data['order']['status_travel'] == 1
+                  ? Row(
+                      children: [
+                        Image.asset('assets/images/status4Am.png',
+                          height: 244,
+                          width: 279,
+                        ),
+                      ],
+                    )
+                  :
+                   myC.statusOrderDetail.value == 4 && widget.data['order']['status_travel'] == 2
+                  ? Row(
+                      children: [
+                        Image.asset('assets/images/status4AAm.png',
+                          height: 244,
+                          width: 279,
+                        ),
+                      ],
+                    ) :
+                  
+                   myC.statusOrderDetail.value == 6
+                      ? Row(
+                          children: [
+                            Image.asset('assets/images/status6Am.png',
+                              height: 244,
+                              width: 279,
+                            ),
+                          ],
+                        )
+                      : myC.statusOrderDetail.value == 5
+                          ? Row(
                               children: [
-                                Image.asset(
-                                   role == 'nurse' ? 'assets/images/step_failN2.png' :
-                                  'assets/images/step_fail.png',
+                                Image.asset('assets/images/status5Am.png',
                                   height: 244,
                                   width: 279,
                                 ),
                               ],
                             )
-                          
-                          :Row(
-                              children: [
-                                Image.asset(
-                                   role == 'nurse' ? 'assets/images/step_failN.png' :
-                                  'assets/images/step_fail.png',
-                                  height: 244,
-                                  width: 279,
-                                ),
-                              ],
-                            ))
+                          : myC.statusOrderDetail.value == 98
+                              ? Row(
+                                  children: [
+                                    Image.asset('assets/images/status99Am.png',
+                                      height: 244,
+                                      width: 279,
+                                    ),
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Image.asset('assets/images/status99Am.png',
+                                      height: 244,
+                                      width: 279,
+                                    ),
+                                  ],
+                                )
         ],
       ),
     );
@@ -1748,22 +1982,23 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
               ),
             ],
           ),
-          verticalSpace(10), DottedBorder(
-                  radius: const Radius.circular(8),
-                  color:
-                      AppColor.bodyColor.shade300, //color of dotted/dash line
-                  strokeWidth: 2, //thickness of dash/dots
-                  dashPattern: const [5, 6],
-                  child: Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: 
-                      widget.data['payment'] == null
-              ?  Cntr(height: 30, width: Get.width,)
-              :
-                      Row(
+          verticalSpace(10),
+          DottedBorder(
+            radius: const Radius.circular(8),
+            color: AppColor.bodyColor.shade300, //color of dotted/dash line
+            strokeWidth: 2, //thickness of dash/dots
+            dashPattern: const [5, 6],
+            child: Container(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: widget.data['payment'] == null
+                    ? Cntr(
+                        height: 30,
+                        width: Get.width,
+                      )
+                    : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
@@ -1931,9 +2166,9 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                           ]),
                         ],
                       ),
-                    ),
-                  ),
-                ),
+              ),
+            ),
+          ),
           verticalSpace(10),
           Row(
             children: [
@@ -1961,8 +2196,13 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
         children: [
           CachedNetworkImage(
             imageUrl: role == 'nurse'
-                ? widget.data['order']['nurse']['hospital'] != null ? widget.data['order']['nurse']['hospital']['image'] ?? 'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42' : widget.data['order']['nurse']['image']
-                : widget.data['order']['doctor']['image'],
+                ? widget.data['order']['nurse']['hospital'] != null
+                    ? widget.data['order']['nurse']['hospital']['image'] ??
+                        'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42'
+                    : widget.data['order']['nurse']['image']
+                : 
+                role == 'ambulance' ?  widget.data['order']['ambulance']['image'] == "" || widget.data['order']['ambulance']['image'] == null ? 'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42' : widget.data['order']['ambulance']['image']:
+                widget.data['order']['doctor']['image'],
             width: 70.w,
             placeholder: (context, url) =>
                 loadingIndicator(color: AppColor.primaryColor),
@@ -1975,10 +2215,12 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
             children: [
               Text(
                 role == 'nurse'
-                    ? widget.data['order']['nurse']['hospital'] != null ? widget.data['order']['nurse']['hospital']['name'] :
-                    
-                    widget.data['order']['nurse']['name']
-                    : widget.data['order']['doctor']['name'],
+                    ? widget.data['order']['nurse']['hospital'] != null
+                        ? widget.data['order']['nurse']['hospital']['name']
+                        : widget.data['order']['nurse']['name']
+                    : 
+                    role == 'ambulance' ? widget.data['order']['ambulance']['name'] :
+                    widget.data['order']['doctor']['name'],
                 style: TextStyles.subtitle2,
               ),
               verticalSpace(5),
@@ -1989,22 +2231,22 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
               const SizedBox(
                 height: 5.0,
               ),
-              Visibility(
-                visible: role != 'nurse',
-                child: InkWell(
-                  onTap: () {
-                    Get.find<ControllerLogin>()
-                        .getDoctorDetail(id: myC.detailDokter['id'].toString());
-                    // ignore: prefer_const_constructors
-                    Get.to(DetailDokterInOrder());
-                  },
-                  child: const Text("Detail Dokter",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.blue,
-                      )),
-                ),
-              ),
+              // Visibility(
+              //   visible: role != 'nurse',
+              //   child: InkWell(
+              //     onTap: () {
+              //       Get.find<ControllerLogin>()
+              //           .getDoctorDetail(id: myC.detailDokter['id'].toString());
+              //       // ignore: prefer_const_constructors
+              //       Get.to(DetailDokterInOrder());
+              //     },
+              //     child: const Text("Detail Dokter",
+              //         style: TextStyle(
+              //           fontSize: 12,
+              //           color: Colors.blue,
+              //         )),
+              //   ),
+              // ),
             ],
           )
         ],
@@ -2041,7 +2283,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                     // Text(
                     //   DateFormat('d MMMM y, kk:mm', "id_ID")
                     //       .format(DateTime.parse(tanggal)),
-                    //   style: blackTextStyle.copyWith(
+                    //   style: TextStyle(
                     //       fontWeight: bold, color: Colors.white),
                     // ),
                   ],
@@ -2078,7 +2320,6 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                        
                           DateFormat('d MMMM y, kk:mm', "id_ID").format(
                               DateTime.parse(
                                   widget.data['order']['startDateCustomer'])),
@@ -2106,7 +2347,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                         //   DateFormat('d MMMM y, kk:mm', "id_ID")
                         //       .format(DateTime.parse(jamMulai)),
                         //   // CurrencyFormat.convertToIdr(discount, 0),
-                        //   style: blackTextStyle.copyWith(
+                        //   style: TextStyle(
                         //       fontWeight: bold, color: Colors.white),
                         // ),
                         // const SizedBox(
@@ -2116,7 +2357,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                         //   DateFormat('d MMMM y, kk:mm', "id_ID")
                         //       .format(DateTime.parse(jamSelesai)),
                         //   // CurrencyFormat.convertToIdr(discount, 0),
-                        //   style: blackTextStyle.copyWith(
+                        //   style: TextStyle(
                         //       fontWeight: bold, color: Colors.white),
                         // ),
                       ],
@@ -2125,9 +2366,9 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                 ),
               ],
             )),
-            widget.data['order']['nurse']['hospital'] != null ?         namaHospital()
-:
-        namaPerawat(),
+        widget.data['order']['nurse']['hospital'] != null
+            ? namaHospital()
+            : namaPerawat(),
         // detailAmbulance(),
         // const SizedBox(
         // height: 20.0,
@@ -2165,10 +2406,16 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
           height: 25.0,
         ),
         Cntr(
-          width: Get.width,
-            boxShadow:widget.data['order']['status'] != 6 && widget.data['order']['status'] != 5 && widget.data['order']['status'] != 99 && widget.data['order']['status'] != 0? [
-              const BoxShadow(blurRadius: 10, spreadRadius: 1, color: Colors.grey)
-            ] :[],
+            width: Get.width,
+            boxShadow: widget.data['order']['status'] != 6 &&
+                    widget.data['order']['status'] != 5 &&
+                    widget.data['order']['status'] != 99 &&
+                    widget.data['order']['status'] != 0
+                ? [
+                    const BoxShadow(
+                        blurRadius: 10, spreadRadius: 1, color: Colors.grey)
+                  ]
+                : [],
             padding: const EdgeInsets.only(top: 30, bottom: 20),
             color: Colors.white,
             child: widget.data['order']['status'] == 4
@@ -2179,15 +2426,15 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                         height: 15.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal :24.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
                         child: actionLaporkan(context),
                       )
                     ],
                   )
                 : widget.data['order']['status'] == 99
                     ? const SizedBox(
-                    height: 0.0,
-                    )
+                        height: 0.0,
+                      )
                     // Column(
                     //     children: [
                     //       Padding(
@@ -2205,17 +2452,15 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                     //       actionLaporkan(context)
                     //     ],
                     //   )
-                    : 
-                    widget.data['order']['status'] == 98
-                        ? 
-                        Padding(
+                    : widget.data['order']['status'] == 98
+                        ? Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 24.0),
                             child: Column(
                               children: [
                                 Image.asset('assets/images/Frame.png'),
                                 const SizedBox(
-                                height: 10.0,
+                                  height: 10.0,
                                 ),
                                 Txt(
                                   text:
@@ -2227,8 +2472,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                           )
                         : widget.data['order']['status'] == 6
                             ? const SizedBox(
-                            height: 1.0,
-                            )
+                                height: 1.0,
+                              )
                             // Cntr(
                             //     width: Get.width,
                             //     child: Txt(text: 'jika anda belum mengkonfirmasi selama 24 jam, maka pesanan akan dinyatakan selesai', textAlign: TextAlign.center,),
@@ -2247,22 +2492,212 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                                           height: 6.0,
                                         ),
                                         Txt(
-                                          text: 'Penilaian anda sangat berharga',
+                                          text:
+                                              'Penilaian anda sangat berharga',
                                           size: 12,
                                         ),
                                         const SizedBox(
                                           height: 10.0,
                                         ),
-                                        Rating(rating: double.parse(widget.data['order']['rating'].toString()),deskripsi: widget.data['order']['description_rating'],)
+                                        Rating(
+                                          rating: double.parse(widget
+                                              .data['order']['rating']
+                                              .toString()),
+                                          deskripsi: widget.data['order']
+                                              ['description_rating'],
+                                        )
                                         // rating,
                                       ],
                                     ),
                                   )
-                                : widget.data['order']['status'] == 0? const SizedBox(
-                                height: 1.0,
-                                ): 
-                                
-                                Center(child: Txt(text: 'Menunggu keberangkatan perawat')))
+                                : widget.data['order']['status'] == 0
+                                    ? const SizedBox(
+                                        height: 1.0,
+                                      )
+                                    : Center(
+                                        child: Txt(
+                                            text:
+                                                'Menunggu keberangkatan perawat')))
+      ],
+    );
+  }
+
+  Column detailPesananAmbulance(BuildContext context) {
+    return Column(
+      children: [
+        jadwalPesananAmbulance(),
+        namaAmbulance(),
+        const SizedBox(
+          height: 15.0,
+        ),
+        dataOrderAmbulance(),
+        const SizedBox(
+        height: 15.0,
+        ),
+        tujuanAmbulance(),
+        // dataPemesanNurse(),
+        const SizedBox(
+          height: 20.0,
+        ),
+        widget.data['order']['image_ambulance'] == null ||   widget.data['order']['image_ambulance'] == "" ?const SizedBox(
+        height: 1.0,
+        ) :
+        detailAmbulance(),
+        const SizedBox(
+        height: 15.0,
+        ),
+        widget.data['order']['status'] != 6 && widget.data['order']['status'] != 5 ?
+         Cntr(
+          radius: BorderRadius.circular(10),
+          alignment: Alignment.center,
+          margin: const EdgeInsets.symmetric(horizontal:  24),
+          width: Get.width,
+          border: Border.all(color: Colors.blue),
+          padding: const EdgeInsets.all(15),child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.chat, color: Colors.blue,), const SizedBox(
+              width: 20.0,
+              ),
+              Txt(text: 'Forum Chatting', color: Colors.blue,),
+            ],
+          ),) :
+         widget.data['order']['image_proof_travel'] == "" || widget.data['order']['image_proof_travel'] == null ? const SizedBox(
+        height: 1.0,
+        ) :
+          InkWell(
+            onTap: () {
+              popUpLihatGambarBuktiSelesai(context);
+            },
+            child: Cntr(
+            radius: BorderRadius.circular(10),
+            alignment: Alignment.center,
+            margin: const EdgeInsets.symmetric(horizontal:  24),
+            width: Get.width,
+            border: Border.all(color: Colors.blue),
+            padding: const EdgeInsets.all(15),child: Txt(text: 'Lihat bukti selesai', color: Colors.blue,),),
+          ),
+        // buktiPengambilanSample(),
+        // detailPaketNurse(),
+        const SizedBox(
+          height: 25.0,
+        ),
+        Cntr(
+            width: Get.width,
+            boxShadow: widget.data['order']['status'] != 6 &&
+                    widget.data['order']['status'] != 5 &&
+                    widget.data['order']['status'] != 99 &&
+                    widget.data['order']['status'] != 0
+                ? [
+                    const BoxShadow(
+                        blurRadius: 10, spreadRadius: 1, color: Colors.grey)
+                  ]
+                : [],
+            padding: const EdgeInsets.only(top: 30, bottom: 20),
+            color: Colors.white,
+            child: widget.data['order']['status'] == 4
+                ? Column(
+                    children: [
+                      Txt(text: 'Mohon tunggu kedatangan Ambulance'),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: actionLaporkan(context),
+                      )
+                    ],
+                  )
+                : widget.data['order']['status'] == 99
+                    ? const SizedBox(
+                        height: 0.0,
+                      )
+                    // Column(
+                    //     children: [
+                    //       Padding(
+                    //         padding:
+                    //             const EdgeInsets.symmetric(horizontal: 24.0),
+                    //         child: Txt(
+                    //           text:
+                    //               'Menunggu pemesan mengatur ulang jadwal atau mebatalkan pesanan',
+                    //           textAlign: TextAlign.center,
+                    //         ),
+                    //       ),
+                    //       const SizedBox(
+                    //         height: 15.0,
+                    //       ),
+                    //       actionLaporkan(context)
+                    //     ],
+                    //   )
+                    : widget.data['order']['status'] == 98
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 24.0),
+                            child: Column(
+                              children: [
+                                Image.asset('assets/images/Frame.png'),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Txt(
+                                  text:
+                                      'Pesanan telah dibatalkan, saldo akan segera dikembalikan ke rekening anda',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          )
+                        : widget.data['order']['status'] == 6
+                            ? 
+                            ButtonGradient(
+                              margin: const EdgeInsets.symmetric(horizontal: 24),
+                              onPressed: (){
+                                actionButtonAmbulance();
+                              }, label: 'Konfirmasi & Beri Penilaian')
+                            // Cntr(
+                            //     width: Get.width,
+                            //     child: Txt(text: 'jika anda belum mengkonfirmasi selama 24 jam, maka pesanan akan dinyatakan selesai', textAlign: TextAlign.center,),
+                            //   )
+                            : widget.data['order']['status'] == 5
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0),
+                                    child: Column(
+                                      children: [
+                                        Txt(
+                                          text: 'Penilaian',
+                                          weight: FontWeight.bold,
+                                        ),
+                                        const SizedBox(
+                                          height: 6.0,
+                                        ),
+                                        Txt(
+                                          text:
+                                              'Penilaian anda sangat berharga',
+                                          size: 12,
+                                        ),
+                                        const SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        Rating(
+                                          rating: double.parse(widget
+                                              .data['order']['rating']
+                                              .toString()),
+                                          deskripsi: widget.data['order']
+                                              ['description_rating'],
+                                        )
+                                        // rating,
+                                      ],
+                                    ),
+                                  )
+                                : widget.data['order']['status'] == 0
+                                    ? const SizedBox(
+                                        height: 1.0,
+                                      )
+                                    : Center(
+                                        child: Txt(
+                                            text:
+                                                'Menunggu keberangkatan Ambulance')))
       ],
     );
   }
@@ -2331,7 +2766,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                               width: Get.width / 1.7,
                               child: Txt(
                                   text: Get.find<ControllerPesanan>()
-                                      .sopNurse[index]['nurse_work_scope']['name']
+                                          .sopNurse[index]['nurse_work_scope']
+                                      ['name']
                                   // "Get.find<LayananHomeController>().packageNurseSops[index]['nurse_work_scope']['name']"
                                   ),
                             )
@@ -2367,25 +2803,27 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
               width: Get.width,
               child: Column(
                 children: [
-                  Cntr(height: 120,
-                  width:  Get.width,
-                radius: BorderRadius.circular(10),
-                image: const DecorationImage(image: NetworkImage('https://picsum.photos/200/300'), fit: BoxFit.cover),),
+                  Cntr(
+                    height: 120,
+                    width: Get.width,
+                    radius: BorderRadius.circular(10),
+                    image: const DecorationImage(
+                        image: NetworkImage('https://picsum.photos/200/300'),
+                        fit: BoxFit.cover),
+                  ),
                   const SizedBox(
                     height: 12.0,
                   ),
                   Cntr(
-                    radius: BorderRadius.circular(10),
-                    padding: const EdgeInsets.all(15),
-                    border: Border.all(color: Colors.grey[300]!),
-                    color: Colors.grey[100],
-                    height:
-                        100,
-                    width: 
-                    Get.width,
-                    child: 
-                    Txt(text: 'Sudah melakukan penganmbila tes pada jam 15.00 WiB dirumah pasien')
-                  )
+                      radius: BorderRadius.circular(10),
+                      padding: const EdgeInsets.all(15),
+                      border: Border.all(color: Colors.grey[300]!),
+                      color: Colors.grey[100],
+                      height: 100,
+                      width: Get.width,
+                      child: Txt(
+                          text:
+                              'Sudah melakukan penganmbila tes pada jam 15.00 WiB dirumah pasien'))
                 ],
               ),
             ),
@@ -2439,119 +2877,120 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                         size: 12,
                         color: Colors.grey,
                       ),
-                  widget.data['payment'] == null ? Txt(text: '') :
-                      widget.data['payment']['debit_from_bank'] == '014'
-                          ? Image.asset(
-                              'assets/icons/logo_bca.png',
-                              width: 50,
-                              height: 50,
-                            )
-                          : widget.data['payment']['debit_from_bank'] == '002'
+                      widget.data['payment'] == null
+                          ? Txt(text: '')
+                          : widget.data['payment']['debit_from_bank'] == '014'
                               ? Image.asset(
-                                  'assets/icons/logo_briva.png',
+                                  'assets/icons/logo_bca.png',
                                   width: 50,
                                   height: 50,
                                 )
                               : widget.data['payment']['debit_from_bank'] ==
-                                      '013'
+                                      '002'
                                   ? Image.asset(
-                                      'assets/icons/logo_permata.png',
+                                      'assets/icons/logo_briva.png',
                                       width: 50,
                                       height: 50,
                                     )
                                   : widget.data['payment']['debit_from_bank'] ==
-                                          '022'
+                                          '013'
                                       ? Image.asset(
-                                          'assets/icons/logo_cimb.png',
+                                          'assets/icons/logo_permata.png',
                                           width: 50,
                                           height: 50,
                                         )
                                       : widget.data['payment']
                                                   ['debit_from_bank'] ==
-                                              '503'
+                                              '022'
                                           ? Image.asset(
-                                              'assets/icons/logo_ovo.png',
+                                              'assets/icons/logo_cimb.png',
                                               width: 50,
                                               height: 50,
                                             )
                                           : widget.data['payment']
                                                       ['debit_from_bank'] ==
-                                                  '016'
+                                                  '503'
                                               ? Image.asset(
-                                                  'assets/icons/logo_maybank.png',
+                                                  'assets/icons/logo_ovo.png',
                                                   width: 50,
                                                   height: 50,
                                                 )
                                               : widget.data['payment']
                                                           ['debit_from_bank'] ==
-                                                      '011'
+                                                      '016'
                                                   ? Image.asset(
-                                                      'assets/icons/logo_danamon.png',
+                                                      'assets/icons/logo_maybank.png',
                                                       width: 50,
                                                       height: 50,
                                                     )
                                                   : widget.data['payment'][
-                                                              'product_code'] ==
-                                                          'MANDIRIATM'
+                                                              'debit_from_bank'] ==
+                                                          '011'
                                                       ? Image.asset(
-                                                          'assets/icons/logo_mandiri.png',
+                                                          'assets/icons/logo_danamon.png',
                                                           width: 50,
                                                           height: 50,
                                                         )
                                                       : widget.data['payment'][
                                                                   'product_code'] ==
-                                                              'SHOPEEJUMPPAY'
+                                                              'MANDIRIATM'
                                                           ? Image.asset(
-                                                              'assets/icons/logo_shopeepay.png',
+                                                              'assets/icons/logo_mandiri.png',
                                                               width: 50,
                                                               height: 50,
                                                             )
                                                           : widget.data['payment']
                                                                       ['product_code'] ==
-                                                                  'LINKAJAAPPLINK'
+                                                                  'SHOPEEJUMPPAY'
                                                               ? Image.asset(
-                                                                  'assets/icons/logo_linkaja.png',
+                                                                  'assets/icons/logo_shopeepay.png',
                                                                   width: 50,
                                                                   height: 50,
                                                                 )
-                                                              : widget.data['payment']['product_code'] == 'DANAPAY'
+                                                              : widget.data['payment']['product_code'] == 'LINKAJAAPPLINK'
                                                                   ? Image.asset(
-                                                                      'assets/icons/logo_dana.png',
+                                                                      'assets/icons/logo_linkaja.png',
                                                                       width: 50,
                                                                       height:
                                                                           50,
                                                                     )
-                                                                  : widget.data['payment']['debit_from_bank'] == '157'
+                                                                  : widget.data['payment']['product_code'] == 'DANAPAY'
                                                                       ? Image.asset(
-                                                                          'assets/icons/logo_maspion.png',
+                                                                          'assets/icons/logo_dana.png',
                                                                           width:
                                                                               50,
                                                                           height:
                                                                               50,
                                                                         )
-                                                                      : widget.data['payment']['debit_from_bank'] == '037'
+                                                                      : widget.data['payment']['debit_from_bank'] == '157'
                                                                           ? Image.asset(
-                                                                              'assets/icons/logo_artha.png',
+                                                                              'assets/icons/logo_maspion.png',
                                                                               width: 50,
                                                                               height: 50,
                                                                             )
-                                                                          : widget.data['payment']['debit_from_bank'] == '200'
+                                                                          : widget.data['payment']['debit_from_bank'] == '037'
                                                                               ? Image.asset(
-                                                                                  'assets/icons/logo_btn.png',
+                                                                                  'assets/icons/logo_artha.png',
                                                                                   width: 50,
                                                                                   height: 50,
                                                                                 )
-                                                                              : widget.data['payment']['debit_from_bank'] == '213'
+                                                                              : widget.data['payment']['debit_from_bank'] == '200'
                                                                                   ? Image.asset(
-                                                                                      'assets/icons/logo_btpn.png',
+                                                                                      'assets/icons/logo_btn.png',
                                                                                       width: 50,
                                                                                       height: 50,
                                                                                     )
-                                                                                  : Image.asset(
-                                                                                      'assets/icons/bni.png',
-                                                                                      width: 50,
-                                                                                      height: 50,
-                                                                                    ),
+                                                                                  : widget.data['payment']['debit_from_bank'] == '213'
+                                                                                      ? Image.asset(
+                                                                                          'assets/icons/logo_btpn.png',
+                                                                                          width: 50,
+                                                                                          height: 50,
+                                                                                        )
+                                                                                      : Image.asset(
+                                                                                          'assets/icons/bni.png',
+                                                                                          width: 50,
+                                                                                          height: 50,
+                                                                                        ),
                       // Image.asset(
                       //   controller.paymentName.value == "022"
                       //       ? 'assets/icon/icon_bankcimb.png'
@@ -2642,6 +3081,266 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
     );
   }
 
+  Cntr dataOrderAmbulance() {
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 25),
+      alignment: Alignment.centerLeft,
+      width: Get.width,
+      color: const Color(0xffF4F4F4),
+      radius: BorderRadius.circular(10),
+      child: ExpansionTile(
+          title: Txt(
+            text: 'Data Order',
+            weight: FontWeight.bold,
+          ),
+          children: [
+            InkWell(
+              child: Cntr(
+                color: const Color(0xffF4F4F4),
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                radius: BorderRadius.circular(10),
+                width: Get.width,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Txt(
+                          text: 'Kode Order',
+                          size: 12,
+                          color: Colors.grey,
+                        ),
+                        Txt(
+                          text: "${widget.data['order']['code']}",
+                          size: 10,
+                          weight: FontWeight.bold,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                      widget.data['order']['is_csr'] == 1 ? const SizedBox(
+                      height: 1.0,
+                      ) :
+                    Column(children: [
+                    
+                      Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Txt(
+                          text: 'Pembayaran',
+                          size: 12,
+                          color: Colors.grey,
+                        ),
+                        widget.data['payment'] == null
+                            ? Txt(text: '')
+                            : widget.data['payment']['debit_from_bank'] == '014'
+                                ? Image.asset(
+                                    'assets/icons/logo_bca.png',
+                                    width: 50,
+                                    height: 50,
+                                  )
+                                : widget.data['payment']['debit_from_bank'] ==
+                                        '002'
+                                    ? Image.asset(
+                                        'assets/icons/logo_briva.png',
+                                        width: 50,
+                                        height: 50,
+                                      )
+                                    : widget.data['payment']['debit_from_bank'] ==
+                                            '013'
+                                        ? Image.asset(
+                                            'assets/icons/logo_permata.png',
+                                            width: 50,
+                                            height: 50,
+                                          )
+                                        : widget.data['payment']
+                                                    ['debit_from_bank'] ==
+                                                '022'
+                                            ? Image.asset(
+                                                'assets/icons/logo_cimb.png',
+                                                width: 50,
+                                                height: 50,
+                                              )
+                                            : widget.data['payment']
+                                                        ['debit_from_bank'] ==
+                                                    '503'
+                                                ? Image.asset(
+                                                    'assets/icons/logo_ovo.png',
+                                                    width: 50,
+                                                    height: 50,
+                                                  )
+                                                : widget.data['payment']
+                                                            ['debit_from_bank'] ==
+                                                        '016'
+                                                    ? Image.asset(
+                                                        'assets/icons/logo_maybank.png',
+                                                        width: 50,
+                                                        height: 50,
+                                                      )
+                                                    : widget.data['payment'][
+                                                                'debit_from_bank'] ==
+                                                            '011'
+                                                        ? Image.asset(
+                                                            'assets/icons/logo_danamon.png',
+                                                            width: 50,
+                                                            height: 50,
+                                                          )
+                                                        : widget.data['payment'][
+                                                                    'product_code'] ==
+                                                                'MANDIRIATM'
+                                                            ? Image.asset(
+                                                                'assets/icons/logo_mandiri.png',
+                                                                width: 50,
+                                                                height: 50,
+                                                              )
+                                                            : widget.data['payment']
+                                                                        ['product_code'] ==
+                                                                    'SHOPEEJUMPPAY'
+                                                                ? Image.asset(
+                                                                    'assets/icons/logo_shopeepay.png',
+                                                                    width: 50,
+                                                                    height: 50,
+                                                                  )
+                                                                : widget.data['payment']['product_code'] == 'LINKAJAAPPLINK'
+                                                                    ? Image.asset(
+                                                                        'assets/icons/logo_linkaja.png',
+                                                                        width: 50,
+                                                                        height:
+                                                                            50,
+                                                                      )
+                                                                    : widget.data['payment']['product_code'] == 'DANAPAY'
+                                                                        ? Image.asset(
+                                                                            'assets/icons/logo_dana.png',
+                                                                            width:
+                                                                                50,
+                                                                            height:
+                                                                                50,
+                                                                          )
+                                                                        : widget.data['payment']['debit_from_bank'] == '157'
+                                                                            ? Image.asset(
+                                                                                'assets/icons/logo_maspion.png',
+                                                                                width: 50,
+                                                                                height: 50,
+                                                                              )
+                                                                            : widget.data['payment']['debit_from_bank'] == '037'
+                                                                                ? Image.asset(
+                                                                                    'assets/icons/logo_artha.png',
+                                                                                    width: 50,
+                                                                                    height: 50,
+                                                                                  )
+                                                                                : widget.data['payment']['debit_from_bank'] == '200'
+                                                                                    ? Image.asset(
+                                                                                        'assets/icons/logo_btn.png',
+                                                                                        width: 50,
+                                                                                        height: 50,
+                                                                                      )
+                                                                                    : widget.data['payment']['debit_from_bank'] == '213'
+                                                                                        ? Image.asset(
+                                                                                            'assets/icons/logo_btpn.png',
+                                                                                            width: 50,
+                                                                                            height: 50,
+                                                                                          )
+                                                                                        : Image.asset(
+                                                                                            'assets/icons/bni.png',
+                                                                                            width: 50,
+                                                                                            height: 50,
+                                                                                          ),
+                        // Image.asset(
+                        //   controller.paymentName.value == "022"
+                        //       ? 'assets/icon/icon_bankcimb.png'
+                        //       : controller.paymentName.value == "014"
+                        //           ? 'assets/icon/icon_bankbca.png'
+                        //           : controller.paymentName.value == "002"
+                        //               ? 'assets/icon/bri.png'
+                        //               : controller.paymentName.value == "013"
+                        //                   ? 'assets/icon/icon_bankpermata.png'
+                        //                   : controller.paymentName.value == "503"
+                        //                       ? "assets/icon/logo_ovo.png"
+                        //                       : controller.paymentName.value ==
+                        //                               "016"
+                        //                           ? "assets/icon/logo_maybank.png"
+                        //                           : controller.paymentName
+                        //                                       .value ==
+                        //                                   "011"
+                        //                               ? "assets/icon/logo_danamon.png"
+                        //                               : controller.paymentName
+                        //                                               .value ==
+                        //                                           "008" &&
+                        //                                       controller.bankName
+                        //                                               .value ==
+                        //                                           "MANDIRIATM"
+                        //                                   ? "assets/icon/logo_mandiri.png"
+                        //                                   : controller.paymentName
+                        //                                                   .value ==
+                        //                                               "008" &&
+                        //                                           controller
+                        //                                                   .bankName
+                        //                                                   .value ==
+                        //                                               "DANAPAY"
+                        //                                       ? "assets/icon/logo_dana.png"
+                        //                                       : controller.paymentName
+                        //                                                   .value ==
+                        //                                               "157"
+                        //                                           ? "assets/icon/logo_maspion.png"
+                        //                                           : controller.paymentName
+                        //                                                       .value ==
+                        //                                                   "037"
+                        //                                               ? "assets/icon/logo_artha.png"
+                        //                                               : controller.paymentName.value ==
+                        //                                                       "200"
+                        //                                                   ? "assets/icon/logo_btn.png"
+                        //                                                   : controller.paymentName.value ==
+                        //                                                           "213"
+                        //                                                       ? "assets/icon/logo_btpn.png"
+                        //                                                       : controller.bankName.value == "SHOPEEJUMPPAY"
+                        //                                                           ? "assets/icon/logo_shopeepay.png"
+                        //                                                           : controller.bankName.value == "LINKAJAAPPLINK"
+                        //                                                               ? "assets/icon/logo_linkaja.png"
+                        //                                                               : 'assets/icon/bni.png',
+                        //   height: 20,
+                        // ),
+                        // Txt(
+                        //   text: 'alah siaa',
+                        //   size: 10,
+                        //   weight: FontWeight.bold,
+                        // ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Txt(
+                          text: 'Harga',
+                          size: 12,
+                          color: Colors.grey,
+                        ),
+                        Txt(
+                          text: CurrencyFormat.convertToIdr(
+                              widget.data['order']['totalPrice'], 0),
+                          size: 10,
+                          weight: FontWeight.bold,
+                        ),
+                      ],
+                    ),
+                      
+                    ],),
+                    
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ]),
+    );
+  }
+
   Cntr detailAmbulance() {
     return Cntr(
       margin: const EdgeInsets.symmetric(horizontal: 24),
@@ -2674,7 +3373,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                         height: 10.0,
                       ),
                       Txt(
-                        text: 'DK 1234 FGH',
+                        text: widget.data['order']['plat_no'],
                         weight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -2682,7 +3381,7 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                         height: 10.0,
                       ),
                       Txt(
-                        text: 'Ambulance Standar 1',
+                        text: widget.data['order']['service_price_ambulance']['type'],
                         size: 12,
                         color: Colors.white,
                       ),
@@ -2699,9 +3398,9 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                       radius: BorderRadius.circular(100),
                       height: 80,
                       width: 80,
-                      image: const DecorationImage(
+                      image:  DecorationImage(
                           image: NetworkImage(
-                              'https://fastly.picsum.photos/id/201/200/300.jpg?blur=2&hmac=Bk1YAURRJgndPj6oL1nVMMPuskT1OVuu7itxEp71aH4'),
+                                widget.data['order']['image_ambulance']),
                           fit: BoxFit.cover),
                       border: Border.all(color: Colors.white, width: 4),
                     ),
@@ -2772,9 +3471,63 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                             margin: const EdgeInsets.symmetric(horizontal: 20),
                             height: 260,
                             width: Get.width,
-                            image: const DecorationImage(
+                            image:  DecorationImage(
                               image: NetworkImage(
-                                  'https://picsum.photos/200/300/?blur'),
+                                  widget.data['order']['image_ambulance']),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 22.0,
+                          ),
+                          ButtonGradient(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            label: "Kembali",
+                            onPressed: () {
+                              Get.back();
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30.0,
+                          ),
+                        ])
+                  ]));
+        });
+  }
+
+  popUpLihatGambarBuktiSelesai(BuildContext context) {
+    showModalBottomSheet(
+        isDismissible: false,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        context: context,
+        builder: (context) {
+          return SizedBox(
+              height: 500,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 18, top: 14),
+                            width: Get.width / 1.9,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffEDEDED)),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Cntr(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            height: 260,
+                            width: Get.width,
+                            image:  DecorationImage(
+                              image: NetworkImage(
+                                  widget.data['order']['image_proof_travel']),
                             ),
                           ),
                           const SizedBox(
@@ -2984,7 +3737,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
       ),
     );
   }
-  Cntr namaHospital(){
+
+  Cntr namaHospital() {
     return Cntr(
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
       radius: BorderRadius.circular(10),
@@ -3003,25 +3757,32 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                     children: [
                       Cntr(
                         color: Colors.transparent,
-                        height: 40, width: 40, image: DecorationImage(image: NetworkImage(widget.data['order']['service']['image']),fit: BoxFit.cover),),
-                  const SizedBox(
-                    height: 15.0,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Txt(
-                        text: widget.data['order']['nurse']['name'],
-                        weight: FontWeight.bold,
-                        color: Colors.white,
+                        height: 40,
+                        width: 40,
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                widget.data['order']['service']['image']),
+                            fit: BoxFit.cover),
                       ),
-                        Txt(
-                        text: widget.data['order']['nurse']['hospital']['name'],
-                        size: 12,
-                        color: Colors.white,
+                      const SizedBox(
+                        height: 15.0,
                       ),
-                    ],
-                  ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Txt(
+                            text: widget.data['order']['nurse']['name'],
+                            weight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          Txt(
+                            text: widget.data['order']['nurse']['hospital']
+                                ['name'],
+                            size: 12,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -3031,7 +3792,8 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
                     radius: BorderRadius.circular(5),
                     width: Get.width,
                     padding: const EdgeInsets.all(15),
-                  child: Txt(text: widget.data['order']['nurse']['description']),
+                    child:
+                        Txt(text: widget.data['order']['nurse']['description']),
                   )
                 ],
               ),
@@ -3041,7 +3803,237 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
       ),
     );
   }
+
+Cntr namaAmbulance() {
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+      radius: BorderRadius.circular(10),
+      width: Get.width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      gradient: AppColor.gradient1,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Cntr(
+                        color: Colors.transparent,
+                        height: 40,
+                        width: 40,
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                widget.data['order']['service']['image']),
+                            fit: BoxFit.cover),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Txt(
+                            text: widget.data['order']['ambulance']['name'],
+                            weight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          Txt(
+                            text: widget.data['order']['ambulance']['hospital']
+                                ['name'],
+                            size: 12,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Cntr(
+                    radius: BorderRadius.circular(5),
+                    width: Get.width,
+                    padding: const EdgeInsets.all(15),
+                    child:
+                        Txt(text: widget.data['order']['ambulance']['description']),
+                  )
+                ],
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+ Cntr tujuanAmbulance() {
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 25),
+      alignment: Alignment.centerLeft,
+      width: Get.width,
+      color: const Color(0xffF4F4F4),
+      radius: BorderRadius.circular(10),
+      child: ExpansionTile(
+          title: Txt(
+            text: 'Tujuan Anda',
+            weight: FontWeight.bold,
+          ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Txt(text: 'Alamat :'),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Txt(
+                            text:
+                                "${widget.data['order']['start_districts']}, ${widget.data['order']['start_city']}, ${widget.data['order']['start_province']}, ",
+                            weight: FontWeight.bold,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Txt(text: 'Tujuan :'),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Txt(
+                            text:
+                                "${widget.data['order']['end_districts']}, ${widget.data['order']['end_city']}, ${widget.data['order']['end_province']}, ",
+                            weight: FontWeight.bold,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ]),
+    );
+  }
+
+Cntr jadwalPesananAmbulance() {
+    return Cntr(
+        margin: const EdgeInsets.symmetric(horizontal: 25),
+        radius: BorderRadius.circular(10),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
+        gradient: AppColor.gradient1,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Txt(
+              text: 'Jadwal Pesanan',
+              weight: FontWeight.bold,
+              color: Colors.white,
+              size: 16,
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Layanan',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+                Text(
+                  widget.data['order']['service_price_ambulance']['name'],
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 6.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Mulai Order',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      'Selesai Order',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      DateFormat('d MMMM y, kk:mm', "id_ID")
+                          .format(DateTime.parse(widget.data['order']['startDateCustomer'])),
+                      // CurrencyFormat.convertToIdr(discount, 0),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      DateFormat('d MMMM y, kk:mm', "id_ID")
+                          .format(DateTime.parse(widget.data['order']['endDateCustomer'])),
+                      // CurrencyFormat.convertToIdr(discount, 0),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ));
+  }
+
 }
+
 
 // ignore: must_be_immutable
 class Rating extends StatelessWidget {
@@ -3063,7 +4055,7 @@ class Rating extends StatelessWidget {
         // Center(
         //     child: Text(
         //   'Konsultasi Selesai',
-        //   style: blackTextStyle.copyWith(fontWeight: bold),
+        //   style: TextStyle(fontWeight: bold),
         // )),
         // Center(
         //     child: Text(
@@ -3124,7 +4116,8 @@ class Rating extends StatelessWidget {
         const Text('Deskripsi'),
         const SizedBox(
           height: 10,
-        ),Container(
+        ),
+        Container(
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 17),
             decoration: BoxDecoration(

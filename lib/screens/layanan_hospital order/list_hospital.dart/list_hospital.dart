@@ -1,6 +1,7 @@
 import 'package:bionmed_app/screens/layanan_hospital%20order/detail_hospital/detail_hospital.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
 import 'package:bionmed_app/screens/login/controller_login.dart';
+import 'package:bionmed_app/screens/payment/controller_payment.dart';
 import 'package:bionmed_app/screens/services/controller_service_on_call.dart';
 import 'package:bionmed_app/widgets/appbar/appbar_gradient.dart';
 import 'package:bionmed_app/widgets/container/container.dart';
@@ -27,10 +28,14 @@ class ListHospital extends StatelessWidget {
             // ignore: avoid_print
             print(
                 'zezen + ${Get.find<InputLayananController>().idNurse.value}');
-            await Get.find<InputLayananController>().getDetailNurse();
+            if (Get.find<ControllerPayment>().sequenceId.value == 8) {
+              await Get.find<InputLayananController>().getDetailAmbulance();
+            } else {
+              await Get.find<InputLayananController>().getDetailNurse();
             Get.find<InputLayananController>().educationNurse.value =
                 Get.find<InputLayananController>()
                     .detailNurse['nurse_educations'];
+            }
             // cLog.isloading.isTrue
             //     ? showDialog(
             //         context: context,
@@ -75,7 +80,9 @@ class ListHospital extends StatelessWidget {
                   height: 85,
                   radius: BorderRadius.circular(10),
                   image: DecorationImage(
-                      image: NetworkImage(inputC.listDataNurse[index]['hospital']['image'] ?? 'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42'),
+                      image: NetworkImage(inputC.listDataNurse[index]
+                              ['hospital']['image'] ??
+                          'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42'),
                       fit: BoxFit.cover),
                 ),
                 // Image.network('https://picsum.photos/seed/picsum/200/300'),
@@ -92,14 +99,18 @@ class ListHospital extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Txt(
-                            text: inputC.listDataNurse[index]['hospital']['name'],
+                            text: inputC.listDataNurse[index]['hospital']
+                                ['name'],
                             size: 16,
                             weight: FontWeight.bold,
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
-                          Txt(text: inputC.listDataNurse[index]['hospital']['city'] ?? "null"),
+                          Txt(
+                              text: inputC.listDataNurse[index]['hospital']
+                                      ['city'] ??
+                                  "null"),
                         ],
                       ),
                       Cntr(
@@ -125,7 +136,7 @@ class ListHospital extends StatelessWidget {
                             //   ],
                             // ),
                             Row(
-                              children:  [
+                              children: [
                                 const Icon(
                                   Icons.star,
                                   color: Colors.yellow,
@@ -135,7 +146,9 @@ class ListHospital extends StatelessWidget {
                                   width: 4.0,
                                 ),
                                 Txt(
-                                  text: inputC.listDataNurse[index]['hospital']['rating'].toString(),
+                                  text: inputC.listDataNurse[index]['hospital']
+                                          ['rating']
+                                      .toString(),
                                   size: 11,
                                 )
                               ],

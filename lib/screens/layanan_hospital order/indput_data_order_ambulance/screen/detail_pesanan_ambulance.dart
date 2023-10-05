@@ -1,6 +1,7 @@
 import 'package:bionmed_app/constant/colors.dart';
 import 'package:bionmed_app/constant/styles.dart';
 import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/controller/input_data_order_ambulance_controller.dart';
+import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/screen/waiting_response_ambulance.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
 import 'package:bionmed_app/screens/pesanan/maps.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
@@ -11,18 +12,25 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../widgets/card/card_select_service.dart';
+import '../../../../widgets/other/show_dialog.dart';
+
 class DataPesananAMbulance extends StatefulWidget {
-  const DataPesananAMbulance({Key? key}) : super(key: key);
+  DataPesananAMbulance({Key? key, required this.data, required this.dataPaket})
+      : super(key: key);
+  var data;
+  var dataPaket;
 
   @override
   State<DataPesananAMbulance> createState() => _DataPesananAMbulanceState();
 }
 
 class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
-  final cLog = Get.put(InputLayananController());
+  // final inputC = Get.put(InputLayananController());
   // final myC = Get.put(ProfileJadwalController());
   final myC = Get.put(MapsController());
   final controller = Get.put(InputDataOrderAmbulanceController());
+  final inputC = Get.put(InputLayananController());
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +43,7 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
               // Obx(
               //   () =>
               CachedNetworkImage(
-                  imageUrl: cLog.detailNurse['image'] ?? "",
+                  imageUrl: inputC.detailNurse['image'] ?? "",
                   width: Get.width,
                   fit: BoxFit.cover,
                   placeholder: (context, url) =>
@@ -78,7 +86,7 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
           ),
           Container(
             width: Get.width,
-            height: Get.height,
+            height: 650,
             transform: Matrix4.translationValues(0.0, -25.0, 0.0),
             decoration: const BoxDecoration(
               color: AppColor.whiteColor,
@@ -124,7 +132,7 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                             color: Colors.white,
                           ),
                           Txt(
-                            text: 'Ambulance Jenazah',
+                            text: controller.tanggalC.text,
                             color: Colors.white,
                             weight: FontWeight.bold,
                           ),
@@ -141,7 +149,7 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                             color: Colors.white,
                           ),
                           Txt(
-                            text: '13, Juni 2023',
+                            text: widget.dataPaket['name'],
                             color: Colors.white,
                             weight: FontWeight.bold,
                           ),
@@ -185,7 +193,7 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                           weight: FontWeight.w500,
                         ),
                         const SizedBox(
-                        height: 10.0,
+                          height: 10.0,
                         ),
                         Txt(
                           text: 'Masukkan tujuan lokasi anda',
@@ -204,26 +212,32 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                      size: 18,
-                    ),
-                    const SizedBox(
-                      width: 5.0,
-                    ),
-                    Txt(
-                      text: 'Anda termasuk zona',
-                      color: Colors.amber,
-                    ),
-                    Txt(
-                      text: ' CSR Rumah Sakit (Gratis)',
-                      color: Colors.amber,
-                      weight: FontWeight.bold,
-                    ),
-                  ],
+                Obx(
+                  () => controller.isCrs.isFalse
+                      ? const SizedBox(
+                          height: 1.0,
+                        )
+                      : Row(
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 18,
+                            ),
+                            const SizedBox(
+                              width: 5.0,
+                            ),
+                            Txt(
+                              text: 'Anda termasuk zona',
+                              color: Colors.amber,
+                            ),
+                            Txt(
+                              text: ' CSR Rumah Sakit (Gratis)',
+                              color: Colors.amber,
+                              weight: FontWeight.bold,
+                            ),
+                          ],
+                        ),
                 ),
                 const SizedBox(
                   height: 20.0,
@@ -235,17 +249,31 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                   color: const Color.fromARGB(62, 0, 221, 37),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Txt(
                         text: 'Total Biaya',
                         color: Colors.black,
                         weight: FontWeight.normal,
                       ),
-                      Txt(
-                        text: 'Rp 1.000.000',
-                        color: const Color(0xff0B9444),
-                        weight: FontWeight.bold,
-                      ),
+                      Obx(
+                        () => controller.isCrs.isTrue
+                            ? Txt(
+                                text: "Gratis",
+                                color: const Color(0xff0B9444),
+                                weight: FontWeight.bold,
+                              )
+                            : Txt(
+                                text: (CurrencyFormat.convertToIdr(
+                                    (widget.dataPaket['price'] -
+                                        (widget.dataPaket['price'] *
+                                            widget.dataPaket['discount'] /
+                                            100)),
+                                    0)),
+                                color: const Color(0xff0B9444),
+                                weight: FontWeight.bold,
+                              ),
+                      )
                     ],
                   ),
                 )
@@ -256,7 +284,48 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
       ),
       bottomSheet: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ButtonGradient(onPressed: () async {}, label: "Pesan Sekarang"),
+        child: Obx(() => ButtonGradient(
+            onPressed: () async {
+              if (myC.city.isEmpty) {
+                showPopUp(
+                    onTap: () {
+                      Get.back();
+                    },
+                    imageAction: "assets/json/eror.json",
+                    description: "Mohon isi Alamat anda\nterlebih dahulu");
+              } else {
+                if (controller.isLoading.isFalse) {
+                  inputC.diskonPesananNurse.value =
+                      widget.dataPaket['discount'];
+                  inputC.priceBeforeDiskon.value =
+                      widget.dataPaket['price'].toString();
+                  inputC.totalPrice.value =
+                      '${(widget.dataPaket['price'] - (widget.dataPaket['price'] * inputC.diskonPesananNurse.value / 100))}';
+                  inputC.totalPriceDouble.value =
+                      double.parse(inputC.totalPrice.value);
+                  inputC.totalPriceFix.value = inputC.totalPriceDouble.toInt();
+                  await controller.addOrderAmbulance(
+                      ambulanceId: widget.dataPaket['ambulanceId'],
+                      servicePriceAmbulanceId: widget.dataPaket['id'],
+                      discount: widget.dataPaket['discount'],
+                      totalPrice: inputC.totalPriceFix.value,
+                      endLat: widget.data['hospital']['lat'],
+                      endLong: widget.data['hospital']['long'],
+                      endDistrict: widget.data['hospital']['district'],
+                      endCity: widget.data['hospital']['city'],
+                      endCountry: widget.data['hospital']['country'],
+                      endProvince: myC.kabupaten.value);
+
+                  Get.to(() => WaitingResponAmbulance(
+                        data: widget.data,
+                      ));
+                } else {}
+              }
+              // await inputC.getPaketbyAmbulanceFilter();
+              // Get.to(() =>  SelectServiceScreen());
+            },
+            label:
+                controller.isLoading.isTrue ? "Loading..." : "Pesan Sekarang")),
       ),
     );
   }
@@ -448,15 +517,15 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                   ),
                   InkWell(
                     onTap: () async {
-                      myC.isTujuan.value = true;
-                      controller.isLoadingTujuan.value = true;
-                      await myC.getCurrentLocation().then((value) {
-                        myC.latTujuan.value = value.latitude;
-                        myC.longTujuan.value = value.longitude;
-                      });
-                      await myC.getUserLocation();
-                      Get.to(() => const Maaapp());
-                      controller.isLoadingTujuan.value = false;
+                      // myC.isTujuan.value = true;
+                      // controller.isLoadingTujuan.value = true;
+                      // await myC.getCurrentLocation().then((value) {
+                      //   myC.latTujuan.value = value.latitude;
+                      //   myC.longTujuan.value = value.longitude;
+                      // });
+                      // await myC.getUserLocation();
+                      // Get.to(() => const Maaapp());
+                      // controller.isLoadingTujuan.value = false;
                     },
                     child: Cntr(
                       padding: const EdgeInsets.only(left: 10, right: 10),
@@ -466,32 +535,23 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                       color: AppColor.bgForm,
                       radius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey[300]!),
-                      child: Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Cntr(
-                              color: Colors.transparent,
-                              width: Get.width / 1.6,
-                              child: Txt(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Cntr(
+                            color: Colors.transparent,
+                            width: Get.width / 1.6,
+                            child: Txt(
                                 textOverFlow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                text: controller.isLoadingTujuan.isTrue
-                                    ? "Memuat maps.."
-                                    : myC.cityTujuan.isNotEmpty
-                                        ? '${myC.desaTujuan.value} ${myC.kecamatanTujuan.value} ${myC.cityTujuan.value}, ${myC.kabupatenTujuan.value}, ${myC.kodePosTujuan.value}, ${myC.negaraTujuan.value}'
-                                        : 'Masukkan tujuan anda',
-                                color: myC.cityTujuan.isNotEmpty
-                                    ? Colors.black
-                                    : AppColor.bodyColor.shade500,
-                              ),
-                            ),
-                            const Icon(
-                                Icons.map,
-                              color: Colors.green,
-                            )
-                          ],
-                        ),
+                                text: widget.data['address'],
+                                color: Colors.black),
+                          ),
+                          const Icon(
+                            Icons.map,
+                            color: Colors.green,
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -530,11 +590,11 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                           ),
                           Image.asset('assets/icons/scr.png'),
                           const SizedBox(
-                          height: 20.0,
+                            height: 20.0,
                           ),
                           const Text(
                             'Zona gratis (CSR)',
-                            style: TextStyle( fontSize: 16),
+                            style: TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(
@@ -544,19 +604,20 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                             height: 280,
                             width: Get.width,
                             child: ListView.builder(
-                              itemCount: 3,
+                              itemCount: widget
+                                  .dataPaket['service_price_zona_ambulances']
+                                  .length,
                               itemBuilder: (context, index) => Cntr(
-                                
                                 margin: EdgeInsets.symmetric(
                                     horizontal: defaultPadding, vertical: 5),
-
                                 color: Colors.grey[200],
                                 radius: BorderRadius.circular(10),
                                 padding: const EdgeInsets.all(15),
                                 child: Row(
                                   children: [
                                     Txt(
-                                      text: 'Cibungbulang, Bogor, Jawa barat',
+                                      text:
+                                          "${widget.dataPaket['service_price_zona_ambulances'][index]['districts']}, ${widget.dataPaket['service_price_zona_ambulances'][index]['city']}, ${widget.dataPaket['service_price_zona_ambulances'][index]['country']} ",
                                     ),
                                     const Icon(
                                       Icons.map_outlined,

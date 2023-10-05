@@ -225,6 +225,23 @@ Future<void> enableGPS() async {
       print("Cek error pesan$e");
     }
   }
+  Future<dynamic> hapusPesanAmbulance() async {
+    final params = <String, dynamic>{};
+    try {
+      isloading(true);
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}inbox/ambulance/delete/$inboxId)', Method.POST, params);
+      // ignore: unused_local_variable
+      var hapus = json.decode(result.toString());
+      log(hapus.toString());
+
+      // }
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error pesan$e");
+    }
+  }
 
   Future<dynamic> reminderPayment() async {
     final params = <String, dynamic>{
@@ -639,8 +656,8 @@ Future<void> enableGPS() async {
   void onInit() {
     Get.put(ControllerPayment());
     getLocation();
-    realtimeApi();
-    trimUpdateStatus();
+    // realtimeApi();
+    // trimUpdateStatus();
     // log('zen');
 
     // ignore: todo
@@ -691,6 +708,26 @@ Future<void> enableGPS() async {
       log("readNotif['data'] . $readNotif");
       idOrderFromPesan.value = readNotif['data']['nurse_order']['id'];
       serviceId.value = readNotif['data']["nurse_order"]['serviceId'];
+
+
+      log('Masuk == $serviceId');
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Error nih == $e");
+    }
+  }
+
+  Future<dynamic> readNotifAmbulance({required String id}) async {
+    final params = <String, dynamic>{};
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}inbox/ambulance/read/$id',
+          Method.POST,
+          params);
+      final readNotif = json.decode(result.toString());
+      log("readNotif['data'] ambulance . $readNotif");
+      idOrderFromPesan.value = readNotif['data']['ambulance_order']['id'];
+      serviceId.value = readNotif['data']["ambulance_order"]['serviceId'];
 
 
       log('Masuk == $serviceId');

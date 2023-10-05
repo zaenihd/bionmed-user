@@ -18,6 +18,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../layanan_hospital order/indput_data_order_ambulance/screen/pesanan_status_hospital.dart';
+
 class ControllerPayment extends GetxController {
   final formKey = GlobalKey<FormState>();
   var now = DateTime.now();
@@ -139,7 +141,8 @@ class ControllerPayment extends GetxController {
     loading(false);
     if (value['code'] == 200) {
       // log('DATA == $value');
-      print('doctorScheduleId  :${Get.find<PilihJadwalController>().idService.value}');
+      print(
+          'doctorScheduleId  :${Get.find<PilihJadwalController>().idService.value}');
       print('customerId  :${Get.find<ControllerLogin>().costumerId.value}');
       print('districts  :${districts.value}');
       print('city  :${city.value}');
@@ -148,13 +151,17 @@ class ControllerPayment extends GetxController {
       print('lat  :${lat.value}');
       print('lat  :${long.value}');
       print('serviceId  :${Get.find<PilihJadwalController>().serviceId.value}');
-      print('servicePriceId  :${Get.find<PilihJadwalController>().servicePriceId.value}');
-      print('startDate  :${Get.find<PilihJadwalController>().startDateCustomer.value}');
+      print(
+          'servicePriceId  :${Get.find<PilihJadwalController>().servicePriceId.value}');
+      print(
+          'startDate  :${Get.find<PilihJadwalController>().startDateCustomer.value}');
       print('doctorId  :${Get.find<PilihJadwalController>().docterId.value}');
       print('date  :${formatter.format(now.toLocal())}');
-      print('totalPrice  :${Get.find<PilihJadwalController>().totalBiayaFix.value.toInt()}');
-      print('discount  :${Get.find<PilihJadwalController>().diskon.value.toInt()}');
-      
+      print(
+          'totalPrice  :${Get.find<PilihJadwalController>().totalBiayaFix.value.toInt()}');
+      print(
+          'discount  :${Get.find<PilihJadwalController>().diskon.value.toInt()}');
+
       idOrder.value = value['data']['id'];
       dataOrder.value = value['data'];
       codeOrder.value = value['data']['code'];
@@ -244,7 +251,7 @@ class ControllerPayment extends GetxController {
     var value = await ApiPayment().getServicePrice(
         idDoctor: dataPayloadOrder['doctorId'].toString(), idService: id);
     loading(false);
-    
+
     print("masuk sini ?$value");
 
     if (value['code'] == 200) {
@@ -260,14 +267,33 @@ class ControllerPayment extends GetxController {
     String codeOrders = codeOrder.value;
     // ignore: prefer_const_constructors
     if (
-      // Get.find<ControllerPayment>().serviceId.value == 4
-      Get.find<ControllerPayment>().sequenceId.value == 4
-      ) {
+        // Get.find<ControllerPayment>().serviceId.value == 4
+        Get.find<ControllerPayment>().sequenceId.value == 4) {
       Get.to(() => const PesananStatusScreenNurse());
       // ignore: prefer_interpolation_to_compose_strings
-      log('ZAENIHD UY ' + labelPay.value +" . code " + codeOrder.value + " code String $codeOrders  " +" va VAlue " + vaValue.value + ' label pa ' + labelPay.value);
+      log('ZAENIHD UY ' +
+          labelPay.value +
+          " . code " +
+          codeOrder.value +
+          " code String $codeOrders  " +
+          " va VAlue " +
+          vaValue.value +
+          ' label pa ' +
+          labelPay.value);
+    } else if (Get.find<ControllerPayment>().sequenceId.value == 8) {
+      Get.to(() => const PesananStatusAmbulance());
+      log('inin diasasas-]=======');
+       log('ZAENIHD UY ' +
+          labelPay.value +
+          " . code " +
+          codeOrder.value +
+          " code String $codeOrders  " +
+          " va VAlue " +
+          vaValue.value +
+          ' label pa ' +
+          labelPay.value);
     } else {
-      Get.to(()=> const PesananStatusScreen());
+      Get.to(() => const PesananStatusScreen());
     }
 
     if (!await launchUrl(

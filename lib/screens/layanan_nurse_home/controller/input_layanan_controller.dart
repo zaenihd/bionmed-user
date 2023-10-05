@@ -33,9 +33,11 @@ class InputLayananController extends GetxController {
   RxString totalPrice = ''.obs;
   RxString priceBeforeDiskon = ''.obs;
   RxString serviceNurseId = ''.obs;
+  RxString endCityAmbulance = ''.obs;
   RxDouble totalPriceDouble = 0.0.obs;
   RxInt totalPriceFix = 0.obs;
   RxInt diskonPesananNurse = 0.obs;
+  RxInt servicePriceIdAmbulance = 0.obs;
   DateTime? startTime;
   RxBool isloading = false.obs;
   final ImagePicker _picker = ImagePicker();
@@ -120,6 +122,35 @@ class InputLayananController extends GetxController {
       print('ZAZAZA ' + e.toString());
     }
   }
+  Future<dynamic> getAmbulanceFilter() async {
+    final params = <String, dynamic>{
+      "filter" : [{
+          "lat": Get.find<ControllerPayment>().lat.value,
+          "long": Get.find<ControllerPayment>().long.value}]
+      // "sop": tampunganNurseId
+    };
+    isloading(true);
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}filter-ambulance/${Get.find<ControllerPayment>()
+                              .serviceId
+                              .value}',
+          Method.POST,
+          dataFilter.isEmpty ? params : dataFilter[0] as Map<String, dynamic>);
+      // ignore: unused_local_variable
+      final listNurseFromFilter = json.decode(result.toString());
+      listDataNurse.value = listNurseFromFilter['data'];
+      dataFilter.clear();
+
+      // jadwalDokter = jadwal['data']['doctor_schedules'];
+      // }
+
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print, prefer_interpolation_to_compose_strings
+      print('ZAZAZA ' + e.toString());
+    }
+  }
 
   Future<dynamic> getListNurse() async {
     final params = <String, dynamic>{};
@@ -165,6 +196,29 @@ class InputLayananController extends GetxController {
       print('ZAZAZA $e');
     }
   }
+  Future<dynamic> getPaketbyAmbulanceFilter() async {
+    final params = <String, dynamic>{
+    };
+    isloading(true);
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/package/$idNurse',
+          Method.POST,
+          params);
+      // ignore: unused_local_variable
+      final listNursePaketFromFilter = json.decode(result.toString());
+      listPaketDataNurse.value = listNursePaketFromFilter['data'];
+      log('ini pakey +' + listNursePaketFromFilter.toString() + "ini zen id " + detailNurse['id'].toString());
+
+      // jadwalDokter = jadwal['data']['doctor_schedules'];
+      // }
+
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print('ZAZAZA $e');
+    }
+  }
 
   Future<dynamic> getDetailNurse() async {
     final params = <String, dynamic>{};
@@ -176,6 +230,26 @@ class InputLayananController extends GetxController {
       final detailNurseProfile = json.decode(result.toString());
       detailNurse.value = detailNurseProfile['data'];
       educationNurse.value = detailNurse['nurse_educations'];
+
+      // jadwalDokter = jadwal['data']['doctor_schedules'];
+      // }
+
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+  Future<dynamic> getDetailAmbulance() async {
+    final params = <String, dynamic>{};
+    isloading(true);
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/detail/$idNurse', Method.GET, params);
+      // ignore: unused_local_variable
+      final detailNurseProfile = json.decode(result.toString());
+      detailNurse.value = detailNurseProfile['data'];
+      // educationNurse.value = detailNurse['nurse_educations'];
 
       // jadwalDokter = jadwal['data']['doctor_schedules'];
       // }

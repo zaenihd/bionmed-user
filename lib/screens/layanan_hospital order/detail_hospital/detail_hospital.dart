@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bionmed_app/constant/colors.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
 import 'package:bionmed_app/screens/login/controller_login.dart';
+import 'package:bionmed_app/screens/payment/controller_payment.dart';
 import 'package:bionmed_app/screens/profile_doctor/profil_dokter_controller.dart';
 import 'package:bionmed_app/screens/select_service/select_service_screen.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
@@ -212,7 +213,7 @@ class _DetailHospitalState extends State<DetailHospital> {
                   ),
                 ),
                 const SizedBox(
-                height: 20.0,
+                  height: 20.0,
                 ),
                 Txt(
                   text: 'Detail Rumah Sakit',
@@ -258,10 +259,18 @@ class _DetailHospitalState extends State<DetailHospital> {
       bottomSheet: ButtonGradient(
           margin: const EdgeInsets.all(24),
           onPressed: () async {
-            await cLog.getPaketbyNurseFilter();
-            Get.find<ControllerLogin>().priceService.value =
-                cLog.detailNurse['service_price_nurses'];
-            log(Get.find<ControllerLogin>().priceService.value.toString());
+            if (Get.find<ControllerPayment>().serviceId.value == 8) {
+              // Get.defaultDialog();
+              await cLog.getPaketbyAmbulanceFilter();
+              // Get.to(()=>  DataPesananAMbulance(data: widget.data,));
+              Get.to(() =>  SelectServiceScreen(data: widget.data,));
+            } else {
+              await cLog.getPaketbyNurseFilter();
+              Get.find<ControllerLogin>().priceService.value =
+                  cLog.detailNurse['service_price_nurses'];
+              log(Get.find<ControllerLogin>().priceService.value.toString());
+              Get.to(() =>  SelectServiceScreen());
+            }
             // Get.find<ControllerPayment>().dates.value = "";
             // Get.find<ControllerServiceOnCall>()
             //     .controllerSearch
@@ -282,7 +291,6 @@ class _DetailHospitalState extends State<DetailHospital> {
             // print(Get.find<ControllerPayment>()
             //     .dataPayloadOrder['doctorId']
             //     .toString());
-            Get.to(() => const SelectServiceScreen());
           },
           label: "Pesan Sekarang"),
     );

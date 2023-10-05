@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:bionmed_app/constant/colors.dart';
 import 'package:bionmed_app/constant/styles.dart';
 import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/controller/input_data_order_ambulance_controller.dart';
-import 'package:bionmed_app/screens/layanan_hospital%20order/indput_data_order_ambulance/screen/detail_pesanan_ambulance.dart';
+import 'package:bionmed_app/screens/layanan_hospital%20order/list_hospital.dart/list_hospital.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/input_layanan_controller.dart';
 import 'package:bionmed_app/screens/pesanan/maps.dart';
 import 'package:bionmed_app/widgets/button/button_gradient.dart';
@@ -13,6 +15,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../widgets/other/show_dialog.dart';
 
 class InputDataOrderAmbulance extends StatefulWidget {
   const InputDataOrderAmbulance({Key? key}) : super(key: key);
@@ -166,12 +170,12 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
                 // ignore: avoid_unnecessary_containers
                 Container(
                   child: InputPrimary(
-                    controller: TextEditingController(),
+                    controller: controller.tanggalC,
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(1800),
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2101));
                       if (pickedDate != null) {
                         // ignore: avoid_print
@@ -180,6 +184,11 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
                             DateFormat('yyyy-MM-dd').format(pickedDate);
                         // ignore: avoid_print
                         print(formattedDate);
+                        controller.tanggalC.text = formattedDate;
+                        String starDate = DateFormat("yyyy-MM-dd HH:mm:ss")
+                            .format(pickedDate);
+                        controller.tanggalOrder.value = starDate;
+                        log(controller.tanggalOrder.value.toString());
                         // Get.put(PilihJadwalController()).day.value =
                         //     DateFormat("EEEE", "id_ID").format(pickedDate);
                         // Get.find<ControllerPesanan>().day.value =
@@ -329,17 +338,29 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
                 //     Image.asset('assets/icons/arrow.png')
                 //   ],
                 // ),
-                
               ],
             ),
           ),
         ],
       ),
       bottomSheet: ButtonGradient(
-        margin: const EdgeInsets.all(24),
-        onPressed: () async {
-                  Get.to(()=> const DataPesananAMbulance());
-                }, label: "Lanjutkan"),
+          margin: const EdgeInsets.all(24),
+          onPressed: () async {
+            if (controller.tanggalC.text == "") {
+              showPopUp(
+                  onTap: () {
+                    Get.back();
+                  },
+                  imageAction: "assets/json/eror.json",
+                  description: "Mohon isi tanggal\nterlebih dahulu");
+            } else {
+              await cLog.getAmbulanceFilter();
+
+              Get.to(() => ListHospital());
+            }
+            // Get.to(()=> const DataPesananAMbulance());
+          },
+          label: "Lanjutkan"),
     );
   }
 }
@@ -475,48 +496,48 @@ class TambahAlamatAmbulance extends StatelessWidget {
                 //   hintText: "Masukan No Handphone",
                 // ),
                 // Obx(
-                //   () => 
-                  InkWell(
-                      onTap: () async {
-                        myC.isLoadingMaps(true);
-                        await myC.getCurrentLocation().then((value) {
-                          myC.lat.value = value.latitude;
-                          myC.long.value = value.longitude;
-                        });
-                        await myC.getUserLocation();
-                        Get.to(() => const Maaapp());
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 15, right: 15, top: 10, bottom: 10),
-                        alignment: Alignment.topLeft,
-                        width: Get.width,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10.0),
-                          ),
-                          border: Border.all(color: Colors.grey[300]!),
+                //   () =>
+                InkWell(
+                    onTap: () async {
+                      myC.isLoadingMaps(true);
+                      await myC.getCurrentLocation().then((value) {
+                        myC.lat.value = value.latitude;
+                        myC.long.value = value.longitude;
+                      });
+                      await myC.getUserLocation();
+                      Get.to(() => const Maaapp());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, top: 10, bottom: 10),
+                      alignment: Alignment.topLeft,
+                      width: Get.width,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
-                        child: Obx(
-                          () => myC.alamatMaps.isNotEmpty
-                              ? Text(myC.alamatMaps.value)
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Obx(() => Text(
-                                          myC.isLoadingMaps.isTrue
-                                              ? "Loading..."
-                                              : 'Alamat lengkap',
-                                          style: TextStyle(
-                                              color: Colors.grey[500]!),
-                                        )),
-                                    const Icon(Icons.arrow_forward_ios)
-                                  ],
-                                ),
-                        ),
-                      )),
+                        border: Border.all(color: Colors.grey[300]!),
+                      ),
+                      child: Obx(
+                        () => myC.alamatMaps.isNotEmpty
+                            ? Text(myC.alamatMaps.value)
+                            : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Obx(() => Text(
+                                        myC.isLoadingMaps.isTrue
+                                            ? "Loading..."
+                                            : 'Alamat lengkap',
+                                        style:
+                                            TextStyle(color: Colors.grey[500]!),
+                                      )),
+                                  const Icon(Icons.arrow_forward_ios)
+                                ],
+                              ),
+                      ),
+                    )),
                 // ),
                 const SizedBox(
                   height: 10.0,

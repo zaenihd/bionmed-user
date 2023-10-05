@@ -15,6 +15,8 @@ import 'package:search_map_location/search_map_location.dart';
 import 'package:search_map_location/utils/google_search/place.dart';
 import 'package:search_map_location/utils/google_search/place_type.dart';
 
+import '../layanan_hospital order/indput_data_order_ambulance/controller/input_data_order_ambulance_controller.dart';
+
 // import '../../../../../theme.dart';
 
 class Maaapp extends StatefulWidget {
@@ -363,7 +365,9 @@ class MaaappState extends State<Maaapp> {
                                                 height: 30.0,
                                               ),
                                               ButtonGradient(
-                                                  onPressed: () {
+                                                  onPressed: () async{
+                                                   await Get.find<InputDataOrderAmbulanceController>().checkCsr(startCity: mapC.city.value);
+                                                   log(mapC.city.value);
                                                     // if (Get.put(InputDataOrderAmbulanceController())
                                                     //         .serviceAmbulance
                                                     //         .value ==

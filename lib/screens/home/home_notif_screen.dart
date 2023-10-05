@@ -182,12 +182,30 @@ class _NotifScreenState extends State<NotifScreen> {
                                             if (Get.find<ControllerLogin>()
                                                         .dataNotif[index]
                                                     ['order'] ==
-                                                null) {
+                                                null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null ) {
+
+                                              Get.defaultDialog();
                                               await Get.find<HomeController>()
                                                   .hapusPesanNurse();
                                               await Get.find<ControllerLogin>()
                                                   .getNotif();
-                                            } else {
+
+                                            } else if(
+                                              Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null
+                                            ){
+                                                await Get.find<HomeController>()
+                                                  .hapusPesanAmbulance();
+                                              await Get.find<ControllerLogin>()
+                                                  .getNotif();
+                                              // Get.defaultDialog(title: 'Ini Ambulance');
+
+                                            }else{
+
+                                              // Get.defaultDialog(title: 'Ini Ambulance');
+
+
                                               await Get.find<HomeController>()
                                                   .hapusPesan();
                                               await Get.find<ControllerLogin>()
@@ -215,7 +233,10 @@ class _NotifScreenState extends State<NotifScreen> {
                             Get.find<ControllerLogin>().dataNotif[index]['id'];
                         if (Get.find<ControllerLogin>().dataNotif[index]
                                 ['order'] ==
-                            null) {
+                            null
+                            && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
+                            ) {
                           await Get.find<HomeController>().readNotifNurse(
                               id: Get.find<ControllerLogin>()
                                   .dataNotif[index]['id']
@@ -225,7 +246,20 @@ class _NotifScreenState extends State<NotifScreen> {
                                   .dataNotif[index]['nurse_order']['id'];
                         pesananC.getDetailOrderNurse();
 
-                        } else {
+                        }
+                        else if(
+                                              Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null
+                                            ){
+                                                await Get.find<HomeController>().readNotifAmbulance(
+                              id: Get.find<ControllerLogin>()
+                                  .dataNotif[index]['id']
+                                  .toString());
+                        pesananC.getDetailOrderAmbulance();
+
+                                              // Get.defaultDialog(title: 'Ini Ambulance');
+                                            }
+                         else {
                           await Get.find<HomeController>().readNitif(
                               id: Get.find<ControllerLogin>()
                                   .dataNotif[index]['id']
@@ -352,9 +386,14 @@ class _NotifScreenState extends State<NotifScreen> {
                                                   Get.find<ControllerLogin>()
                                                                   .dataNotif[
                                                               index]['order'] ==
-                                                          null
-                                                      ? "${Get.find<ControllerLogin>().dataNotif[index]['nurse_order']['code']}"
-                                                      : "${Get.find<ControllerLogin>().dataNotif[index]['order']['code']}",
+                                                          null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
+                                                      ? 
+                                                      "${Get.find<ControllerLogin>().dataNotif[index]['nurse_order']['code']}"
+                                                      : Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null ? "${Get.find<ControllerLogin>().dataNotif[index]['ambulance_order']['code']}" :
+                                                      
+                                                       "${Get.find<ControllerLogin>().dataNotif[index]['order']['code']}",
                                                   style: const TextStyle(),
                                                 ),
                                               ],
@@ -367,14 +406,24 @@ class _NotifScreenState extends State<NotifScreen> {
                                             Get.find<ControllerLogin>()
                                                               .dataNotif[index]
                                                           ['order'] ==
-                                                      null ?
-                                              'Perawat :' : "Dokter :",
+                                                      null  && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null?
+                                              'Perawat :' :  Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null ? "Ambulance : " :"Dokter :",
+
+
+                                  
                                               Get.find<ControllerLogin>()
                                                               .dataNotif[index]
                                                           ['order'] ==
-                                                      null
+                                                      null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
                                                   ? pesananC.nameDoctor.value
-                                                  : Get.find<ControllerLogin>()
+                                                  : Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null ? Get.find<ControllerLogin>()
+                                                              .dataNotif[index]
+                                                          ['ambulance_order']['ambulance']
+                                                      ['name'] : Get.find<ControllerLogin>()
                                                               .dataNotif[index]
                                                           ['order']['doctor']
                                                       ['name'],
@@ -382,29 +431,46 @@ class _NotifScreenState extends State<NotifScreen> {
                                                       Get.find<ControllerLogin>()
                                                               .dataNotif[index]
                                                           ['order'] ==
-                                                      null
-                                                  ?pesananC.imageDoctor.value: Get.find<ControllerLogin>()
+                                                      null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
+                                                  ?
+                                                  pesananC.imageDoctor.value: 
+                                                  Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null? pesananC.imageDoctor.value :
+                                                  
+                                                  Get.find<ControllerLogin>()
                                                               .dataNotif[index]
-                                                          ['order']['doctor']['image']),
+                                                          ['order']['doctor']['image'] 
+
+                                                          
+                                                          ),
                                           const SizedBox(
                                             height: 20.0,
                                           ),
                                           cardPerawat('Layanan :', Get.find<ControllerLogin>()
                                                               .dataNotif[index]
                                                           ['order'] ==
-                                                      null
+                                                      null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
                                                   ?Get.find<ControllerLogin>()
                                                               .dataNotif[index]
-                                                          ['nurse_order']['service']['name']: Get.find<ControllerLogin>()
+                                                          ['nurse_order']['service']['name']:  Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null ? Get.find<ControllerLogin>()
+                                                              .dataNotif[index]
+                                                          ['ambulance_order']['service']['name'] :Get.find<ControllerLogin>()
                                                               .dataNotif[index]
                                                           ['order']['service']['name'],
                                                           Get.find<ControllerLogin>()
                                                               .dataNotif[index]
                                                           ['order'] ==
-                                                      null
+                                                      null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
                                                   ?Get.find<ControllerLogin>()
                                                               .dataNotif[index]
-                                                          ['nurse_order']['service']['image']: Get.find<ControllerLogin>()
+                                                          ['nurse_order']['service']['image']: Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null ? Get.find<ControllerLogin>()
+                                                              .dataNotif[index]
+                                                          ['ambulance_order']['service']['image'] : Get.find<ControllerLogin>()
                                                               .dataNotif[index]
                                                           ['order']['service']['image']),
                                           const SizedBox(
@@ -518,12 +584,19 @@ class _NotifScreenState extends State<NotifScreen> {
                                           const SizedBox(
                                             height: 20.0,
                                           ),
+                                          Get.find<ControllerLogin>().dataNotif[index]
+                                                    ['title'] ==
+                                                "Belum Bayar" ? 
+                                                const SizedBox(
+                                                height: 1.0,
+                                                ) :
                                           Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 30),
                                               child: ButtonGradient(
                                                   onPressed: () async {
+                                                    log("zzzzzz${controller.serviceId}");
                                                     Get.find<
                                                             ControllerPesanan>()
                                                         .idOrder
@@ -531,17 +604,26 @@ class _NotifScreenState extends State<NotifScreen> {
                                                             HomeController>()
                                                         .idOrderFromPesan
                                                         .value;
-
                                                     // ignore: unrelated_type_equality_checks
-                                                    if (controller.serviceId != 2 && controller.serviceId != 1) {
-                                                      log('masuuuk zee');
+                                                    if (controller.serviceId.value == 4 || controller.serviceId.value == 5 || controller.serviceId.value == 6) {
+                                                      log('zzzzzz zee');
                                                       await Get.find<
                                                               ControllerPesanan>()
                                                           .getDetailOrderNurse();
                                                       controller.role.value =
                                                           "nurse";
                                                           
-                                                    } else {
+                                                    } else if(
+                                                      controller.serviceId.value == 8
+                                                    ){
+                                                       log('zen ini ya zee');
+                                                      await Get.find<
+                                                              ControllerPesanan>()
+                                                          .getDetailOrderAmbulance();
+                                                      controller.role.value =
+                                                          "ambulance";
+                                                    }else
+                                                    {
                                                       log('masuuuk');
                                                       await Get.find<
                                                               ControllerPesanan>()
@@ -651,13 +733,20 @@ class _NotifScreenState extends State<NotifScreen> {
               child: Column(
                 children: [
                   Get.find<ControllerLogin>().dataNotif[index]['order'] == null
+                  && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
                       ? detailPesan(
                           title: 'Paket',
                           detail: Get.find<ControllerLogin>()
                               .dataNotif[index]['nurse_order']['package_name']
                               .toString(),
                           index: index)
-                      : const SizedBox(
+                      : 
+                      Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null ? const SizedBox(
+                                  height: 1.0,
+                                  ) :
+                      const SizedBox(
                           height: 1.0,
                         ),
                   const SizedBox(
@@ -668,10 +757,16 @@ class _NotifScreenState extends State<NotifScreen> {
                       title: 'Harga',
                       detail: Get.find<ControllerLogin>().dataNotif[index]
                                   ['order'] ==
-                              null
+                              null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
                           ?CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
                               .dataNotif[index]['nurse_order']['service_price_nurse']['price'],0)
-                          : CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
+                          : 
+                          Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null ? 
+                                  CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
+                              .dataNotif[index]['ambulance_order']['service_price_ambulance']['price'],0) :
+                          CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
                               .dataNotif[index]['order']['service_price']['price'],0)),
                   const SizedBox(
                     height: 12.0,
@@ -681,14 +776,21 @@ class _NotifScreenState extends State<NotifScreen> {
                       title: 'Diskon',
                       detail: Get.find<ControllerLogin>().dataNotif[index]
                                   ['order'] ==
-                              null
+                              null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
                           ? "${Get.find<ControllerLogin>()
                               .dataNotif[index]['nurse_order']['discount']} %"
-                          : "${Get.find<ControllerLogin>()
+                          : 
+                          Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null ? 
+                                  "${Get.find<ControllerLogin>()
+                              .dataNotif[index]['ambulance_order']['service_price_ambulance']['discount']} %" :
+                          "${Get.find<ControllerLogin>()
                               .dataNotif[index]['order']['discount']} %"),
                   const SizedBox(
                     height: 12.0,
                   ),
+
                   Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -698,7 +800,7 @@ class _NotifScreenState extends State<NotifScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Txt(
-                text: 'Metode pmebayaran',
+                text: 'Metode pembayaran',
                 color: Colors.grey,
               ),
               Txt(
@@ -708,11 +810,15 @@ class _NotifScreenState extends State<NotifScreen> {
             ],
           ),
         ),
+
         Get.find<ControllerLogin>().dataNotif[index]
                                   ['order'] ==
-                              null ?  Get.find<ControllerLogin>()
-                              .dataNotif[index]['nurse_order']['payment'] == null ? Txt(text: "null") :
-        Get.find<ControllerLogin>()
+                              null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null? 
+                                   Get.find<ControllerLogin>().dataNotif[index]['nurse_order']['payment'] == null ? 
+                                   Txt(text: "null") :
+                              Get.find<ControllerLogin>().dataNotif[index]['ambulance_order'] != null ? Txt(text: 'Ambulance') :
+              Get.find<ControllerLogin>()
                               .dataNotif[index]['nurse_order']['payment']['debit_from_bank'] == '014'
                                 ? Image.asset(
                                     'assets/icons/logo_bca.png',
@@ -837,8 +943,10 @@ class _NotifScreenState extends State<NotifScreen> {
                                                                                           
                                                                                           ) 
                                   //  : Txt(text: 'null')
-                                :  Get.find<ControllerLogin>()
-                              .dataNotif[index]['order']['payment'] == null ?Txt(text: 'null', weight: FontWeight.bold, color: Colors.blue,) :                                
+                                : 
+                                Get.find<ControllerLogin>().dataNotif[index]['ambulance_order'] != null ? Txt(text: '-') :
+                                
+                                 Get.find<ControllerLogin>().dataNotif[index]['order']['payment'] == null ?Txt(text: 'null', weight: FontWeight.bold, color: Colors.blue,) :                                
                                 Get.find<ControllerLogin>()
                               .dataNotif[index]['order']['payment']['debit_from_bank'] ==
                                         '002'
@@ -970,10 +1078,15 @@ class _NotifScreenState extends State<NotifScreen> {
                       title: 'Total pembayaran',
                       detail: Get.find<ControllerLogin>().dataNotif[index]
                                   ['order'] ==
-                              null
+                              null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] == null
                           ?CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
                               .dataNotif[index]['nurse_order']['totalPrice'],0)
-                          : CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
+                          :
+                          Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null ? CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
+                              .dataNotif[index]['ambulance_order']['totalPrice'],0) :
+                           CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
                               .dataNotif[index]['order']['totalPrice'],0),),
                               const SizedBox(
                               height: 5.0,
