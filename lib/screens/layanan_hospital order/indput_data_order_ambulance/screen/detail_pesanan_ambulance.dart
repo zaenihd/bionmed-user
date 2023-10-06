@@ -475,6 +475,7 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                         myC.long.value = value.longitude;
                       });
                       await myC.getUserLocation();
+                      controller.endCityCsr.value = widget.dataPaket['service_price_zona_ambulances'][0]['city'];
                       Get.to(() => const Maaapp());
                       controller.isLoadingAlamat.value = false;
                     },
@@ -615,9 +616,14 @@ class _DataPesananAMbulanceState extends State<DataPesananAMbulance> {
                                 padding: const EdgeInsets.all(15),
                                 child: Row(
                                   children: [
-                                    Txt(
-                                      text:
-                                          "${widget.dataPaket['service_price_zona_ambulances'][index]['districts']}, ${widget.dataPaket['service_price_zona_ambulances'][index]['city']}, ${widget.dataPaket['service_price_zona_ambulances'][index]['country']} ",
+                                    SizedBox(
+                                      width: Get.width /1.4,
+                                      child: Txt(
+                                        maxLines: 1,
+                                        textOverFlow: TextOverflow.ellipsis,
+                                        text:
+                                            "${widget.dataPaket['service_price_zona_ambulances'][index]['districts']}, ${widget.dataPaket['service_price_zona_ambulances'][index]['city']}, ${widget.dataPaket['service_price_zona_ambulances'][index]['country']} ",
+                                      ),
                                     ),
                                     const Icon(
                                       Icons.map_outlined,

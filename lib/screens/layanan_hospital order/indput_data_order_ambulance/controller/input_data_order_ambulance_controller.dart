@@ -20,6 +20,7 @@ class InputDataOrderAmbulanceController extends GetxController {
   RxBool isCrs = false.obs;
   RxString tanggalOrder = ''.obs;
   RxInt isCrsFromOrder = 0.obs;
+  RxString endCityCsr = ''.obs;
   TextEditingController tanggalC = TextEditingController();
   final inputC = Get.find<InputLayananController>();
   final mapC = Get.find<MapsController>();
@@ -30,7 +31,7 @@ class InputDataOrderAmbulanceController extends GetxController {
     final params = <String, dynamic>{
       "servicePriceId": inputC.servicePriceIdAmbulance.value,
       "start_city": startCity,
-      "end_city": "Bogor"
+      "end_city":endCityCsr.value
     };
     // isloading(true);
     try {
@@ -101,6 +102,7 @@ class InputDataOrderAmbulanceController extends GetxController {
        Get.find<ControllerPayment>().dataOrder.value = dataOrder['data'];
       Get.find<ControllerPayment>().codeOrder.value =
       Get.find<ControllerPayment>().dataOrder['code'];
+      log("message id Order ${waitingC.orderId.value}");
     isLoading(false);
 
 
@@ -116,6 +118,45 @@ class InputDataOrderAmbulanceController extends GetxController {
 
       // ignore: avoid_print
       print('ZAZAZA $e');
+    }
+  }
+
+  Future<dynamic> batalkanPesanan({required int statusRespone}) async {
+    final params = <String, dynamic>{"ambulance_receive_status": statusRespone};
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/update/order/${waitingC.orderId.value}',
+          Method.POST,
+          params);
+      final order = json.decode(result.toString());
+      // stopTime.value = true;
+
+      log('zaeehahaa $order');
+
+      // ignore: empty_catches, unused_catch_clause
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print('zaeejaja $e');
+    }
+  }
+
+  Future<dynamic> updateStatusBatalAmbulance(
+      {required int status}) async {
+    final params = <String, dynamic>{"status": status};
+    // loadingButton(true);
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/update/order/${waitingC.orderId.value}', Method.POST, params);
+      final status = json.decode(result.toString());
+      // ratingDoctor.value = status['data']['rating'];
+      print('zezeze $status');
+      // }
+      // loadingButton(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error =-=-=$e");
     }
   }
 }

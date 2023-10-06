@@ -224,7 +224,7 @@ class _DetailHospitalState extends State<DetailHospital> {
                   height: 10.0,
                 ),
                 Cntr(
-                  height: 325,
+                  height: 230,
                   color: const Color(0xffECECEC),
                   child: CupertinoScrollbar(
                     child: ListView(

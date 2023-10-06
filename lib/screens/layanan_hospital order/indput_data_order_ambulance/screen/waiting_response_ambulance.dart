@@ -200,7 +200,13 @@ class WaitingResponAmbulance extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                       color: const Color(0xFFFFE4E4),
-                      onPressed: () {},
+                      onPressed: ()async {
+                          await controller.batalkanPesanan(statusRespone: 2);
+                                controller.updateStatusBatalAmbulance(status: 98,);
+
+                                Get.back();
+                                Get.to(()=> const Home(indexPage: 0,));
+                      },
                       label: 'Batalkan Pesanan'))
               : myC.nurseReciveOrderStatus.value == 1
                   ? Container(
@@ -262,7 +268,16 @@ class WaitingResponAmbulance extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                               color: const Color(0xFFFFE4E4),
-                              onPressed: () {},
+                              onPressed: () async{
+                                await controller.batalkanPesanan(statusRespone: 2);
+                                // updateStatusAmbulance
+                                controller.updateStatusBatalAmbulance(status: 98,);
+                                Get.back();
+                                Get.to(()=> const Home(indexPage: 0,));
+
+
+                                
+                              },
                               label: 'Batalkan Pesanan')
                         ],
                       ),

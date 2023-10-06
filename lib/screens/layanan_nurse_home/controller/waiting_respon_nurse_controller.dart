@@ -144,5 +144,42 @@ class WaitingResponNurseController extends GetxController{
     }
   }
 
+  Future<dynamic> updateStatusBatalNurse() async {
+    final params = <String, dynamic>{"status": 98};
+    // loadingButton(true);
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}nurse/update/order/${orderId.value}', Method.POST, params);
+      final status = json.decode(result.toString());
+      // ratingDoctor.value = status['data']['rating'];
+      print('zezeze $status');
+      // }
+      // loadingButton(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error =-=-=$e");
+    }}
+
+    Future<dynamic> batalkanPesananNurse() async {
+    final params = <String, dynamic>{"nurse_receive_status": 2};
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}nurse/update/order/${orderId.value}',
+          Method.POST,
+          params);
+      final order = json.decode(result.toString());
+      // stopTime.value = true;
+
+      log('zaeehahaa $order');
+
+      // ignore: empty_catches, unused_catch_clause
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print('zaeejaja $e');
+    }
+  }
+
 
 }

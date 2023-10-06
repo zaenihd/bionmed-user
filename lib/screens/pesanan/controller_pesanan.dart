@@ -578,4 +578,27 @@ class ControllerPesanan extends GetxController {
       print("nicee  $e");
     }
   }
+
+  Future<dynamic> sendRatingAmbulance(
+      { required int rating, required String deskripsi, required int orderId}
+      ) async {
+    final params = <String, dynamic>{
+     "rating" : rating,
+    "description_rating" : deskripsi
+    };
+    loadingButton(true);
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/update/order/$orderId', Method.POST, params);
+      final rating = json.decode(result.toString());
+      // ratingDoctor.value = rating['data']['rating'];
+      print('nicee  $rating');
+      // }
+      loadingButton(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("nicee  $e");
+    }
+  }
 }

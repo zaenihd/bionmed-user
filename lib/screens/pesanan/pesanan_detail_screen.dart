@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bionmed_app/constant/helper.dart';
 import 'package:bionmed_app/constant/styles.dart';
 import 'package:bionmed_app/screens/call/page_voice.dart';
+import 'package:bionmed_app/screens/chat/chat_ambulance.dart';
 import 'package:bionmed_app/screens/chat/chat_dokter.dart';
 import 'package:bionmed_app/screens/home/home_controller.dart';
 import 'package:bionmed_app/screens/login/controller_login.dart';
@@ -498,7 +499,7 @@ void actionButtonAmbulance() async {
                     await Get.find<ControllerPesanan>().updateStatusAmbulance(
                         status: 5, orderId: widget.data['order']['id']);
                     Get.back();
-                    await Get.find<ControllerPesanan>().sendRating(
+                    await Get.find<ControllerPesanan>().sendRatingAmbulance(
                         rating: int.parse(response.rating.toStringAsFixed(0)),
                         deskripsi: response.comment,
                         orderId: widget.data['order']['id']);
@@ -1850,7 +1851,7 @@ void actionButtonAmbulance() async {
                           : myC.statusOrderDetail.value == 98
                               ? Row(
                                   children: [
-                                    Image.asset('assets/images/status99Am.png',
+                                    Image.asset('assets/images/status98Am.png',
                                       height: 244,
                                       width: 279,
                                     ),
@@ -2452,7 +2453,7 @@ void actionButtonAmbulance() async {
                     //       actionLaporkan(context)
                     //     ],
                     //   )
-                    : widget.data['order']['status'] == 98
+                    : widget.data['order']['status'] == 98 && widget.data['payment'] == null ? Center(child: Txt(text:'Pesanan telah dibatalkan')) : widget.data['order']['status'] == 98
                         ? Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 24.0),
@@ -2547,21 +2548,38 @@ void actionButtonAmbulance() async {
         height: 15.0,
         ),
         widget.data['order']['status'] != 6 && widget.data['order']['status'] != 5 ?
-         Cntr(
-          radius: BorderRadius.circular(10),
-          alignment: Alignment.center,
-          margin: const EdgeInsets.symmetric(horizontal:  24),
-          width: Get.width,
-          border: Border.all(color: Colors.blue),
-          padding: const EdgeInsets.all(15),child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.chat, color: Colors.blue,), const SizedBox(
-              width: 20.0,
-              ),
-              Txt(text: 'Forum Chatting', color: Colors.blue,),
-            ],
-          ),) :
+         InkWell(
+          onTap: () async{
+            // log(widget.data['order']['customer']['userId'].toString());
+            // log(widget.data['order']['ambulance']['userId'].toString());
+
+             await ZIMKit()
+        .connectUser(id: widget.data['order']['customer']['userId'].toString());
+        // ZIMKit().showDefaultNewPeerChatDialogChatCut(
+        //     context, widget.data['order']['ambulance']['userId'].toString());
+        // ignore: use_build_context_synchronously
+             Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return ZIMKitMessageListPageChatAmbulance(
+              conversationID: widget.data['order']['ambulance']['userId'].toString(),
+            );
+          }));
+          },
+           child: Cntr(
+            radius: BorderRadius.circular(10),
+            alignment: Alignment.center,
+            margin: const EdgeInsets.symmetric(horizontal:  24),
+            width: Get.width,
+            border: Border.all(color: Colors.blue),
+            padding: const EdgeInsets.all(15),child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.chat, color: Colors.blue,), const SizedBox(
+                width: 20.0,
+                ),
+                Txt(text: 'Forum Chatting', color: Colors.blue,),
+              ],
+            ),),
+         ) :
          widget.data['order']['image_proof_travel'] == "" || widget.data['order']['image_proof_travel'] == null ? const SizedBox(
         height: 1.0,
         ) :
@@ -2629,7 +2647,7 @@ void actionButtonAmbulance() async {
                     //       actionLaporkan(context)
                     //     ],
                     //   )
-                    : widget.data['order']['status'] == 98
+                    : widget.data['order']['status'] == 98 && widget.data['payment'] == null ? Center(child: Txt(text: 'Pesanan telah dibatalkan')) : widget.data['order']['status'] == 98
                         ? Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 24.0),

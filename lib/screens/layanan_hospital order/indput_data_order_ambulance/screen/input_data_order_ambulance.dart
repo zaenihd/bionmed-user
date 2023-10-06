@@ -178,6 +178,7 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
                           firstDate: DateTime.now(),
                           lastDate: DateTime(2101));
                       if (pickedDate != null) {
+                        DateTime now = DateTime.now();
                         // ignore: avoid_print
                         print(pickedDate);
                         String formattedDate =
@@ -185,9 +186,12 @@ class _InputDataOrderAmbulanceState extends State<InputDataOrderAmbulance> {
                         // ignore: avoid_print
                         print(formattedDate);
                         controller.tanggalC.text = formattedDate;
-                        String starDate = DateFormat("yyyy-MM-dd HH:mm:ss")
-                            .format(pickedDate);
-                        controller.tanggalOrder.value = starDate;
+                        String starDate =
+                            DateFormat("yyyy-MM-dd").format(pickedDate);
+                        String jamNow =
+                            DateFormat('HH:mm:ss').format(now);
+                            // String jam = DateFormat("HH:mm:ss").format(pickedDate);
+                        controller.tanggalOrder.value = "$starDate $jamNow";
                         log(controller.tanggalOrder.value.toString());
                         // Get.put(PilihJadwalController()).day.value =
                         //     DateFormat("EEEE", "id_ID").format(pickedDate);

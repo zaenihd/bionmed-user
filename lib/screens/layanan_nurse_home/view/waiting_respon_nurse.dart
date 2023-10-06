@@ -1,3 +1,4 @@
+import 'package:bionmed_app/screens/home/home.dart';
 import 'package:bionmed_app/screens/layanan_nurse_home/controller/waiting_respon_nurse_controller.dart';
 import 'package:bionmed_app/screens/services/service_on_call.dart';
 import 'package:get/get.dart';
@@ -54,9 +55,9 @@ class WaitingResponNurse extends StatelessWidget {
                                     null
                                 ? Get.find<InputLayananController>()
                                     .detailNurse['image']
-                                :  Get.find<InputLayananController>().detailNurse['hospital']
-                                            ['image'] ??
-                                        'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42',
+                                : Get.find<InputLayananController>()
+                                        .detailNurse['hospital']['image'] ??
+                                    'https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg?w=2000&t=st=1694367961~exp=1694368561~hmac=dc0a60debe1925ff62ec0fb9171e5466998617fa775ef32cac6f5113af4dcc42',
                           ),
                           fit: BoxFit.cover),
                     )),
@@ -76,12 +77,16 @@ class WaitingResponNurse extends StatelessWidget {
               weight: FontWeight.bold,
             ),
             const SizedBox(
-            height: 10.0,
+              height: 10.0,
             ),
             Visibility(
-              visible: Get.find<InputLayananController>().detailNurse['hospital'] != null,
-              child: Txt(text: '${Get.find<InputLayananController>().detailNurse['name']}')),
-                                    
+                visible: Get.find<InputLayananController>()
+                        .detailNurse['hospital'] !=
+                    null,
+                child: Txt(
+                    text:
+                        '${Get.find<InputLayananController>().detailNurse['name']}')),
+
             // const SizedBox(
             //   height: 5.0,
             // ),
@@ -206,7 +211,12 @@ class WaitingResponNurse extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                       color: const Color(0xFFFFE4E4),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await myC.batalkanPesananNurse();
+                        myC.updateStatusBatalNurse();
+                        Get.back();
+                        Get.to(() => const Home(indexPage: 0));
+                      },
                       label: 'Batalkan Pesanan'))
               : myC.nurseReciveOrderStatus.value == 1
                   ? Container(
@@ -225,7 +235,11 @@ class WaitingResponNurse extends StatelessWidget {
                       child: Column(
                         children: [
                           ButtonGradient(
-                              onPressed: () {
+                              onPressed: () async {
+                                await myC.batalkanPesananNurse();
+                                myC.updateStatusBatalNurse();
+                                Get.back();
+                                // Get.to(()=> const Home(indexPage: 0));
                                 Get.to(() => ServiceOnCall(
                                       title: Get.find<ControllerPayment>()
                                                   .nameService
@@ -260,7 +274,12 @@ class WaitingResponNurse extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                               color: const Color(0xFFFFE4E4),
-                              onPressed: () {},
+                              onPressed: () async {
+                                await myC.batalkanPesananNurse();
+                                myC.updateStatusBatalNurse();
+                                Get.back();
+                                Get.to(() => const Home(indexPage: 0));
+                              },
                               label: 'Batalkan Pesanan')
                         ],
                       ),

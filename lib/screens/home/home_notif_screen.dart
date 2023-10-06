@@ -782,6 +782,9 @@ class _NotifScreenState extends State<NotifScreen> {
                               .dataNotif[index]['nurse_order']['discount']} %"
                           : 
                           Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order']['is_csr'] == 1 ? "100 %" :
+                          Get.find<ControllerLogin>().dataNotif[index]
                                   ['ambulance_order'] != null ? 
                                   "${Get.find<ControllerLogin>()
                               .dataNotif[index]['ambulance_order']['service_price_ambulance']['discount']} %" :
@@ -1076,13 +1079,18 @@ class _NotifScreenState extends State<NotifScreen> {
                   detailPesan(
                       index: index,
                       title: 'Total pembayaran',
-                      detail: Get.find<ControllerLogin>().dataNotif[index]
+                      detail: 
+                      
+                      Get.find<ControllerLogin>().dataNotif[index]
                                   ['order'] ==
                               null && Get.find<ControllerLogin>().dataNotif[index]
                                   ['ambulance_order'] == null
                           ?CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
                               .dataNotif[index]['nurse_order']['totalPrice'],0)
                           :
+                          Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order'] != null && Get.find<ControllerLogin>().dataNotif[index]
+                                  ['ambulance_order']['is_csr'] == 1 ? "Gratis" :
                           Get.find<ControllerLogin>().dataNotif[index]
                                   ['ambulance_order'] != null ? CurrencyFormat.convertToIdr(Get.find<ControllerLogin>()
                               .dataNotif[index]['ambulance_order']['totalPrice'],0) :
@@ -1091,6 +1099,23 @@ class _NotifScreenState extends State<NotifScreen> {
                               const SizedBox(
                               height: 5.0,
                               ),
+                              Get.find<ControllerLogin>().dataNotif[index]['title'] == "Belum Bayar" ?
+                              Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Icon(
+                        Icons.cancel,
+                        color: Colors.red,
+                        size: 14,
+                      ),
+                      Txt(
+                        text: 'Segera Lakukan Pembayaran',
+                        color: Colors.red,
+                        size: 10,
+                      )
+                    ],
+                  ) :
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

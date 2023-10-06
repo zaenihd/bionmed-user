@@ -5,6 +5,7 @@ import 'package:bionmed_app/constant/helper.dart';
 import 'package:bionmed_app/screens/payment/metode_pembayaran_screen.dart';
 import 'package:bionmed_app/screens/pesanan/controller_pesanan.dart';
 import 'package:bionmed_app/screens/pesanan/pesanan_detail_screen.dart';
+import 'package:bionmed_app/widgets/container/container.dart';
 import 'package:bionmed_app/widgets/txt/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -612,7 +613,19 @@ class CardPesananService extends StatelessWidget {
                   ),
               ],
             )
-            : Row(
+            : 
+            data['order']['status'] == 98 ? Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+
+                Cntr(
+                  radius: BorderRadius.circular(5),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  color: Colors.red,
+                  child: Txt(text: 'Dibatalkan',size: 12, color: Colors.white,)),
+              ],
+            ) :
+            Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Belum Bayar ",

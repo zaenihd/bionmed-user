@@ -366,7 +366,7 @@ class MaaappState extends State<Maaapp> {
                                               ),
                                               ButtonGradient(
                                                   onPressed: () async{
-                                                   await Get.find<InputDataOrderAmbulanceController>().checkCsr(startCity: mapC.city.value);
+                                                   await Get.put(InputDataOrderAmbulanceController()).checkCsr(startCity: mapC.city.value);
                                                    log(mapC.city.value);
                                                     // if (Get.put(InputDataOrderAmbulanceController())
                                                     //         .serviceAmbulance
