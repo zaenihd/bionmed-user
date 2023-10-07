@@ -64,6 +64,7 @@ dependencies:
   avatar_glow: ^2.0.2
   flutter_rating_bar: ^4.0.1
   zego_zimkit: ^1.7.0
+  maps_launcher: ^2.2.0
   flutter: 
     sdk: flutter
 

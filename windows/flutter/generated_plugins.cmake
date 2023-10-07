@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   awesome_notifications
   geolocator_windows
+  maps_launcher
   permission_handler_windows
   platform_device_id_windows
   url_launcher_windows

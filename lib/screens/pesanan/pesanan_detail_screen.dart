@@ -119,6 +119,10 @@ class _PesananDetailScreenState extends State<PesananDetailScreen>
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       String starDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       Get.find<PilihJadwalController>().startDate.value = starDate;
+      String jamNow = DateFormat('HH:mm:ss').format(DateTime.now());
+      String dateFormat = DateFormat("yyyy-MM-dd").format(pickedDate);
+      pilihC.dateTimeNow.value ="$dateFormat $jamNow";
+      print('UWU${pilihC.dateTimeNow}');
 
       // ignore: avoid_print
       print("uwu${pilihC.day.value}");
@@ -584,9 +588,11 @@ void actionButtonAmbulance() async {
                       widget.data['order']['service']['sequence'] == 6 ||
                   myC.statusOrderDetail.value == 4 &&
                       widget.data['order']['service']['sequence'] == 2 ||
-                  myC.statusOrderDetail.value == 98 || widget.data['order']['service']['sequence'] == 8
+                  myC.statusOrderDetail.value == 98 
               ? verticalSpace(0)
-              : myC.statusOrderDetail.value == 99
+              : 
+               widget.data['order']['service']['sequence'] == 8 && myC.statusOrderDetail.value == 99 ?aturUlangJadwalAmbulance() :
+              myC.statusOrderDetail.value == 99
                   ? Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: SizedBox(
@@ -4049,6 +4055,183 @@ Cntr jadwalPesananAmbulance() {
           ],
         ));
   }
+
+aturUlangJadwalAmbulance(){
+  return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        height: 120,
+                        child: Column(
+                          children: [
+                            ButtonPrimary(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      // <-- SEE HERE
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(25.0),
+                                      ),
+                                    ),
+                                    builder: (context) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          verticalSpace(10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 150,
+                                                height: 5,
+                                                decoration: BoxDecoration(
+                                                    color: AppColor
+                                                        .bodyColor.shade200,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                              ),
+                                            ],
+                                          ),
+                                          verticalSpace(20),
+                                          Center(
+                                            child: Column(
+                                              children: [
+                                                verticalSpace(10),
+                                                const Text(
+                                                  'Atur ulang jadwal anda yang sudah terlewatkan',
+                                                  style: TextStyle(),
+                                                ),
+                                                verticalSpace(20),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        const Text(
+                                                          'Pilih Tanggal',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 16),
+                                                        ),
+                                                        verticalSpace(10),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            datePicker1();
+                                                          
+                                                          },
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            height: 50,
+                                                            width:
+                                                                Get.width / 2.5,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    10.0),
+                                                              ),
+                                                              border:
+                                                                  Border.all(
+                                                                width: 1.0,
+                                                                color: Colors
+                                                                    .grey[400]!,
+                                                              ),
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Obx(
+                                                                  () => Icon(
+                                                                    Icons
+                                                                        .date_range,
+                                                                    color: myC.dates.value ==
+                                                                            ""
+                                                                        ? Colors.grey[
+                                                                            400]!
+                                                                        : Colors
+                                                                            .black,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 4.0,
+                                                                ),
+                                                                Obx(() => Text(
+                                                                      myC.dates.value ==
+                                                                              ""
+                                                                          ? 'dd/mm/yy'
+                                                                          : myC
+                                                                              .dates
+                                                                              .value,
+                                                                      style: TextStyle(
+                                                                          color: myC.dates.value == ""
+                                                                              ? Colors.grey[400]!
+                                                                              : Colors.black),
+                                                                    ))
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 10.0,
+                                                ),
+                                                // Text('Terima kasih telah memberikan penilaian anda,\nLekas membaik ', textAlign: TextAlign.center,),
+                                                // Image.asset('assets/icons/icon_succes.png'),
+                                                verticalSpace(20),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: 
+                                                  Obx(()=>
+                                                  ButtonGradient(
+                                                      onPressed: () async {
+                                                        if(Get.find<ControllerPesanan>().isloading.isFalse){
+
+                                                       await Get.find<ControllerPesanan>().rescheduleOrderAmbulance(pilihC.dateTimeNow.value);
+                                                        }
+                                                        // Get.back();
+                                                      },
+                                                      label:
+                                                      Get.find<ControllerPesanan>().isloading.isTrue ? "loading.." :
+                                                       'Atur Ulang'),),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              },
+                              label: "Atur Ulang",
+                              color: AppColor.yellowColor,
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            actionLaporkan(context)
+                          ],
+                        ),
+                      ),
+                    );
+}
 
 }
 

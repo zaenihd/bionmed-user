@@ -34,6 +34,7 @@ class ControllerPesanan extends GetxController {
   final formKey = GlobalKey<FormState>();
   RxBool loading = false.obs;
   RxBool gender = false.obs;
+  RxBool isloading = false.obs;
   RxBool dontShowAgainPesanan = false.obs;
   RxBool loadingButton = false.obs;
   RxList dataOrder = [].obs;
@@ -167,7 +168,8 @@ class ControllerPesanan extends GetxController {
       updateStatusChat.value = servis['data']['statusOrder'];
       updateStatusPayment.value = servis['data']['statusPayment'];
       nameDoctor.value = servis['data']['doctor']['name'];
-      imageDoctor.value = servis['data']['doctor']['image'] ?? "https://picsum.photos/200/300/?blur";
+      imageDoctor.value = servis['data']['doctor']['image'] ??
+          "https://picsum.photos/200/300/?blur";
       statusOrderDetail.value = servis['data']['status'];
       doctorId.value = servis['data']['doctor']['id'];
       servicePriceId.value = servis['data']['servicePriceId'];
@@ -196,7 +198,6 @@ class ControllerPesanan extends GetxController {
   RxList detailDataOrder = [].obs;
   RxList sopNurse = [].obs;
 
-
   Future<dynamic> getDetailOrderNurse() async {
     final params = <String, dynamic>{};
     // ignore: unused_local_variable
@@ -207,7 +208,9 @@ class ControllerPesanan extends GetxController {
       final result = await RestClient().request(
           '${MainUrl.urlApi}nurse/order/detail/$idOrder', Method.GET, params);
       final servis = json.decode(result.toString());
-      detailDataOrder.value = [{"order" : servis['data']}];
+      detailDataOrder.value = [
+        {"order": servis['data']}
+      ];
       // updateStatusChat.value = servis['data']['statusOrder'];
       // updateStatusPayment.value = servis['data']['statusPayment'];
       nameDoctor.value = servis['data']['nurse']['name'];
@@ -215,14 +218,16 @@ class ControllerPesanan extends GetxController {
       doctorId.value = servis['data']['nurse']['id'];
       // servicePriceId.value =servis['data']['servicePriceId'];
       // serviceId.value = servis['data']['serviceId'];
-      imageDoctor.value = servis['data']['nurse']['image'] ?? "https://picsum.photos/200/300/?blur";
+      imageDoctor.value = servis['data']['nurse']['image'] ??
+          "https://picsum.photos/200/300/?blur";
       totalPrice.value = servis['data']['totalPrice'];
       orderIdDetail.value = servis['data']['id'];
       // ignore: prefer_if_null_operators
       imageResep.value = servis['data']['image_recipe'] == null
           ? ""
           : servis['data']['image_recipe'];
-      sopNurse.value = servis['data']['service_price_nurse']['package_nurse_sops'];
+      sopNurse.value =
+          servis['data']['service_price_nurse']['package_nurse_sops'];
 
       // dataGetOrder = servis['data'];
       print('ini data : ${updateStatusChat.value}');
@@ -248,9 +253,13 @@ class ControllerPesanan extends GetxController {
     // isloadingDetail(true);
     try {
       final result = await RestClient().request(
-          '${MainUrl.urlApi}ambulance/order/detail/$idOrder', Method.GET, params);
+          '${MainUrl.urlApi}ambulance/order/detail/$idOrder',
+          Method.GET,
+          params);
       final servis = json.decode(result.toString());
-      detailDataOrder.value = [{"order" : servis['data']}];
+      detailDataOrder.value = [
+        {"order": servis['data']}
+      ];
       // updateStatusChat.value = servis['data']['statusOrder'];
       // updateStatusPayment.value = servis['data']['statusPayment'];
       nameDoctor.value = servis['data']['ambulance']['name'];
@@ -258,7 +267,10 @@ class ControllerPesanan extends GetxController {
       doctorId.value = servis['data']['ambulance']['id'];
       // servicePriceId.value =servis['data']['servicePriceId'];
       // serviceId.value = servis['data']['serviceId'];
-      imageDoctor.value = servis['data']['ambulance']['image'] ?? "https://picsum.photos/200/300/?blur";
+      imageDoctor.value = servis['data']['ambulance']['image'] == null ||
+              servis['data']['ambulance']['image'] == ""
+          ? "https://picsum.photos/200/300/?blur"
+          : servis['data']['ambulance']['image'];
       totalPrice.value = servis['data']['totalPrice'];
       orderIdDetail.value = servis['data']['id'];
       // ignore: prefer_if_null_operators
@@ -268,7 +280,7 @@ class ControllerPesanan extends GetxController {
       // sopNurse.value = servis['data']['service_price_ambulance']['package_nurse_sops'];
 
       // dataGetOrder = servis['data'];
-      print('ini data : ${updateStatusChat.value}');
+      print('ini data : ${servis['data']['ambulance']['image']}');
       print("WHOO ");
 
       if (servis['code'] == 200) {
@@ -296,7 +308,9 @@ class ControllerPesanan extends GetxController {
           '${MainUrl.urlApi}order/detail/$idOrder', Method.GET, params);
       final servis = json.decode(result.toString());
       // detailDataOrder.value = servis['data'];
-      detailDataOrder.value = [{"order" : servis['data']}];
+      detailDataOrder.value = [
+        {"order": servis['data']}
+      ];
       detailDokter.value = servis['data']['doctor'];
       updateStatusChat.value = servis['data']['statusOrder'];
       updateStatusPayment.value = servis['data']['statusPayment'];
@@ -412,7 +426,6 @@ class ControllerPesanan extends GetxController {
     // print("masuk controller");
     Get.find<ControllerPayment>().loading.value = true;
     log('code $codeBank');
-
 
     var value = await ApiPayment()
         .createVa(codeOrder: codeOrder.value, codeBank: codeBank);
@@ -544,7 +557,9 @@ class ControllerPesanan extends GetxController {
 
     try {
       final result = await RestClient().request(
-          '${MainUrl.urlApi}ambulance/update/order/$orderId', Method.POST, params);
+          '${MainUrl.urlApi}ambulance/update/order/$orderId',
+          Method.POST,
+          params);
       final status = json.decode(result.toString());
       // ratingDoctor.value = status['data']['rating'];
       print('zezeze $status');
@@ -557,11 +572,12 @@ class ControllerPesanan extends GetxController {
   }
 
   Future<dynamic> sendRating(
-      { required int rating, required String deskripsi, required int orderId}
-      ) async {
+      {required int rating,
+      required String deskripsi,
+      required int orderId}) async {
     final params = <String, dynamic>{
-     "rating" : rating,
-    "description_rating" : deskripsi
+      "rating": rating,
+      "description_rating": deskripsi
     };
     loadingButton(true);
 
@@ -580,17 +596,20 @@ class ControllerPesanan extends GetxController {
   }
 
   Future<dynamic> sendRatingAmbulance(
-      { required int rating, required String deskripsi, required int orderId}
-      ) async {
+      {required int rating,
+      required String deskripsi,
+      required int orderId}) async {
     final params = <String, dynamic>{
-     "rating" : rating,
-    "description_rating" : deskripsi
+      "rating": rating,
+      "description_rating": deskripsi
     };
     loadingButton(true);
 
     try {
       final result = await RestClient().request(
-          '${MainUrl.urlApi}ambulance/update/order/$orderId', Method.POST, params);
+          '${MainUrl.urlApi}ambulance/update/order/$orderId',
+          Method.POST,
+          params);
       final rating = json.decode(result.toString());
       // ratingDoctor.value = rating['data']['rating'];
       print('nicee  $rating');
@@ -599,6 +618,37 @@ class ControllerPesanan extends GetxController {
     } on Exception catch (e) {
       // ignore: avoid_print
       print("nicee  $e");
+    }
+  }
+
+  Future<dynamic> rescheduleOrderAmbulance(String startDate) async {
+    final params = <String, dynamic>{"startDate": startDate};
+
+    isloading(true);
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/reschedule/${orderIdDetail.value}',
+          Method.POST,
+          params);
+      final updateJadwal = json.decode(result.toString());
+      if (updateJadwal['message'] == 'Successfully') {
+            Get.back();
+            Get.back();
+        Get.defaultDialog(
+            title: 'Successfully',
+            middleText: "Berhasil mengatur ulang jadwal");
+        updateStatusAmbulance(orderId: orderIdDetail.value, status: 2);
+      } else {
+        Get.defaultDialog(
+            title: 'Gagal', middleText: updateJadwal['message'].toString());
+      }
+
+      print('UWWU$updateJadwal');
+
+      isloading(false);
+      // ignore: empty_catches, unused_catch_clause
+    } on Exception catch (e) {
+      print("UWWU $e");
     }
   }
 }

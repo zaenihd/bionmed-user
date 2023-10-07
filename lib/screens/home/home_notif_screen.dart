@@ -13,6 +13,7 @@ import 'package:bionmed_app/widgets/txt/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 import '../../constant/colors.dart';
 
@@ -477,6 +478,145 @@ class _NotifScreenState extends State<NotifScreen> {
                                             height: 20.0,
                                           ),
                                           detailPaket(index),
+                                          const SizedBox(
+                                          height: 20.0,
+                                          ),
+                                           Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order'] != null
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        children: [
+                          Cntr(
+                            margin: const EdgeInsets.only(bottom: 15),
+                            alignment: Alignment.centerLeft,
+                            // padding: EdgeInsets.symmetric(horizontal: 20),
+                            width: Get.width,
+                            border: Border.all(color: Colors.grey[400]!),
+                            radius: BorderRadius.circular(10),
+                            child: ExpansionTile(
+                              title: Row(
+                                children: [
+                                  Image.asset('assets/icons/maps.png'),
+                                  const SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Txt(text: 'Lokasi Penjemputan'),
+                                ],
+                              ),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: Txt(
+                                      text:
+                                          "${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['start_districts']},${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['start_city']} ${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['start_province']}\n ${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['start_address']}"),
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await MapsLauncher.launchCoordinates(
+                                        Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']
+                                            ['start_lat'],
+                                        Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']
+                                            ['start_long'],
+                                        "${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['start_districts']},${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['start_city']} ${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['start_province']}\n ${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['start_address']}");
+                                  },
+                                  child: Cntr(
+                                    radius: BorderRadius.circular(10),
+                                    alignment: Alignment.center,
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    height: 30,
+                                    width: Get.width,
+                                    color: Colors.blue,
+                                    child: Txt(
+                                      text: 'Lihat Lokasi Maps',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Cntr(
+                            margin: const EdgeInsets.only(bottom: 15),
+                            alignment: Alignment.centerLeft,
+                            // padding: EdgeInsets.symmetric(horizontal: 20),
+                            width: Get.width,
+                            border: Border.all(color: Colors.grey[400]!),
+                            radius: BorderRadius.circular(10),
+                            child: ExpansionTile(
+                              title: Row(
+                                children: [
+                                  Image.asset('assets/icons/maps.png'),
+                                  const SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Txt(text: 'Lokasi Tujuan'),
+                                ],
+                              ),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: Txt(
+                                      text:
+                                          "${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['end_districts']},${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['end_city']} ${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['end_province']}\n ${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['end_address']}"),
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await MapsLauncher.launchCoordinates(
+                                        Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['end_lat'],
+                                        Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']
+                                            ['end_long'],
+                                        "${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['end_districts']},${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['end_city']} ${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['end_province']}\n ${Get.find<ControllerLogin>()
+                                                              .dataNotif[index]['ambulance_order']['end_address']}");
+                                  },
+                                  child: Cntr(
+                                    radius: BorderRadius.circular(10),
+                                    alignment: Alignment.center,
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    height: 30,
+                                    width: Get.width,
+                                    color: Colors.blue,
+                                    child: Txt(
+                                      text: 'Lihat Lokasi Maps',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ) :
 
                                           // Container(
                                           //   padding: const EdgeInsets.symmetric(
