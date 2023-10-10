@@ -9,6 +9,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   maps_launcher
   permission_handler_windows
   platform_device_id_windows
+  smart_auth
   url_launcher_windows
   zego_express_engine
   zego_zim

@@ -48,14 +48,12 @@ dependencies:
   firebase_core: ^2.5.0
   firebase_auth: ^4.2.6
   cloud_firestore: ^4.3.2
-  assets_audio_player: ^3.0.6
   google_maps_flutter: 2.2.3
   geolocator: 9.0.2
   search_map_location: 0.0.6
   search_map_place_updated: 0.0.4
   gallery_saver: ^2.3.2
   flutter_callkit_incoming: ^2.0.0
-  awesome_notifications: ^0.7.4+1
   flutter_email_sender: ^5.2.0
   flutter_phone_direct_caller: ^2.1.1
   flutter_html: ^3.0.0-alpha.6
@@ -65,6 +63,8 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   zego_zimkit: ^1.7.0
   maps_launcher: ^2.2.0
+  pinput: ^2.2.20
+
   flutter: 
     sdk: flutter
 

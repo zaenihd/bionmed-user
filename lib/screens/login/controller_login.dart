@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, avoid_print
 
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bionmed_app/screens/home/api_home.dart';
@@ -7,17 +8,23 @@ import 'package:bionmed_app/screens/home/home.dart';
 import 'package:bionmed_app/screens/home/home_controller.dart';
 import 'package:bionmed_app/screens/login/api_login.dart';
 import 'package:bionmed_app/screens/login/disclaimer.dart';
+import 'package:bionmed_app/screens/otp/otp_screen.dart';
 import 'package:bionmed_app/screens/pesanan/controller_pesanan.dart';
 import 'package:bionmed_app/screens/register/register_controller.dart';
 import 'package:bionmed_app/screens/register/register_screen.dart';
 import 'package:bionmed_app/screens/articel/controller_articel.dart';
 import 'package:bionmed_app/widgets/other/show_dialog.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../constant/string.dart';
+import '../../constant/url.dart';
+
 class ControllerLogin extends GetxController {
   RxBool isloading = false.obs;
+  RxBool isloadingOtp = false.obs;
   RxBool rememberme = false.obs;
   RxString name = "".obs;
   RxString lat = "".obs;
@@ -46,6 +53,7 @@ class ControllerLogin extends GetxController {
   RxInt costumerId = 0.obs;
   RxList dataBanner = [].obs;
   RxInt statusOrder = 0.obs;
+  TextEditingController controllerOtp = TextEditingController();
 
   // ignore: prefer_typing_uninitialized_variables
   var dataUser;
@@ -55,6 +63,75 @@ class ControllerLogin extends GetxController {
   final cTransaksi = Get.put(ControllerArticel());
   final cPesanan = Get.put(ControllerPesanan());
   final cHomes = Get.put(HomeController());
+  final box = GetStorage();
+
+  //===================================OTP===================
+  Future<dynamic> sendOtp() async {
+    // isloading(true);
+    final params = <String, dynamic>{
+      "phoneNumber": noHp.value,
+      "type": "customer"
+    };
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}otp/get', Method.POST, params);
+      // ignore: unused_local_variable
+      var sendOtp = json.decode(result.toString());
+      log(sendOtp.toString());
+
+      // }
+      // isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error pesan$e");
+    }
+  }
+
+  Future<dynamic> verifyOtp() async {
+    isloadingOtp(true);
+    final params = <String, dynamic>{
+      "phoneNumber": noHp.value,
+      "type": "customer",
+      "otp": controllerOtp.text
+    };
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}otp/verify', Method.POST, params);
+      // ignore: unused_local_variable
+      var verifi = json.decode(result.toString());
+      if (verifi['verifyOtp'] == true) {
+        // if (isKodeAkses.isFalse) {
+        box.write('phone', noHp.value);
+        // Get.toNamed(Routes.BOTTOM_NAVIGATION);
+        Get.to(() => Disclamer());
+        controllerOtp.clear();
+        // } else {
+        //   Get.to(() => BuatPinSaldo());
+        // }
+      } else {
+        final snackBar = SnackBar(
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+          content: const Text('Kode OTP salah'),
+          backgroundColor: (Colors.red),
+          action: SnackBarAction(
+            label: '',
+            onPressed: () {},
+          ),
+        );
+        ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+      }
+
+      // }
+      isloadingOtp(false);
+    } on Exception catch (e) {
+      isloadingOtp(false);
+
+      // ignore: avoid_print
+      print("Cek error pesan$e");
+    }
+  }
 
   Future<dynamic> loginApps(String phoneNumber) async {
     isloading(true);
@@ -81,7 +158,6 @@ class ControllerLogin extends GetxController {
         ApiLogin()
             .registerTokenFirebase(tokens!, value['data']['id'].toString());
 
-        box.write('phone', phoneNumber);
         // box.write('remem', phoneNumber);
 
         box.write('id', value['data']['customer']['id'].toString());
@@ -95,14 +171,14 @@ class ControllerLogin extends GetxController {
         if (setuju == true) {
           // ignore: prefer_const_constructors
           Get.offAll(() => Home(
-              indexPage: 0,
-            ));
+                indexPage: 0,
+              ));
           // Get.toNamed(Routes.BOTTOM_NAVIGATION);
         } else {
           print('zen ' + setuju.toString());
-          Get.to(() => Disclamer());
+          await sendOtp();
+          Get.to(() => const OtpScreen());
         }
-        
       } else {
         showPopUp(
             onTap: () {
@@ -231,7 +307,7 @@ class ControllerLogin extends GetxController {
     if (value['code'] == 200) {
       dataBanner.value = value['data'];
       // ignore: invalid_use_of_protected_member
-      print('hihi = ' + dataBanner.value.toString() );
+      print('hihi = ' + dataBanner.value.toString());
     }
   }
 }

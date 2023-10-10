@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:bionmed_app/constant/string.dart';
 import 'package:bionmed_app/constant/url.dart';
 import 'package:bionmed_app/screens/call/page_voice.dart';
@@ -27,7 +26,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 class HomeController extends GetxController {
   String url = 'assets/ringtone/COMTelph_Phone ring 5 (ID 0375)_BSB.wav';
-  final assetsAudioPlayer = AssetsAudioPlayer();
   RxBool timePeriodic = false.obs;
 
   RxBool isNotif = false.obs;
@@ -154,14 +152,14 @@ Future<void> enableGPS() async {
     callIncoming;
   }
 
-  void playRingtone() async {
-    await assetsAudioPlayer.open(Audio(url));
-    assetsAudioPlayer.play();
-  }
+  // void playRingtone() async {
+  //   await assetsAudioPlayer.open(Audio(url));
+  //   assetsAudioPlayer.play();
+  // }
 
-  void stopRingtone() {
-    assetsAudioPlayer.stop();
-  }
+  // void stopRingtone() {
+  //   assetsAudioPlayer.stop();
+  // }
 
   notif() {
     // AwesomeNotifications().createNotification(
@@ -656,8 +654,8 @@ Future<void> enableGPS() async {
   void onInit() {
     Get.put(ControllerPayment());
     getLocation();
-    // realtimeApi();
-    // trimUpdateStatus();
+    realtimeApi();
+    trimUpdateStatus();
     // log('zen');
 
     // ignore: todo

@@ -717,7 +717,7 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
               ButtonGradient(
                   onPressed: () {
                     if (Get.find<ControllerPayment>().serviceId.value == 5) {
-                      log('message');
+                      log('a');
                       controller.selectedGenderPasien.value = jenisKelamin[1];
                     }
                     DateTime now = DateTime.now();
@@ -743,8 +743,8 @@ class _InputLayananNurseState extends State<InputLayananNurse> {
                               .value ==
                           5) {
                         log('message');
-                        // controller.selectedGenderPasien.value = jenisKelamin[1];
-                        // actionNurse();
+                        controller.selectedGenderPasien.value = jenisKelamin[1];
+                        actionNurse();
                       } else {
                         log('message 1');
 
